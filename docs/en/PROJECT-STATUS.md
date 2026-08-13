@@ -4,10 +4,11 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- CLI entrypoint is in; next are detect/doctor and the Three.js fixture.
+- Read-only discovery is in; next are doctor and dashboard scaffolding.
 
 ## Recently completed
 
+- Read-only discovery with evidence and confidence (issue #12).
 - `packages/cli`: npx entrypoint, help, exit code 2 (issue #11).
 - Golden v1.0.0 artifact tests and schema compatibility (issue #9).
 - `packages/evidence`: provenance and source candidates (issue #8).
@@ -19,7 +20,7 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Detect/doctor, dashboard, and Three.js fixture are still missing.
+- Doctor, dashboard, and Three.js fixture runner are still missing.
 
 ## Risks
 

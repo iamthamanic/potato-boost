@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "CLI-Entrypoint steht; als Nächstes Detection/Doctor und Three.js-Fixture.",
-      "en": "CLI entrypoint is in; next are detect/doctor and the Three.js fixture."
+      "de": "Read-only Discovery steht; als Nächstes Doctor und Dashboard-Scaffolding.",
+      "en": "Read-only discovery is in; next are doctor and dashboard scaffolding."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Read-only Discovery mit Evidence und Confidence (issue #12).",
+      "en": "Read-only discovery with evidence and confidence (issue #12)."
+    },
     {
       "de": "packages/cli: npx-Entrypoint, Hilfe, Exit-Code 2 (issue #11).",
       "en": "packages/cli: npx entrypoint, help, exit code 2 (issue #11)."
@@ -18,8 +22,8 @@
   ],
   "incomplete": [
     {
-      "de": "Detection/Doctor, Dashboard und Three.js-Fixture fehlen noch.",
-      "en": "Detect/doctor, dashboard, and Three.js fixture are still missing."
+      "de": "Doctor, Dashboard und Three.js-Fixture-Runner fehlen noch.",
+      "en": "Doctor, dashboard, and Three.js fixture runner are still missing."
     }
   ],
   "risks": [
@@ -28,5 +32,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T11:15:00Z"
+  "updated_at": "2026-08-13T13:05:00Z"
 }

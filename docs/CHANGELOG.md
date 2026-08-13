@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Read-only Discovery
+
+`packages/core/src/discovery/` scannt Marker/Manifeste und liefert Kandidaten (Web/Vite/React/Three.js) mit Evidence und Confidence 0..1. Keine Projektdateien werden vor Bestätigung geschrieben (BR-001). Leere Repos liefern 'unknown' statt eines erfundenen Stacks (EDGE-001).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — CLI entrypoint
 
 `packages/cli` mit Commander. `potato-boost`/`potato` zeigen Hilfe; unbekannte Commands/Flags enden mit Exit-Code 2. Subcommands sind Stubs.

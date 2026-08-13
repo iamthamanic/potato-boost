@@ -1,0 +1,97 @@
+{
+  "id": "2026-08-13-readonly-discovery",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Read-only Discovery mit Confidence und Belegen",
+    "en": "Read-only discovery with confidence and evidence"
+  },
+  "summary": {
+    "de": "packages/core/src/discovery/ scannt Marker/Manifeste und liefert Kandidaten (Web/Vite/React/Three.js) mit Evidence und Confidence 0..1. Discovery schreibt keine Projektdateien vor Bestätigung (BR-001).",
+    "en": "packages/core/src/discovery/ scans markers/manifests and returns candidates (Web/Vite/React/Three.js) with evidence and confidence 0..1. Discovery writes no project files before confirmation (BR-001)."
+  },
+  "plain_language": {
+    "de": "Erkennung ohne Belege ist Magie. Jetzt gibt es Belege und Confidence. Leeres Repo erfindet keinen Stack.",
+    "en": "Detection without evidence is magic. Now there are evidence entries and confidence. An empty repo does not invent a stack."
+  },
+  "why_it_matters": {
+    "de": "Ohne read-only Discovery ist init gefährlich und unvertrauenswürdig (FR-002, EDGE-001).",
+    "en": "Without read-only discovery, init is dangerous and untrustworthy (FR-002, EDGE-001)."
+  },
+  "user_impact": {
+    "de": [
+      "potato-boost detect [pfad] gibt JSON mit Kandidaten, Evidence und Confidence aus.",
+      "Leere/unbekannte Ordner liefern 'unknown' statt einer falschen Stack-Behauptung."
+    ],
+    "en": [
+      "potato-boost detect [path] prints JSON with candidates, evidence, and confidence.",
+      "Empty/unknown directories return 'unknown' instead of a false stack claim."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "DiscoveryFs ist injiziert; read-only ist per Vertrag testbar.",
+      "webDetectors sind table-driven in packages/core."
+    ],
+    "en": [
+      "DiscoveryFs is injected; read-only is testable by contract.",
+      "webDetectors are table-driven in packages/core."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine Schreibzugriffe im Discovery-Pfad; Pfade bleiben unter Root."
+    ],
+    "en": [
+      "No write calls in the discovery path; paths stay under root."
+    ]
+  },
+  "git": {
+    "base": "dabd1e79598036fc80e430631f7429cc4b65efa1",
+    "head": "issue/12-discovery-readonly",
+    "branch": "issue/12-discovery-readonly",
+    "pull_request": null
+  },
+  "packages": [
+    "core",
+    "cli"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/core/src/discovery/",
+    "packages/cli/src/program.ts",
+    "packages/cli/src/web-detectors.ts",
+    "fixtures/web-threejs/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/core/src/discovery/detect.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/12-discovery-readonly/packages/core/src/discovery/detect.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/core/src/discovery/web-detectors.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/12-discovery-readonly/packages/core/src/discovery/web-detectors.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/cli/src/program.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/12-discovery-readonly/packages/cli/src/program.ts"
+    },
+    {
+      "kind": "file",
+      "path": "fixtures/web-threejs/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/12-discovery-readonly/fixtures/web-threejs"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}

@@ -1,3 +1,6 @@
+import { mkdtemp } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { EXIT_OK, EXIT_USAGE } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
@@ -59,5 +62,29 @@ describe("runCli", () => {
     const code = await runCli(["init"], io);
     expect(code).toBe(EXIT_OK);
     expect(stdout.join("")).toMatch(/not implemented yet/);
+  });
+
+  describe("detect", () => {
+    it("prints JSON with candidates for the web-threejs fixture", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["detect", "fixtures/web-threejs"], io);
+      expect(code).toBe(EXIT_OK);
+      const parsed = JSON.parse(stdout.join(""));
+      expect(parsed.wrote).toBe(false);
+      const kinds = parsed.candidates.map((c: { kind: string }) => c.kind);
+      expect(kinds).toContain("web");
+      expect(kinds).toContain("vite");
+      expect(kinds).toContain("threejs");
+    });
+
+    it("returns unknown for an empty directory", async () => {
+      const { io, stdout } = capture();
+      const tmp = await mkdtemp(join(tmpdir(), "potato-detect-"));
+      const code = await runCli(["detect", tmp], io);
+      expect(code).toBe(EXIT_OK);
+      const parsed = JSON.parse(stdout.join(""));
+      expect(parsed.candidates).toHaveLength(1);
+      expect(parsed.candidates[0].kind).toBe("unknown");
+    });
   });
 });

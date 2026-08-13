@@ -4,3 +4,5 @@ export const CORE_PACKAGE_NAME = "@potato-boost/core" as const;
 export function workspaceReady(): true {
   return true;
 }
+
+export * from "./discovery/index.js";
