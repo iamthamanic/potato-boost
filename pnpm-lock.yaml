@@ -58,6 +58,15 @@ importers:
 
   packages/rules-web: {}
 
+  packages/scenario-engine:
+    dependencies:
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      zod:
+        specifier: ^4.1.0
+        version: 4.4.3
+
   packages/schemas:
     dependencies:
       zod:

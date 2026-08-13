@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Scenario engine
+
+`packages/scenario-engine` modelliert Setup/Warm-up/Measure/Cleanup, Wiederholungen, Marker und Timeouts. Quick Scan ist ein vorgefertigtes Scenario (FR-009/010). Timeout bricht Phase ab ohne Baseline-Eignung.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Read-only Discovery
 
 `packages/core/src/discovery/` scannt Marker/Manifeste und liefert Kandidaten (Web/Vite/React/Three.js) mit Evidence und Confidence 0..1. Keine Projektdateien werden vor Bestätigung geschrieben (BR-001). Leere Repos liefern 'unknown' statt eines erfundenen Stacks (EDGE-001).
