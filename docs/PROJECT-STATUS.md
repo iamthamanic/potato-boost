@@ -4,10 +4,11 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Artifact Spine: Schema, Store und Analysis stehen; als Nächstes Rules, CLI-Entrypoint und Three.js-Fixture.
+- Artifact Spine: Schema, Store, Analysis und Rules stehen; als Nächstes CLI-Entrypoint und Three.js-Fixture.
 
 ## Zuletzt erledigt
 
+- `packages/rule-engine` + `rules-web`: deterministische evaluate() (issue #7).
 - `packages/analysis`: Quantile, Hitches, Datenqualität (issue #6).
 - `packages/artifact-store`: atomares Schreiben unter `.potato` (issue #5).
 - `packages/schemas`: Zod + committed JSON Schema für run-artifact (issue #4).
@@ -15,7 +16,7 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- rule-engine, CLI, Dashboard und Fixtures fehlen noch.
+- evidence-graph, CLI, Dashboard und Fixtures fehlen noch.
 
 ## Risiken
 
@@ -25,4 +26,4 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Nächster Schritt
 
-GitHub-Issues #8 (rule-engine), #11 (CLI-Entrypoint) und #17 (web-threejs Fixture).
+GitHub-Issues #8 (evidence-graph) bzw. #11 (CLI) und #17 (Fixture).

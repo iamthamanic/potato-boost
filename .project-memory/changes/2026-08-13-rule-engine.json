@@ -1,0 +1,99 @@
+{
+  "id": "2026-08-13-rule-engine",
+  "date": "2026-08-13",
+  "type": "contract",
+  "status": "recorded",
+  "title": {
+    "de": "Deterministische Rule Engine und rules-web Pack",
+    "en": "Deterministic rule engine and rules-web pack"
+  },
+  "summary": {
+    "de": "packages/rule-engine evaluate() ist pur. Fehlende Evidenz ist observation, nicht Fail. Golden-Pack: packages/rules-web.",
+    "en": "packages/rule-engine evaluate() is pure. Missing evidence is observation, not fail. Golden pack: packages/rules-web."
+  },
+  "plain_language": {
+    "de": "Eine Regel sagt nur Fail, wenn Messung und Beweis da sind. Ohne Beweis bleibt es eine Beobachtung.",
+    "en": "A rule only fails when the measurement and the proof are present. Without proof it stays an observation."
+  },
+  "why_it_matters": {
+    "de": "Sonst werden Lücken in der Messung als Budget-Fail verkauft (BR-005).",
+    "en": "Otherwise measurement gaps are sold as budget fails (BR-005)."
+  },
+  "user_impact": {
+    "de": [
+      "Kein UI. Spätere Findings kommen aus diesem Pack."
+    ],
+    "en": [
+      "No UI. Later findings come from this pack."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "evaluate(pack, context); Pack JSON via Zod.",
+      "Skip bei fehlender Metric/Capability."
+    ],
+    "en": [
+      "evaluate(pack, context); pack JSON via Zod.",
+      "Skip when metric/capability is missing."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine KI, keine Netzwerk-Calls."
+    ],
+    "en": [
+      "No AI, no network calls."
+    ]
+  },
+  "git": {
+    "base": "7fb639b294e9f7a4345c6fae87d2de9dfe4b4cbd",
+    "head": "issue/7-rule-engine",
+    "branch": "issue/7-rule-engine",
+    "pull_request": null
+  },
+  "packages": [
+    "rule-engine",
+    "rules-web"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/rule-engine/",
+    "packages/rules-web/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "7fb639b294e9f7a4345c6fae87d2de9dfe4b4cbd...issue/7-rule-engine",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/7fb639b294e9f7a4345c6fae87d2de9dfe4b4cbd...issue/7-rule-engine"
+    },
+    {
+      "kind": "commit",
+      "path": "issue/7-rule-engine",
+      "sha": "issue/7-rule-engine",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/issue/7-rule-engine"
+    },
+    {
+      "kind": "file",
+      "path": "packages/rule-engine/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/7-rule-engine/packages/rule-engine"
+    },
+    {
+      "kind": "file",
+      "path": "packages/rules-web/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/7-rule-engine/packages/rules-web"
+    },
+    {
+      "kind": "file",
+      "path": "packages/rule-engine/src/evaluate.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/rule-engine/src/evaluate.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.7,
+  "review_status": "needs-review"
+}

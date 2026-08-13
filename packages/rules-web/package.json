@@ -1,0 +1,9 @@
+{
+  "name": "@potato-boost/rules-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./pack": "./pack.json"
+  }
+}
