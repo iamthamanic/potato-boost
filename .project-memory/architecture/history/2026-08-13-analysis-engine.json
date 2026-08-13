@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "2026-08-13-analysis-engine",
+  "date": "2026-08-13",
+  "title": {
+    "de": "Architektur-Stand",
+    "en": "Architecture snapshot"
+  },
+  "summary": {
+    "de": "Automatischer Snapshot von overview.mermaid",
+    "en": "Automatic snapshot of overview.mermaid"
+  },
+  "commit": "5df157a968664132bdfdc90751adec394b309a18",
+  "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> S[\"packages/schemas\"]\n    K --> ST[\"packages/artifact-store\"]\n    K --> AN[\"packages/analysis\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    S --> R\n    ST --> R\n    AN --> R\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]",
+  "content_hash": "e848dc68dbeea38167d9bdcf644e52075db1374147c868a8923ac05ed655be98",
+  "change_ids": [],
+  "review_status": "needs-review"
+}

@@ -52,12 +52,12 @@
         "en": "Artifact Spine"
       },
       "summary": {
-        "de": "Versionierte, hash-integrere Run-Artefakte. Schema-Vertrag und atomarer Store existieren; Statistik und Rules fehlen.",
-        "en": "Versioned, hash-integrity run artifacts. Schema contract and atomic store exist; statistics and rules are missing."
+        "de": "Versionierte Run-Artefakte. Schema, Store und Analysis existieren; Rules fehlen.",
+        "en": "Versioned run artifacts. Schema, store, and analysis exist; rules are missing."
       },
       "plain_language": {
-        "de": "Format und Speichern für einen Messlauf sind da. Regeln und Dashboard kommen später.",
-        "en": "Format and storage for a measurement run are in. Rules and dashboard come later."
+        "de": "Format, Speichern und Statistik für einen Messlauf sind da. Regeln kommen später.",
+        "en": "Format, storage, and stats for a measurement run are in. Rules come later."
       },
       "why_it_matters": {
         "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
@@ -79,19 +79,20 @@
       ],
       "user_impact": {
         "de": [
-          "Noch kein Nutzerfluss — Schema und Store sind internes Fundament."
+          "Noch kein Nutzerfluss — Schema, Store und Analysis sind internes Fundament."
         ],
         "en": [
-          "No user flow yet — schema and store are internal foundation."
+          "No user flow yet — schema, store, and analysis are internal foundation."
         ]
       },
       "related_changes": [
         "2026-08-13-bootstrap",
         "2026-08-13-schemas-core",
-        "2026-08-13-artifact-store"
+        "2026-08-13-artifact-store",
+        "2026-08-13-analysis-engine"
       ],
       "review_status": "needs-review",
-      "confidence": 0.65,
+      "confidence": 0.7,
       "locked": false
     },
     {
