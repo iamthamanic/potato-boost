@@ -20,5 +20,8 @@
   },
   "dependencies": {
     "commander": "^14.0.0"
+  },
+  "devDependencies": {
+    "@potato-boost/core": "workspace:*"
   }
 }

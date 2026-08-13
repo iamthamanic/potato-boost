@@ -1,5 +1,8 @@
+import { detectProject } from "@potato-boost/core";
 import { Command } from "commander";
 import type { CliIo } from "./io.js";
+import { nodeDiscoveryFs } from "./node-fs.js";
+import { webDetectors } from "./web-detectors.js";
 
 const STUB_COMMANDS = [
   { name: "init", summary: "Write local config after confirmation (stub)" },
@@ -30,6 +33,15 @@ export function createProgram(io: CliIo): Command {
       },
     })
     .exitOverride();
+
+  program
+    .command("detect")
+    .argument("[path]", "project root", ".")
+    .description("Scan markers and return candidates (read-only)")
+    .action(async (path: string) => {
+      const result = await detectProject(nodeDiscoveryFs, path, webDetectors);
+      io.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+    });
 
   for (const command of STUB_COMMANDS) {
     program
