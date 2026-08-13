@@ -9,7 +9,7 @@
     "de": "Lokales CLI- und Dashboard-Werkzeug für reproduzierbare Performance-Findings mit deterministischem Messkern.",
     "en": "Local CLI and dashboard for reproducible performance findings with a deterministic measurement core."
   },
-  "packages": ["core", "schemas", "artifact-store", "analysis", "rule-engine", "rules-web"],
+  "packages": ["core", "schemas", "artifact-store", "analysis", "rule-engine", "rules-web", "evidence"],
   "repository": {
     "url": "https://github.com/iamthamanic/potato-boost",
     "default_branch": "main"

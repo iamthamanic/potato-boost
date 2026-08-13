@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Evidence graph
+
+Provenienz und geordnete Source Candidates. Fehlendes Source Mapping senkt Confidence, droppt das Finding nicht. Pfade nur unter Projekt-Root.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Rule engine
 
 Deterministische `evaluate()`-API und versioniertes Pack `rules-web`. Fehlende Evidenz ist observation, nicht Fail.

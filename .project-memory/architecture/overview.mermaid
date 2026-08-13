@@ -5,6 +5,7 @@ flowchart TD
     K --> ST["packages/artifact-store"]
     K --> AN["packages/analysis"]
     K --> RE["packages/rule-engine"]
+    K --> EV["packages/evidence"]
     K --> A["Stack Adapter"]
     A --> P["App / Engine / Processes"]
     K --> R["Run Artifacts"]
@@ -12,5 +13,6 @@ flowchart TD
     ST --> R
     AN --> R
     RE --> R
+    EV --> R
     R --> D["Local Dashboard"]
     R --> V["VisoDev Import (optional, later)"]
