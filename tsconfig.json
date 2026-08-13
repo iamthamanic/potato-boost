@@ -8,6 +8,7 @@
     { "path": "./packages/rule-engine" },
     { "path": "./packages/evidence" },
     { "path": "./packages/cli" },
-    { "path": "./packages/scenario-engine" }
+    { "path": "./packages/scenario-engine" },
+    { "path": "./packages/report" }
   ]
 }

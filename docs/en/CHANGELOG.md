@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Report export
+
+`packages/report` writes validated JSON and static HTML with the same finding IDs. Export is purely local, no network (FR-022, FR-026).
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Three.js fixture
 
 `fixtures/web-threejs` is a deterministic app with toggleable performance problems (draw calls, long task, alloc). No external assets; offline-capable (T-001, T-004).

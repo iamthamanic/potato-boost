@@ -1,0 +1,83 @@
+{
+  "id": "2026-08-13-report-export",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Versionierter JSON- und HTML-Report-Export",
+    "en": "Versioned JSON and HTML report export"
+  },
+  "summary": {
+    "de": "packages/report schreibt validiertes JSON und statisches HTML mit denselben Finding-IDs. Export ist rein lokal, kein Netzwerk (FR-022, FR-026).",
+    "en": "packages/report writes validated JSON and static HTML with the same finding IDs. Export is purely local, no network (FR-022, FR-026)."
+  },
+  "plain_language": {
+    "de": "Mensch und Maschine lesen dieselbe Datei. HTML ist statisch und ohne Server lesbar.",
+    "en": "Human and machine read the same file. HTML is static and readable without a server."
+  },
+  "why_it_matters": {
+    "de": "Ohne Export ist das Messergebnis nicht teilbar (FR-022).",
+    "en": "Without export, the measurement result is not shareable (FR-022)."
+  },
+  "user_impact": {
+    "de": [
+      "potato report schreibt JSON+HTML mit schemaVersion und denselben Finding-IDs.",
+      "Exportfehler ändern das lokale Messergebnis nicht."
+    ],
+    "en": [
+      "potato report writes JSON+HTML with schemaVersion and the same finding IDs.",
+      "Export errors do not change the local measurement result."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Export validiert gegen runArtifactSchema.",
+      "HTML ist statisch und ohne Server lesbar."
+    ],
+    "en": [
+      "Export validates against runArtifactSchema.",
+      "HTML is static and readable without a server."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Kein Netzwerk; keine Secrets im Report."
+    ],
+    "en": [
+      "No network; no secrets in report."
+    ]
+  },
+  "git": {
+    "base": "a7be791",
+    "head": "issue/29-report-export",
+    "branch": "issue/29-report-export",
+    "pull_request": null
+  },
+  "packages": [
+    "report"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/report/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/report/src/export.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/29-report-export/packages/report/src/export.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/report/src/template.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/29-report-export/packages/report/src/template.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

@@ -4,13 +4,13 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Discovery, scenario engine, and fixture are in; next are doctor and dashboard.
+- Discovery, scenario engine, fixture, and report are in; next are doctor and dashboard.
 
 ## Recently completed
 
+- Report export with validated JSON and static HTML (issue #29).
 - Deterministic Three.js fixture with toggleable problems (issue #17).
 - Scenario engine with phases and repetitions (issue #15).
-- Read-only discovery with evidence and confidence (issue #12).
 - `packages/evidence`: provenance and source candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministic evaluate() (issue #7).
 - `packages/analysis`: quantiles, hitches, data quality (issue #6).
