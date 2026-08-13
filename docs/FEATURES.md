@@ -1,10 +1,10 @@
 # Features
 
-Geplante Produktfähigkeiten aus dem PRD. **Nichts davon ist implementiert.** Status überall: `planned`, Review: `needs-review`.
+Geplante Produktfähigkeiten aus dem PRD. Status: `needs-review`.
 
 | ID | Titel | Slice | Status |
 |----|-------|-------|--------|
-| `artifact-spine` | Artifact Spine (Schemas, Store, Regeln) | 1 | planned |
+| `artifact-spine` | Artifact Spine (Schemas, Store, Regeln) | 1 | in-progress |
 | `web-cli` | Web CLI, Discovery, Doctor, Quick Scan | 2 | planned |
 | `dashboard` | Lokales Loopback-Dashboard | 3 | planned |
 | `compare-ci` | Compare, Baseline, CI-Exit-Codes | 4 | planned |

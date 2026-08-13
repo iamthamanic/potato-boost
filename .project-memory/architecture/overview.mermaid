@@ -1,8 +1,10 @@
 flowchart TD
     U["Developer / CI / Agent"] --> C["CLI and Local API"]
     C --> K["Deterministic Core"]
+    K --> S["packages/schemas"]
     K --> A["Stack Adapter"]
     A --> P["App / Engine / Processes"]
     K --> R["Run Artifacts"]
+    S --> R
     R --> D["Local Dashboard"]
     R --> V["VisoDev Import (optional, later)"]

@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0.0",
+  "producer": {
+    "name": "@potato-boost/schemas",
+    "version": "0.0.0"
+  },
+  "run": {
+    "runId": "01JTESTGOLDEN0000000000000",
+    "status": "completed",
+    "startedAt": "2026-08-13T09:00:00Z",
+    "git": {
+      "commit": null,
+      "dirty": true
+    }
+  },
+  "lockedInputs": {
+    "target": { "id": "web-threejs", "version": "1.0.0" },
+    "scenario": { "id": "quick-scan", "version": "1.0.0" },
+    "profile": { "id": "budget-local", "version": "1.0.0" },
+    "adapter": { "id": "adapter-web", "version": "1.0.0" },
+    "rulePacks": [{ "id": "rules-web", "version": "1.0.0" }]
+  },
+  "fingerprints": {
+    "host": { "arch": "arm64" },
+    "os": { "name": "darwin" },
+    "runtime": { "node": "24.0.0" },
+    "adapter": { "id": "adapter-web" },
+    "build": { "mode": "release" },
+    "git": {
+      "commit": null,
+      "dirty": true
+    }
+  },
+  "rawManifest": {
+    "files": [
+      {
+        "path": "samples.jsonl",
+        "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "bytes": 12
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "name": "frame_time_p95",
+      "value": 16.6,
+      "unit": "ms"
+    }
+  ],
+  "evidence": [
+    {
+      "evidenceId": "ev-1",
+      "inputs": [
+        {
+          "kind": "raw",
+          "id": "samples.jsonl",
+          "rawHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      ],
+      "calculation": "p95 of frame_time over measure window",
+      "confidence": "high"
+    }
+  ],
+  "findings": [
+    {
+      "findingId": "f-1",
+      "ruleId": "web.frame_time.p95",
+      "severity": "warning",
+      "evidenceIds": ["ev-1"],
+      "sourceCandidates": [
+        {
+          "uri": "src/main.ts",
+          "line": 10,
+          "column": null,
+          "method": "source-map",
+          "confidenceFactors": ["map-present"]
+        }
+      ],
+      "confidence": "medium",
+      "confidenceFactors": ["correlated-draw-calls"]
+    }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "rawManifestHash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "analysisVersion": "1.0.0"
+  }
+}

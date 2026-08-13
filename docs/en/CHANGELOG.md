@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Schemas core
+
+Canonical Zod and JSON schemas for run artifacts in `packages/schemas`. Unknown schema majors are rejected; additive fields stay allowed. Error envelope has no stack.
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Bootstrap
 
 Project memory and QA scaffolding initialized. Greenfield: no application code, no remote.

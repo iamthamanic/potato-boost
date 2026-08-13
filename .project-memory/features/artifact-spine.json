@@ -5,26 +5,26 @@
     "en": "Artifact Spine"
   },
   "summary": {
-    "de": "Versionierte, hash-integrere Run-Artefakte, Schemas, Statistik und deterministische Rules. Geplant als Slice 1.",
-    "en": "Versioned, hash-integrity run artifacts, schemas, statistics, and deterministic rules. Planned as slice 1."
+    "de": "Versionierte, hash-integrere Run-Artefakte, Schemas, Statistik und deterministische Rules. Schema-Vertrag existiert; Store und Rules fehlen.",
+    "en": "Versioned, hash-integrity run artifacts, schemas, statistics, and deterministic rules. Schema contract exists; store and rules are missing."
   },
   "plain_language": {
-    "de": "Damit ein Lauf später vergleichbar bleibt, speichert Potato Boost das Ergebnis als unveränderliche Datei — noch nicht gebaut.",
-    "en": "So a run stays comparable later, Potato Boost stores the result as an immutable file — not built yet."
+    "de": "Das Dateiformat für einen Messlauf ist definiert. Speichern, Regeln und Dashboard kommen später.",
+    "en": "The file format for a measurement run is defined. Storage, rules, and dashboard come later."
   },
   "why_it_matters": {
     "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
     "en": "Without this foundation, dashboard, CI, and adapters cannot plug in."
   },
-  "status": "planned",
+  "status": "in-progress",
   "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence"],
   "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**"],
   "user_impact": {
-    "de": ["Noch kein Nutzerfluss — internes Fundament."],
-    "en": ["No user flow yet — internal foundation."]
+    "de": ["Noch kein Nutzerfluss — internes Fundament. Schema-Paket ist vorhanden."],
+    "en": ["No user flow yet — internal foundation. Schema package is present."]
   },
-  "related_changes": ["2026-08-13-bootstrap"],
+  "related_changes": ["2026-08-13-bootstrap", "2026-08-13-schemas-core"],
   "review_status": "needs-review",
-  "confidence": 0.4,
+  "confidence": 0.6,
   "locked": false
 }
