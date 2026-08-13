@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This repository is a greenfield pnpm workspace. Application packages under `apps/` and `packages/` are not scaffolded yet — start with `@pingpong-solution` on Slice 1 (Artifact Spine).
+This is a pnpm workspace. `packages/core` is a TypeScript smoke package so lint/typecheck/test are real. Remaining `apps/` and `packages/` from the PRD are still unscaffolded — continue with `@pingpong-solution` / GitHub issues starting at Artifact Spine.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -87,6 +87,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-13** — TypeScript workspace gates are real: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm checks` (`issue/2-ts-workspace-bootstrap`).
 - **2026-08-13** — Project setup: PRD, QA scaffolding, living docs, epic roadmap (`docs/ROADMAP.md`).
 - Project setup: QA scaffolding, PRD import, living docs bootstrap (needs-review).
 

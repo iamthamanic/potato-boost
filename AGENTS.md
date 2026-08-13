@@ -92,13 +92,15 @@ Handoff-Reihenfolge aus dem PRD: zuerst `schemas`, `artifact-store`, `adapter-sd
 
 ## Validation
 
-- **Checks:** `pnpm checks` (Root; siehe `scripts/run-checks.sh`)
+- **Checks:** `pnpm checks` (Root; `scripts/run-checks.sh` → lint, typecheck, test, audit)
 - **Dev (geplant):** `pnpm --filter dashboard dev` → http://localhost:5173
 - **E2E:** `pnpm test:e2e` (Playwright via `@verify-ui` when ready)
 
-Quality tools am Workspace-Root ausführen, sobald Packages existieren. Vor Push `pnpm checks` — Hooks nicht umgehen.
+Run checks before push. Do not bypass hooks.
 
-Geplante Root-Commands (PRD): `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:contract`, `pnpm test:e2e`, `pnpm test:security`, `pnpm test:performance`.
+Quality tools am Workspace-Root ausführen. Vor Push `pnpm checks`.
+
+Root-Commands: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`. Geplant: `pnpm test:contract`, `pnpm test:e2e`, `pnpm test:security`, `pnpm test:performance`.
 
 ---
 
