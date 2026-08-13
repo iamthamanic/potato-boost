@@ -5,12 +5,12 @@
     "en": "Artifact Spine"
   },
   "summary": {
-    "de": "Versionierte Run-Artefakte. Schema, Store, Analysis, Rules und Evidence existieren; Golden-Tests fehlen.",
-    "en": "Versioned run artifacts. Schema, store, analysis, rules, and evidence exist; golden tests are missing."
+    "de": "Versionierte Run-Artefakte. Schema, Store, Analysis, Rules, Evidence und Golden-v1.0.0 existieren.",
+    "en": "Versioned run artifacts. Schema, store, analysis, rules, evidence, and golden v1.0.0 exist."
   },
   "plain_language": {
-    "de": "Format, Speichern, Statistik, Regeln und Provenienz für einen Messlauf sind da.",
-    "en": "Format, storage, stats, rules, and provenance for a measurement run are in."
+    "de": "Format, Speichern, Statistik, Regeln, Provenienz und ein Golden-File für einen Messlauf sind da.",
+    "en": "Format, storage, stats, rules, provenance, and a golden file for a measurement run are in."
   },
   "why_it_matters": {
     "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
@@ -18,7 +18,7 @@
   },
   "status": "in-progress",
   "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence"],
-  "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**", "packages/evidence/**"],
+  "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**", "packages/evidence/**", "tests/golden/**"],
   "user_impact": {
     "de": ["Noch kein Nutzerfluss — Artifact Spine ist internes Fundament."],
     "en": ["No user flow yet — artifact spine is internal foundation."]
@@ -29,9 +29,10 @@
     "2026-08-13-artifact-store",
     "2026-08-13-analysis-engine",
     "2026-08-13-rule-engine",
-    "2026-08-13-evidence-graph"
+    "2026-08-13-evidence-graph",
+    "2026-08-13-golden-artifact-tests"
   ],
   "review_status": "needs-review",
-  "confidence": 0.75,
+  "confidence": 0.8,
   "locked": false
 }

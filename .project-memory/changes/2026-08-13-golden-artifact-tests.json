@@ -1,0 +1,100 @@
+{
+  "id": "2026-08-13-golden-artifact-tests",
+  "date": "2026-08-13",
+  "type": "contract",
+  "status": "recorded",
+  "title": {
+    "de": "Golden Artifact v1.0.0 und Schema-Kompatibilität",
+    "en": "Golden artifact v1.0.0 and schema compatibility"
+  },
+  "summary": {
+    "de": "Committed golden-v1.0.0.json. Tests schreiben Store+Analyse+Regeln und lesen dasselbe Artefakt. Unbekannte Majors werden lesbar abgelehnt.",
+    "en": "Committed golden-v1.0.0.json. Tests write store+analysis+rules and read the same artifact. Unknown majors are rejected with a readable error."
+  },
+  "plain_language": {
+    "de": "CLI, CI und UI sollen dieselbe Datei lesen. Ein zu neues Major-Schema bricht klar, Extra-Felder nicht.",
+    "en": "CLI, CI, and UI should read the same file. A too-new major schema fails clearly; extra fields do not."
+  },
+  "why_it_matters": {
+    "de": "Ohne Golden ist Slice 1 nicht nachweisbar (T-010, NFR-009).",
+    "en": "Without a golden, Slice 1 is not demonstrable (T-010, NFR-009)."
+  },
+  "user_impact": {
+    "de": [
+      "Kein UI. CI liest das Golden ohne Netzwerk."
+    ],
+    "en": [
+      "No UI. CI reads the golden with no network."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "tests/golden komponiert Analysis, Evidence, Rules und Store."
+    ],
+    "en": [
+      "tests/golden composes analysis, evidence, rules, and store."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine Secrets in Fixtures."
+    ],
+    "en": [
+      "No secrets in fixtures."
+    ]
+  },
+  "git": {
+    "base": "d3aef95cef599c1fa40430f28f8b0368c1687a90",
+    "head": "issue/9-golden-artifact-tests",
+    "branch": "issue/9-golden-artifact-tests",
+    "pull_request": null
+  },
+  "packages": [
+    "schemas",
+    "artifact-store",
+    "analysis",
+    "rule-engine",
+    "evidence"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/schemas/fixtures/",
+    "tests/golden/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "d3aef95cef599c1fa40430f28f8b0368c1687a90...issue/9-golden-artifact-tests",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/d3aef95cef599c1fa40430f28f8b0368c1687a90...issue/9-golden-artifact-tests"
+    },
+    {
+      "kind": "commit",
+      "path": "issue/9-golden-artifact-tests",
+      "sha": "issue/9-golden-artifact-tests",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/issue/9-golden-artifact-tests"
+    },
+    {
+      "kind": "file",
+      "path": "packages/schemas/fixtures/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/9-golden-artifact-tests/packages/schemas/fixtures"
+    },
+    {
+      "kind": "file",
+      "path": "tests/golden/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/9-golden-artifact-tests/tests/golden"
+    },
+    {
+      "kind": "file",
+      "path": "packages/schemas/fixtures/golden-v1.0.0.json",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/schemas/fixtures/golden-v1.0.0.json"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.75,
+  "review_status": "needs-review"
+}

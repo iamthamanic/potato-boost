@@ -2,24 +2,24 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Artifact Spine fast komplett; als Nächstes Golden-Tests, CLI und Three.js-Fixture.",
-      "en": "Artifact spine nearly complete; next are golden tests, CLI, and Three.js fixture."
+      "de": "Artifact Spine inkl. Golden-v1.0.0; als Nächstes CLI und Three.js-Fixture.",
+      "en": "Artifact spine including golden v1.0.0; next are CLI and Three.js fixture."
     }
   ],
   "recently_completed": [
     {
-      "de": "packages/evidence: Provenienz und Source Candidates (issue #8).",
-      "en": "packages/evidence: provenance and source candidates (issue #8)."
+      "de": "Golden-Artifact-Tests v1.0.0 inkl. Schema-Kompatibilität (issue #9).",
+      "en": "Golden v1.0.0 artifact tests and schema compatibility (issue #9)."
     },
     {
-      "de": "packages/rule-engine + rules-web: deterministische evaluate() (issue #7).",
-      "en": "packages/rule-engine + rules-web: deterministic evaluate() (issue #7)."
+      "de": "packages/evidence: Provenienz und Source Candidates (issue #8).",
+      "en": "packages/evidence: provenance and source candidates (issue #8)."
     }
   ],
   "incomplete": [
     {
-      "de": "Golden-Artifact-Tests, CLI, Dashboard und Fixtures fehlen noch.",
-      "en": "Golden artifact tests, CLI, dashboard, and fixtures are still missing."
+      "de": "CLI, Dashboard und Three.js-Fixture fehlen noch.",
+      "en": "CLI, dashboard, and Three.js fixture are still missing."
     }
   ],
   "risks": [
@@ -28,5 +28,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T11:00:00Z"
+  "updated_at": "2026-08-13T11:10:00Z"
 }
