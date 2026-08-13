@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "potato-boost",
+  "title": {
+    "de": "Potato Boost",
+    "en": "Potato Boost"
+  },
+  "summary": {
+    "de": "Lokales CLI- und Dashboard-Werkzeug für reproduzierbare Performance-Findings mit deterministischem Messkern.",
+    "en": "Local CLI and dashboard for reproducible performance findings with a deterministic measurement core."
+  },
+  "packages": [],
+  "repository": {
+    "url": "https://github.com/iamthamanic/potato-boost",
+    "default_branch": "main"
+  },
+  "review_status": "needs-review",
+  "confidence": 0.5
+}

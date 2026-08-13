@@ -1,0 +1,15 @@
+{
+  "id": "D-002",
+  "title": {
+    "de": "Eigener Performance-Evidence-Graph, VisoDev optional",
+    "en": "Own performance evidence graph, VisoDev optional"
+  },
+  "status": "proposed",
+  "summary": {
+    "de": "Potato Boost bleibt unabhängig; VisoDev importiert Artefakte später.",
+    "en": "Potato Boost stays independent; VisoDev imports artifacts later."
+  },
+  "review_status": "needs-review",
+  "confidence": 0.6,
+  "source": "docs/PRD.md#d-002"
+}

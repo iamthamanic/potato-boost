@@ -1,0 +1,15 @@
+{
+  "id": "D-004",
+  "title": {
+    "de": "Filesystem-Artefakte ohne Datenbank im MVP",
+    "en": "Filesystem artifacts without a database in MVP"
+  },
+  "status": "proposed",
+  "summary": {
+    "de": "Lokale JSON/JSONL-Dateien statt SQLite/Postgres.",
+    "en": "Local JSON/JSONL files instead of SQLite/Postgres."
+  },
+  "review_status": "needs-review",
+  "confidence": 0.55,
+  "source": "docs/PRD.md#d-004"
+}

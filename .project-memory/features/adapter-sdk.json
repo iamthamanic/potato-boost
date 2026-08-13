@@ -1,0 +1,30 @@
+{
+  "id": "adapter-sdk",
+  "title": {
+    "de": "Adapter SDK",
+    "en": "Adapter SDK"
+  },
+  "summary": {
+    "de": "Capability-Vertrag, damit neue Stacks den Core nicht forken. Geplant als Slice 5; Godot/Tauri/.NET folgen.",
+    "en": "Capability contract so new stacks do not fork the core. Planned as slice 5; Godot/Tauri/.NET follow."
+  },
+  "plain_language": {
+    "de": "Web zuerst, später Godot und andere Engines über denselben Vertrag. Noch nicht gebaut.",
+    "en": "Web first, later Godot and other engines through the same contract. Not built yet."
+  },
+  "why_it_matters": {
+    "de": "G-003: neuer Adapter ohne Core-Schema-Änderung.",
+    "en": "G-003: new adapter without core schema changes."
+  },
+  "status": "planned",
+  "packages": ["adapter-sdk", "adapter-godot", "adapter-tauri", "adapter-dotnet"],
+  "paths": ["packages/adapter-sdk/**", "packages/adapter-godot/**"],
+  "user_impact": {
+    "de": ["Weitere Engines messbar, ohne das Kernprodukt umzubauen — sobald gebaut."],
+    "en": ["More engines become measurable without rewriting the core — once built."]
+  },
+  "related_changes": ["2026-08-13-bootstrap"],
+  "review_status": "needs-review",
+  "confidence": 0.4,
+  "locked": false
+}

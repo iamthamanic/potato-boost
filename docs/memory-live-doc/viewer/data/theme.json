@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "default",
+  "source": "skill-default",
+  "tokens": {
+    "bg": "#0f1115",
+    "bgElev": "#181b22",
+    "ink": "#e8eaef",
+    "muted": "#9aa3b2",
+    "line": "#2a303c",
+    "accent": "#5b9fd4",
+    "accent2": "#6bb89a",
+    "danger": "#e07a6a",
+    "radius": "8px",
+    "fontDisplay": "IBM Plex Sans, Segoe UI, sans-serif",
+    "fontBody": "IBM Plex Sans, Segoe UI, sans-serif",
+    "fontMono": "IBM Plex Mono, ui-monospace, monospace",
+    "tabRadius": "8px",
+    "bgGlow1": "#1a2230",
+    "bgGlow2": "#1a2420"
+  },
+  "fonts": {
+    "google": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  },
+  "mermaid": {
+    "theme": "dark",
+    "themeVariables": {
+      "primaryColor": "#1e3a5f",
+      "primaryTextColor": "#e8eaef",
+      "primaryBorderColor": "#5b9fd4",
+      "lineColor": "#9aa3b2",
+      "secondaryColor": "#243028",
+      "tertiaryColor": "#181b22",
+      "background": "#0f1115",
+      "mainBkg": "#181b22",
+      "nodeBorder": "#5b9fd4",
+      "clusterBkg": "#141820",
+      "titleColor": "#e8eaef",
+      "edgeLabelBackground": "#181b22"
+    }
+  }
+}

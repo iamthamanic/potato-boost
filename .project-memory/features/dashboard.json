@@ -1,0 +1,30 @@
+{
+  "id": "dashboard",
+  "title": {
+    "de": "Lokales Dashboard",
+    "en": "Local dashboard"
+  },
+  "summary": {
+    "de": "Loopback-UI für Setup, Live-Run, Findings und Evidence. Geplant als Slice 3, nach stabilem Artifact-Vertrag.",
+    "en": "Loopback UI for setup, live run, findings, and evidence. Planned as slice 3, after a stable artifact contract."
+  },
+  "plain_language": {
+    "de": "Eine lokale Browser-Oberfläche zeigt Läufe und Befunde — ohne Cloudkonto. Noch nicht gebaut.",
+    "en": "A local browser UI shows runs and findings — no cloud account. Not built yet."
+  },
+  "why_it_matters": {
+    "de": "Terminaltext allein ist kein stabiler Vertrag für Diagnose.",
+    "en": "Terminal text alone is not a stable contract for diagnosis."
+  },
+  "status": "planned",
+  "packages": ["dashboard", "local-api"],
+  "paths": ["apps/dashboard/**", "packages/local-api/**"],
+  "user_impact": {
+    "de": ["Setup, Live-Status, Timeline und Finding-Detail im Browser — sobald gebaut."],
+    "en": ["Setup, live status, timeline, and finding detail in the browser — once built."]
+  },
+  "related_changes": ["2026-08-13-bootstrap"],
+  "review_status": "needs-review",
+  "confidence": 0.4,
+  "locked": false
+}

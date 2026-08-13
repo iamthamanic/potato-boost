@@ -1,0 +1,30 @@
+{
+  "id": "artifact-spine",
+  "title": {
+    "de": "Artifact Spine",
+    "en": "Artifact Spine"
+  },
+  "summary": {
+    "de": "Versionierte, hash-integrere Run-Artefakte, Schemas, Statistik und deterministische Rules. Geplant als Slice 1.",
+    "en": "Versioned, hash-integrity run artifacts, schemas, statistics, and deterministic rules. Planned as slice 1."
+  },
+  "plain_language": {
+    "de": "Damit ein Lauf später vergleichbar bleibt, speichert Potato Boost das Ergebnis als unveränderliche Datei — noch nicht gebaut.",
+    "en": "So a run stays comparable later, Potato Boost stores the result as an immutable file — not built yet."
+  },
+  "why_it_matters": {
+    "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
+    "en": "Without this foundation, dashboard, CI, and adapters cannot plug in."
+  },
+  "status": "planned",
+  "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence"],
+  "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**"],
+  "user_impact": {
+    "de": ["Noch kein Nutzerfluss — internes Fundament."],
+    "en": ["No user flow yet — internal foundation."]
+  },
+  "related_changes": ["2026-08-13-bootstrap"],
+  "review_status": "needs-review",
+  "confidence": 0.4,
+  "locked": false
+}

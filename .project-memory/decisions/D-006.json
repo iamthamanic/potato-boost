@@ -1,0 +1,15 @@
+{
+  "id": "D-006",
+  "title": {
+    "de": "Detect → Evidence → Confirm",
+    "en": "Detect → evidence → confirm"
+  },
+  "status": "proposed",
+  "summary": {
+    "de": "Auto-Erkennung mit Belegen; bei Mehrdeutigkeit entscheidet der Nutzer.",
+    "en": "Auto-detection with evidence; the user decides when ambiguous."
+  },
+  "review_status": "needs-review",
+  "confidence": 0.65,
+  "source": "docs/PRD.md#d-006"
+}

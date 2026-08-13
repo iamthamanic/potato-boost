@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "decisions": [
+    {
+      "id": "D-001",
+      "title": {
+        "de": "npm-CLI auf Node 24 LTS",
+        "en": "npm CLI on Node 24 LTS"
+      },
+      "status": "proposed",
+      "summary": {
+        "de": "Distribution als npm-Paket mit Node 24 LTS statt Go/Rust-Binary im MVP.",
+        "en": "Distribute as an npm package on Node 24 LTS instead of a Go/Rust binary for MVP."
+      },
+      "review_status": "needs-review",
+      "confidence": 0.5,
+      "source": "docs/PRD.md#d-001"
+    },
+    {
+      "id": "D-002",
+      "title": {
+        "de": "Eigener Performance-Evidence-Graph, VisoDev optional",
+        "en": "Own performance evidence graph, VisoDev optional"
+      },
+      "status": "proposed",
+      "summary": {
+        "de": "Potato Boost bleibt unabhängig; VisoDev importiert Artefakte später.",
+        "en": "Potato Boost stays independent; VisoDev imports artifacts later."
+      },
+      "review_status": "needs-review",
+      "confidence": 0.6,
+      "source": "docs/PRD.md#d-002"
+    },
+    {
+      "id": "D-003",
+      "title": {
+        "de": "Capability-basierte Adapterpakete",
+        "en": "Capability-based adapter packages"
+      },
+      "status": "proposed",
+      "summary": {
+        "de": "Ein Core, mehrere Adapter; kein Fork pro Stack.",
+        "en": "One core, multiple adapters; no per-stack fork."
+      },
+      "review_status": "needs-review",
+      "confidence": 0.6,
+      "source": "docs/PRD.md#d-003"
+    },
+    {
+      "id": "D-004",
+      "title": {
+        "de": "Filesystem-Artefakte ohne Datenbank im MVP",
+        "en": "Filesystem artifacts without a database in MVP"
+      },
+      "status": "proposed",
+      "summary": {
+        "de": "Lokale JSON/JSONL-Dateien statt SQLite/Postgres.",
+        "en": "Local JSON/JSONL files instead of SQLite/Postgres."
+      },
+      "review_status": "needs-review",
+      "confidence": 0.55,
+      "source": "docs/PRD.md#d-004"
+    },
+    {
+      "id": "D-005",
+      "title": {
+        "de": "Echte Hardware getrennt von Budgets und Emulation",
+        "en": "Real hardware separated from budgets and emulation"
+      },
+      "status": "proposed",
+      "summary": {
+        "de": "Kein einzelner Potato-Score; drei Target-Modi mit ehrlichen Labels.",
+        "en": "No single Potato score; three target modes with honest labels."
+      },
+      "review_status": "needs-review",
+      "confidence": 0.65,
+      "source": "docs/PRD.md#d-005"
+    },
+    {
+      "id": "D-006",
+      "title": {
+        "de": "Detect → Evidence → Confirm",
+        "en": "Detect → evidence → confirm"
+      },
+      "status": "proposed",
+      "summary": {
+        "de": "Auto-Erkennung mit Belegen; bei Mehrdeutigkeit entscheidet der Nutzer.",
+        "en": "Auto-detection with evidence; the user decides when ambiguous."
+      },
+      "review_status": "needs-review",
+      "confidence": 0.65,
+      "source": "docs/PRD.md#d-006"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "web-cli",
+  "title": {
+    "de": "Web CLI und Discovery",
+    "en": "Web CLI and discovery"
+  },
+  "summary": {
+    "de": "npx-Start, read-only Projekterkennung, Doctor und Quick Scan für Web/Three.js. Geplant als Slice 2.",
+    "en": "npx start, read-only project detection, doctor, and quick scan for Web/Three.js. Planned as slice 2."
+  },
+  "plain_language": {
+    "de": "Im Repo starten, erkennen lassen, messen — der erste sichtbare Nutzerwert. Noch nicht implementiert.",
+    "en": "Start in a repo, confirm detection, measure — the first visible user value. Not implemented yet."
+  },
+  "why_it_matters": {
+    "de": "Time-to-first-finding (G-001) hängt an diesem Slice.",
+    "en": "Time-to-first-finding (G-001) depends on this slice."
+  },
+  "status": "planned",
+  "packages": ["cli", "adapter-web", "collector-os", "collector-hub", "scenario-engine"],
+  "paths": ["packages/cli/**", "packages/adapter-web/**"],
+  "user_impact": {
+    "de": ["Entwickler können ein unterstütztes Web-Projekt erkennen und einen Quick Scan starten — sobald gebaut."],
+    "en": ["Developers will be able to detect a supported web project and start a quick scan — once built."]
+  },
+  "related_changes": ["2026-08-13-bootstrap"],
+  "review_status": "needs-review",
+  "confidence": 0.4,
+  "locked": false
+}

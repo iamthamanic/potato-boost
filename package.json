@@ -1,0 +1,22 @@
+{
+  "name": "potato-boost",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Local CLI and dashboard for reproducible performance findings",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "echo 'apps/dashboard is not scaffolded yet — see AGENTS.md'",
+    "build": "echo 'no packages to build yet'",
+    "lint": "echo 'no packages to lint yet'",
+    "typecheck": "echo 'no packages to typecheck yet'",
+    "test": "echo 'no packages to test yet'",
+    "test:contract": "echo 'Add adapter contract tests after packages/adapter-sdk'",
+    "test:security": "echo 'Add security tests after local-api'",
+    "test:performance": "echo 'Add fixture benchmarks after fixtures/web-threejs'",
+    "test:e2e": "echo 'Add Playwright — see verify-ui skill'",
+    "checks": "bash scripts/run-checks.sh"
+  }
+}

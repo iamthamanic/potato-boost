@@ -1,0 +1,15 @@
+{
+  "id": "D-001",
+  "title": {
+    "de": "npm-CLI auf Node 24 LTS",
+    "en": "npm CLI on Node 24 LTS"
+  },
+  "status": "proposed",
+  "summary": {
+    "de": "Distribution als npm-Paket mit Node 24 LTS statt Go/Rust-Binary im MVP.",
+    "en": "Distribute as an npm package on Node 24 LTS instead of a Go/Rust binary for MVP."
+  },
+  "review_status": "needs-review",
+  "confidence": 0.5,
+  "source": "docs/PRD.md#d-001"
+}

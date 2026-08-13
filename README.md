@@ -1,0 +1,95 @@
+# Potato Boost
+
+Local CLI + dashboard that turns performance measurement into reproducible findings: scenario, target profile, evidence, rule, and confidence.
+
+See [docs/PRD.md](docs/PRD.md) for product scope and [docs/ROADMAP.md](docs/ROADMAP.md) for the build order (epics).
+
+Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boost)
+
+## Prerequisites
+
+- Node.js 24 LTS (project target; local machines may still be on 22)
+- pnpm 10+
+- A browser binary for Web runs (Playwright manages a compatible version once the web adapter exists)
+
+## Setup
+
+```bash
+# From repository root
+pnpm install
+```
+
+This repository is a greenfield pnpm workspace. Application packages under `apps/` and `packages/` are not scaffolded yet — start with `@pingpong-solution` on Slice 1 (Artifact Spine).
+
+There is no `.env` for the MVP. The tool is local-only and offline-capable.
+
+## Development
+
+```bash
+pnpm dev
+```
+
+Once `apps/dashboard` exists, the local dashboard is expected at [http://localhost:5173](http://localhost:5173). The production local API binds loopback only (random port + run token).
+
+## Checks (quality gate)
+
+```bash
+pnpm checks
+```
+
+Runs `scripts/run-checks.sh`. Until packages exist this is a documented placeholder. After scaffolding it should run lint, typecheck, tests, and `pnpm audit --audit-level=high`.
+
+## Tests
+
+```bash
+pnpm test              # Vitest — when packages exist
+pnpm test:e2e          # Playwright — bootstrap via @verify-ui skill
+```
+
+Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test:performance`.
+
+## Project structure
+
+```
+potato-boost/
+├── apps/dashboard/       # planned React + Vite UI
+├── packages/             # planned CLI, core, schemas, adapters
+├── fixtures/             # planned benchmark fixtures
+├── docs/
+│   ├── PRD.md
+│   ├── UI_STYLEGUIDE.md
+│   ├── PROJECT-STATUS.md
+│   └── memory-live-doc/viewer/
+├── .qa/                  # design, acceptance, verify-ui config
+├── .project-memory/      # living documentation source
+├── scripts/run-checks.sh
+└── AGENTS.md
+```
+
+## Environment variables
+
+No required env vars in the MVP. Secrets for recorded scenarios must stay in the user’s environment or secret store and appear in Potato Boost only as reference names — never as values.
+
+| Variable | Purpose |
+|----------|---------|
+| — | none for MVP |
+
+## Agent workflow
+
+For AI-assisted development:
+
+1. `@project-setup` — bootstrap (once)
+2. `@pingpong-solution` — design before features
+3. `@implement` — code + acceptance artifact
+4. `@verify-ui` — browser verification
+
+See [AGENTS.md](AGENTS.md).
+
+## Recent changes
+
+- **2026-08-13** — Project setup: PRD, QA scaffolding, living docs, epic roadmap (`docs/ROADMAP.md`).
+- Project setup: QA scaffolding, PRD import, living docs bootstrap (needs-review).
+
+## License
+
+TBD

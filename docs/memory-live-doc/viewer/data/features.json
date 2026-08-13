@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "features": [
+    {
+      "id": "adapter-sdk",
+      "title": {
+        "de": "Adapter SDK",
+        "en": "Adapter SDK"
+      },
+      "summary": {
+        "de": "Capability-Vertrag, damit neue Stacks den Core nicht forken. Geplant als Slice 5; Godot/Tauri/.NET folgen.",
+        "en": "Capability contract so new stacks do not fork the core. Planned as slice 5; Godot/Tauri/.NET follow."
+      },
+      "plain_language": {
+        "de": "Web zuerst, später Godot und andere Engines über denselben Vertrag. Noch nicht gebaut.",
+        "en": "Web first, later Godot and other engines through the same contract. Not built yet."
+      },
+      "why_it_matters": {
+        "de": "G-003: neuer Adapter ohne Core-Schema-Änderung.",
+        "en": "G-003: new adapter without core schema changes."
+      },
+      "status": "planned",
+      "packages": [
+        "adapter-sdk",
+        "adapter-godot",
+        "adapter-tauri",
+        "adapter-dotnet"
+      ],
+      "paths": [
+        "packages/adapter-sdk/**",
+        "packages/adapter-godot/**"
+      ],
+      "user_impact": {
+        "de": [
+          "Weitere Engines messbar, ohne das Kernprodukt umzubauen — sobald gebaut."
+        ],
+        "en": [
+          "More engines become measurable without rewriting the core — once built."
+        ]
+      },
+      "related_changes": [
+        "2026-08-13-bootstrap"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.4,
+      "locked": false
+    },
+    {
+      "id": "artifact-spine",
+      "title": {
+        "de": "Artifact Spine",
+        "en": "Artifact Spine"
+      },
+      "summary": {
+        "de": "Versionierte, hash-integrere Run-Artefakte, Schemas, Statistik und deterministische Rules. Geplant als Slice 1.",
+        "en": "Versioned, hash-integrity run artifacts, schemas, statistics, and deterministic rules. Planned as slice 1."
+      },
+      "plain_language": {
+        "de": "Damit ein Lauf später vergleichbar bleibt, speichert Potato Boost das Ergebnis als unveränderliche Datei — noch nicht gebaut.",
+        "en": "So a run stays comparable later, Potato Boost stores the result as an immutable file — not built yet."
+      },
+      "why_it_matters": {
+        "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
+        "en": "Without this foundation, dashboard, CI, and adapters cannot plug in."
+      },
+      "status": "planned",
+      "packages": [
+        "schemas",
+        "artifact-store",
+        "analysis",
+        "rule-engine",
+        "evidence"
+      ],
+      "paths": [
+        "packages/schemas/**",
+        "packages/artifact-store/**",
+        "packages/analysis/**",
+        "packages/rule-engine/**"
+      ],
+      "user_impact": {
+        "de": [
+          "Noch kein Nutzerfluss — internes Fundament."
+        ],
+        "en": [
+          "No user flow yet — internal foundation."
+        ]
+      },
+      "related_changes": [
+        "2026-08-13-bootstrap"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.4,
+      "locked": false
+    },
+    {
+      "id": "compare-ci",
+      "title": {
+        "de": "Compare und CI",
+        "en": "Compare and CI"
+      },
+      "summary": {
+        "de": "Baseline-Compare, Noise-Budget und dokumentierte Exit-Codes. Geplant als Slice 4.",
+        "en": "Baseline compare, noise budget, and documented exit codes. Planned as slice 4."
+      },
+      "plain_language": {
+        "de": "Vorher/Nachher und Pull-Request-Gates, ohne falsche Regressionen bei inkompatibler Umgebung.",
+        "en": "Before/after and pull-request gates, without false regressions on incompatible environments."
+      },
+      "why_it_matters": {
+        "de": "G-002 (reproduzierbare Vorher/Nachher-Aussage) und CI-Regression.",
+        "en": "G-002 (reproducible before/after) and CI regression."
+      },
+      "status": "planned",
+      "packages": [
+        "cli",
+        "analysis",
+        "profiles",
+        "rules-web"
+      ],
+      "paths": [
+        "packages/analysis/**",
+        "packages/cli/**"
+      ],
+      "user_impact": {
+        "de": [
+          "Fix verifizieren und CI-Gates — sobald gebaut."
+        ],
+        "en": [
+          "Verify a fix and CI gates — once built."
+        ]
+      },
+      "related_changes": [
+        "2026-08-13-bootstrap"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.4,
+      "locked": false
+    },
+    {
+      "id": "dashboard",
+      "title": {
+        "de": "Lokales Dashboard",
+        "en": "Local dashboard"
+      },
+      "summary": {
+        "de": "Loopback-UI für Setup, Live-Run, Findings und Evidence. Geplant als Slice 3, nach stabilem Artifact-Vertrag.",
+        "en": "Loopback UI for setup, live run, findings, and evidence. Planned as slice 3, after a stable artifact contract."
+      },
+      "plain_language": {
+        "de": "Eine lokale Browser-Oberfläche zeigt Läufe und Befunde — ohne Cloudkonto. Noch nicht gebaut.",
+        "en": "A local browser UI shows runs and findings — no cloud account. Not built yet."
+      },
+      "why_it_matters": {
+        "de": "Terminaltext allein ist kein stabiler Vertrag für Diagnose.",
+        "en": "Terminal text alone is not a stable contract for diagnosis."
+      },
+      "status": "planned",
+      "packages": [
+        "dashboard",
+        "local-api"
+      ],
+      "paths": [
+        "apps/dashboard/**",
+        "packages/local-api/**"
+      ],
+      "user_impact": {
+        "de": [
+          "Setup, Live-Status, Timeline und Finding-Detail im Browser — sobald gebaut."
+        ],
+        "en": [
+          "Setup, live status, timeline, and finding detail in the browser — once built."
+        ]
+      },
+      "related_changes": [
+        "2026-08-13-bootstrap"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.4,
+      "locked": false
+    },
+    {
+      "id": "web-cli",
+      "title": {
+        "de": "Web CLI und Discovery",
+        "en": "Web CLI and discovery"
+      },
+      "summary": {
+        "de": "npx-Start, read-only Projekterkennung, Doctor und Quick Scan für Web/Three.js. Geplant als Slice 2.",
+        "en": "npx start, read-only project detection, doctor, and quick scan for Web/Three.js. Planned as slice 2."
+      },
+      "plain_language": {
+        "de": "Im Repo starten, erkennen lassen, messen — der erste sichtbare Nutzerwert. Noch nicht implementiert.",
+        "en": "Start in a repo, confirm detection, measure — the first visible user value. Not implemented yet."
+      },
+      "why_it_matters": {
+        "de": "Time-to-first-finding (G-001) hängt an diesem Slice.",
+        "en": "Time-to-first-finding (G-001) depends on this slice."
+      },
+      "status": "planned",
+      "packages": [
+        "cli",
+        "adapter-web",
+        "collector-os",
+        "collector-hub",
+        "scenario-engine"
+      ],
+      "paths": [
+        "packages/cli/**",
+        "packages/adapter-web/**"
+      ],
+      "user_impact": {
+        "de": [
+          "Entwickler können ein unterstütztes Web-Projekt erkennen und einen Quick Scan starten — sobald gebaut."
+        ],
+        "en": [
+          "Developers will be able to detect a supported web project and start a quick scan — once built."
+        ]
+      },
+      "related_changes": [
+        "2026-08-13-bootstrap"
+      ],
+      "review_status": "needs-review",
+      "confidence": 0.4,
+      "locked": false
+    }
+  ]
+}

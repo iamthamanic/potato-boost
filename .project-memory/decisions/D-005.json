@@ -1,0 +1,15 @@
+{
+  "id": "D-005",
+  "title": {
+    "de": "Echte Hardware getrennt von Budgets und Emulation",
+    "en": "Real hardware separated from budgets and emulation"
+  },
+  "status": "proposed",
+  "summary": {
+    "de": "Kein einzelner Potato-Score; drei Target-Modi mit ehrlichen Labels.",
+    "en": "No single Potato score; three target modes with honest labels."
+  },
+  "review_status": "needs-review",
+  "confidence": 0.65,
+  "source": "docs/PRD.md#d-005"
+}

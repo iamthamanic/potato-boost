@@ -1,0 +1,13 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.potato/
+.qa/evidence/
+.qa/test-results/
+coverage/
+playwright-report/
+test-results/
+.DS_Store

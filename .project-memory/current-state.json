@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "focus": [
+    {
+      "de": "QA-Scaffolding und PRD importiert; noch kein Anwendungscode.",
+      "en": "QA scaffolding and PRD imported; no application code yet."
+    }
+  ],
+  "recently_completed": [
+    {
+      "de": "Project-Setup (init): PRD, AGENTS, README, .qa, Styleguide, Living Docs.",
+      "en": "Project-setup (init): PRD, AGENTS, README, .qa, styleguide, living docs."
+    }
+  ],
+  "incomplete": [
+    {
+      "de": "Monorepo-Pakete (schemas, artifact-store, adapter-sdk, CLI, Dashboard) existieren nicht.",
+      "en": "Monorepo packages (schemas, artifact-store, adapter-sdk, CLI, dashboard) do not exist yet."
+    }
+  ],
+  "risks": [
+    {
+      "de": "Alle Living-Docs-Claims sind needs-review. Q-001–Q-007 im PRD sind offen.",
+      "en": "All living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
+    }
+  ],
+  "updated_at": "2026-08-13T08:58:00Z"
+}

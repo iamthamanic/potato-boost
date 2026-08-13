@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "changes": [
+    {
+      "id": "2026-08-13-bootstrap",
+      "date": "2026-08-13",
+      "type": "bootstrap",
+      "status": "recorded",
+      "title": {
+        "de": "Projektgedächtnis und QA-Scaffolding initialisiert",
+        "en": "Project memory and QA scaffolding initialized"
+      },
+      "summary": {
+        "de": "Greenfield-Init aus potato-boost-product-spec.md: PRD, AGENTS, README, .qa, Styleguide und Living Docs. Kein Anwendungscode.",
+        "en": "Greenfield init from potato-boost-product-spec.md: PRD, AGENTS, README, .qa, styleguide, and living docs. No application code."
+      },
+      "plain_language": {
+        "de": "Das leere Repo hat jetzt Produktbeschreibung und Agenten-Regeln. Die App selbst fehlt noch.",
+        "en": "The empty repo now has a product description and agent rules. The app itself is still missing."
+      },
+      "why_it_matters": {
+        "de": "Damit spätere Features gegen ein festes PRD und Sicherheitscheckliste gebaut werden.",
+        "en": "So later features are built against a fixed PRD and security checklist."
+      },
+      "user_impact": {
+        "de": [
+          "Noch kein messbares Produkt für Endnutzer.",
+          "Dokumentation und Viewer sind lokal vorhanden (needs-review)."
+        ],
+        "en": [
+          "No measurable product for end users yet.",
+          "Documentation and viewer exist locally (needs-review)."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "AGENTS.md und docs/PRD.md sind die verbindliche Karte.",
+          "pnpm-Workspace-Root existiert; apps/ und packages/ sind leer."
+        ],
+        "en": [
+          "AGENTS.md and docs/PRD.md are the binding map.",
+          "pnpm workspace root exists; apps/ and packages/ are empty."
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Git ist initialisiert, Remote und GitHub Pages fehlen.",
+          "pnpm checks ist ein Placeholder bis Pakete existieren."
+        ],
+        "en": [
+          "Git is initialized; remote and GitHub Pages are missing.",
+          "pnpm checks is a placeholder until packages exist."
+        ]
+      },
+      "git": {
+        "base": "0000000000000000000000000000000000000000",
+        "head": "0000000000000000000000000000000000000000",
+        "branch": "main",
+        "pull_request": null
+      },
+      "packages": [],
+      "affected_features": [
+        "artifact-spine",
+        "web-cli",
+        "dashboard",
+        "compare-ci",
+        "adapter-sdk"
+      ],
+      "affected_components": [
+        "docs/PRD.md",
+        "AGENTS.md",
+        "README.md",
+        ".qa/",
+        ".project-memory/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [
+        {
+          "kind": "file",
+          "path": "docs/PRD.md",
+          "url": "https://github.com/iamthamanic/potato-boost/blob/0000000000000000000000000000000000000000/docs/PRD.md"
+        },
+        {
+          "kind": "file",
+          "path": "AGENTS.md",
+          "url": "https://github.com/iamthamanic/potato-boost/blob/0000000000000000000000000000000000000000/AGENTS.md"
+        },
+        {
+          "kind": "file",
+          "path": "README.md",
+          "url": "https://github.com/iamthamanic/potato-boost/blob/0000000000000000000000000000000000000000/README.md"
+        },
+        {
+          "kind": "file",
+          "path": ".qa/",
+          "url": "https://github.com/iamthamanic/potato-boost/blob/0000000000000000000000000000000000000000/.qa"
+        },
+        {
+          "kind": "file",
+          "path": ".project-memory/",
+          "url": "https://github.com/iamthamanic/potato-boost/tree/0000000000000000000000000000000000000000/.project-memory"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.45,
+      "review_status": "needs-review"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "versions": [
+    {
+      "schema_version": 1,
+      "id": "overview-current",
+      "date": "2026-08-13",
+      "title": {
+        "de": "Aktuell",
+        "en": "Current"
+      },
+      "summary": {
+        "de": "Aktueller Stand aus overview.mermaid",
+        "en": "Current state from overview.mermaid"
+      },
+      "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]\n",
+      "source_path": ".project-memory/architecture/overview.mermaid",
+      "is_current": true
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "id": "D-003",
+  "title": {
+    "de": "Capability-basierte Adapterpakete",
+    "en": "Capability-based adapter packages"
+  },
+  "status": "proposed",
+  "summary": {
+    "de": "Ein Core, mehrere Adapter; kein Fork pro Stack.",
+    "en": "One core, multiple adapters; no per-stack fork."
+  },
+  "review_status": "needs-review",
+  "confidence": 0.6,
+  "source": "docs/PRD.md#d-003"
+}

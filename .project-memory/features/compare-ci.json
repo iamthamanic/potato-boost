@@ -1,0 +1,30 @@
+{
+  "id": "compare-ci",
+  "title": {
+    "de": "Compare und CI",
+    "en": "Compare and CI"
+  },
+  "summary": {
+    "de": "Baseline-Compare, Noise-Budget und dokumentierte Exit-Codes. Geplant als Slice 4.",
+    "en": "Baseline compare, noise budget, and documented exit codes. Planned as slice 4."
+  },
+  "plain_language": {
+    "de": "Vorher/Nachher und Pull-Request-Gates, ohne falsche Regressionen bei inkompatibler Umgebung.",
+    "en": "Before/after and pull-request gates, without false regressions on incompatible environments."
+  },
+  "why_it_matters": {
+    "de": "G-002 (reproduzierbare Vorher/Nachher-Aussage) und CI-Regression.",
+    "en": "G-002 (reproducible before/after) and CI regression."
+  },
+  "status": "planned",
+  "packages": ["cli", "analysis", "profiles", "rules-web"],
+  "paths": ["packages/analysis/**", "packages/cli/**"],
+  "user_impact": {
+    "de": ["Fix verifizieren und CI-Gates — sobald gebaut."],
+    "en": ["Verify a fix and CI gates — once built."]
+  },
+  "related_changes": ["2026-08-13-bootstrap"],
+  "review_status": "needs-review",
+  "confidence": 0.4,
+  "locked": false
+}
