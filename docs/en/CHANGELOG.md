@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — VisoDev import schema
+
+`docs/artifact-schema.md` and `packages/schemas/visodev-export.schema.json` describe the import. IDs are identical to Run/Evidence; no VisoDev code in core (FR-026).
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Adapter SDK
 
 `packages/adapter-sdk` exports manifest schema, capability enum, and contract harness. Core loads adapters via manifest + allowlist + version lock (FR-024, CON-005).

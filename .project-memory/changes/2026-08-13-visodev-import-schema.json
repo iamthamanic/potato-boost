@@ -1,0 +1,84 @@
+{
+  "id": "2026-08-13-visodev-import-schema",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Stabiles VisoDev-Importschema ohne VisoDev-Abhängigkeit",
+    "en": "Stable VisoDev import schema without VisoDev dependency"
+  },
+  "summary": {
+    "de": "docs/artifact-schema.md und packages/schemas/visodev-export.schema.json beschreiben den Import. IDs sind identisch zu Run/Evidence; kein VisoDev-Code im Core (FR-026).",
+    "en": "docs/artifact-schema.md and packages/schemas/visodev-export.schema.json describe the import. IDs are identical to Run/Evidence; no VisoDev code in core (FR-026)."
+  },
+  "plain_language": {
+    "de": "VisoDev kann Artefakte lesen, ohne dass Potato Boost VisoDev kennt.",
+    "en": "VisoDev can read artifacts without Potato Boost knowing VisoDev."
+  },
+  "why_it_matters": {
+    "de": "Ohne dokumentiertes Schema ist Import nicht stabil (FR-026).",
+    "en": "Without a documented schema, import is not stable (FR-026)."
+  },
+  "user_impact": {
+    "de": [
+      "Importschema ist versioniert und teilt runId/evidenceId/findingId.",
+      "Dokumentation sagt klar: VisoDev ist optional."
+    ],
+    "en": [
+      "Import schema is versioned and shares runId/evidenceId/findingId.",
+      "Documentation clearly says VisoDev is optional."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Kein visodev npm-Dependency im Core.",
+      "Roundtrip-Test nur lokal."
+    ],
+    "en": [
+      "No visodev npm dependency in core.",
+      "Roundtrip test is local only."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Kein automatischer Upload; keine Secrets."
+    ],
+    "en": [
+      "No automatic upload; no secrets."
+    ]
+  },
+  "git": {
+    "base": "7386c6b",
+    "head": "issue/35-visodev-import-schema",
+    "branch": "issue/35-visodev-import-schema",
+    "pull_request": null
+  },
+  "packages": [
+    "schemas"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "docs/artifact-schema.md",
+    "packages/schemas/visodev-export.schema.json"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "docs/artifact-schema.md",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/35-visodev-import-schema/docs/artifact-schema.md"
+    },
+    {
+      "kind": "file",
+      "path": "packages/schemas/visodev-export.schema.json",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/35-visodev-import-schema/packages/schemas/visodev-export.schema.json"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}
