@@ -1,0 +1,83 @@
+{
+  "id": "2026-08-13-scenario-engine",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Scenario Engine mit Phasen und Wiederholungen",
+    "en": "Scenario engine with phases and repetitions"
+  },
+  "summary": {
+    "de": "packages/scenario-engine modelliert Setup/Warm-up/Measure/Cleanup, Wiederholungen, Marker und Timeouts. Quick Scan ist ein vorgefertigtes Scenario (FR-009/010).",
+    "en": "packages/scenario-engine models Setup/Warm-up/Measure/Cleanup, repetitions, markers, and timeouts. Quick Scan is a preset scenario (FR-009/010)."
+  },
+  "plain_language": {
+    "de": "Ohne Phasenmodell sind Läufe nicht vergleichbar. Jetzt gibt es ein Schema und einen Engine-Lauf.",
+    "en": "Without a phase model, runs are not comparable. Now there is a schema and an engine run."
+  },
+  "why_it_matters": {
+    "de": "Ohne Scenario Engine gibt es kein reproduzierbares Messfenster (FR-009).",
+    "en": "Without a scenario engine there is no reproducible measurement window (FR-009)."
+  },
+  "user_impact": {
+    "de": [
+      "Ein YAML/JSON-Scenario mit drei Measure-Wiederholungen ist ausführbar.",
+      "Timeout bricht Phase ab ohne Baseline-Eignung."
+    ],
+    "en": [
+      "A YAML/JSON scenario with three measure repetitions is executable.",
+      "Timeout aborts a phase without baseline eligibility."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "ScenarioDriver ist injiziert; Fake-Driver für Tests.",
+      "secretRefs sind Namen, keine Werte."
+    ],
+    "en": [
+      "ScenarioDriver is injected; fake driver for tests.",
+      "secretRefs are names, not values."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine Seiteneffekte im Engine-Pfad; Zeitlimits sind explizit."
+    ],
+    "en": [
+      "No side effects in the engine path; timeouts are explicit."
+    ]
+  },
+  "git": {
+    "base": "58b47ff",
+    "head": "issue/15-scenario-engine",
+    "branch": "issue/15-scenario-engine",
+    "pull_request": null
+  },
+  "packages": [
+    "scenario-engine"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/scenario-engine/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/scenario-engine/src/engine.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/15-scenario-engine/packages/scenario-engine/src/engine.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/scenario-engine/src/schema.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/15-scenario-engine/packages/scenario-engine/src/schema.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}
