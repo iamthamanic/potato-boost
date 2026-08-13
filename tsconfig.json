@@ -6,6 +6,7 @@
     { "path": "./packages/artifact-store" },
     { "path": "./packages/analysis" },
     { "path": "./packages/rule-engine" },
-    { "path": "./packages/evidence" }
+    { "path": "./packages/evidence" },
+    { "path": "./packages/cli" }
   ]
 }

@@ -1,0 +1,90 @@
+{
+  "id": "2026-08-13-cli-entrypoint",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "CLI-Entrypoint mit Hilfe und Exit-Code 2",
+    "en": "CLI entrypoint with help and exit code 2"
+  },
+  "summary": {
+    "de": "packages/cli stellt potato-boost/potato bereit. Unbekannte Nutzung endet mit Exit 2, nicht 1.",
+    "en": "packages/cli provides potato-boost/potato. Invalid usage exits 2, not 1."
+  },
+  "plain_language": {
+    "de": "Ein Befehl, den Menschen und Agenten aufrufen können. Falsche Flags sind Nutzungsfehler, keine Budget-Fails.",
+    "en": "One command humans and agents can invoke. Bad flags are usage errors, not budget fails."
+  },
+  "why_it_matters": {
+    "de": "Ohne stabilen Entrypoint bleibt das Tool ein internes Script (FR-001).",
+    "en": "Without a stable entrypoint the tool stays an internal script (FR-001)."
+  },
+  "user_impact": {
+    "de": [
+      "Nach pnpm build: node packages/cli --help. Subcommands sind Stubs."
+    ],
+    "en": [
+      "After pnpm build: node packages/cli --help. Subcommands are stubs."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Commander, argv-Array, keine Shell-Interpolation."
+    ],
+    "en": [
+      "Commander, argv array, no shell interpolation."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Hilfe und Fehler ohne Stack und Host-Pfade."
+    ],
+    "en": [
+      "Help and errors omit stacks and host paths."
+    ]
+  },
+  "git": {
+    "base": "97d5cbb89dfecb6c9fdf4513ba92bcbba5d1895e",
+    "head": "issue/11-cli-entrypoint",
+    "branch": "issue/11-cli-entrypoint",
+    "pull_request": null
+  },
+  "packages": [
+    "cli"
+  ],
+  "affected_features": [
+    "cli"
+  ],
+  "affected_components": [
+    "packages/cli/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "97d5cbb89dfecb6c9fdf4513ba92bcbba5d1895e...issue/11-cli-entrypoint",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/97d5cbb89dfecb6c9fdf4513ba92bcbba5d1895e...issue/11-cli-entrypoint"
+    },
+    {
+      "kind": "commit",
+      "path": "issue/11-cli-entrypoint",
+      "sha": "issue/11-cli-entrypoint",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/issue/11-cli-entrypoint"
+    },
+    {
+      "kind": "file",
+      "path": "packages/cli/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/11-cli-entrypoint/packages/cli"
+    },
+    {
+      "kind": "file",
+      "path": "packages/cli/src/run.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/cli/src/run.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.75,
+  "review_status": "needs-review"
+}

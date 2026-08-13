@@ -4,10 +4,11 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Artifact spine including golden v1.0.0; next are CLI and Three.js fixture.
+- CLI entrypoint is in; next are detect/doctor and the Three.js fixture.
 
 ## Recently completed
 
+- `packages/cli`: npx entrypoint, help, exit code 2 (issue #11).
 - Golden v1.0.0 artifact tests and schema compatibility (issue #9).
 - `packages/evidence`: provenance and source candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministic evaluate() (issue #7).
@@ -18,7 +19,7 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- CLI, dashboard, and Three.js fixture are still missing.
+- Detect/doctor, dashboard, and Three.js fixture are still missing.
 
 ## Risks
 
@@ -28,4 +29,4 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #11 (CLI) and #17 (fixture).
+GitHub issues #15 (CLI follow-on) or #17 (fixture).
