@@ -1,0 +1,98 @@
+{
+  "id": "2026-08-13-artifact-store",
+  "date": "2026-08-13",
+  "type": "architecture",
+  "status": "recorded",
+  "title": {
+    "de": "Atomarer lokaler Artifact Store",
+    "en": "Atomic local artifact store"
+  },
+  "summary": {
+    "de": "packages/artifact-store schreibt Runs unter .potato mit temp, fsync, Rename und SHA-256. Der Index ist Source of Truth für completed; Hash-Mismatch ist keine Baseline.",
+    "en": "packages/artifact-store writes runs under .potato with temp, fsync, rename, and SHA-256. The index is source of truth for completed; hash mismatch is not a baseline."
+  },
+  "plain_language": {
+    "de": "Ein Messlauf wird erst als fertig gezählt, wenn die Datei vollständig und mit Prüfsumme im Index steht.",
+    "en": "A measurement run counts as finished only when the file is complete and checksummed in the index."
+  },
+  "why_it_matters": {
+    "de": "Absturz mitten im Schreiben darf keinen completed-Run mit kaputtem Hash hinterlassen (NFR-013).",
+    "en": "A crash mid-write must not leave a completed run with a broken hash (NFR-013)."
+  },
+  "user_impact": {
+    "de": [
+      "Kein neuer UI-Fluss. Spätere CLI-Läufe speichern hier."
+    ],
+    "en": [
+      "No new UI flow. Later CLI runs will store here."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "createArtifactStore(projectRoot); Pfade nur unter .potato.",
+      "runId mit ../ wird abgewiesen."
+    ],
+    "en": [
+      "createArtifactStore(projectRoot); paths only under .potato.",
+      "runId with ../ is rejected."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      ".potato/ bleibt gitignored. Keine Cloud, keine SQLite."
+    ],
+    "en": [
+      ".potato/ stays gitignored. No cloud, no SQLite."
+    ]
+  },
+  "git": {
+    "base": "78754f63b052e7477e551105ce17679a3db5b8d3",
+    "head": "issue/5-artifact-store",
+    "branch": "issue/5-artifact-store",
+    "pull_request": null
+  },
+  "packages": [
+    "artifact-store"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/artifact-store/",
+    "tsconfig.json"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "78754f63b052e7477e551105ce17679a3db5b8d3...issue/5-artifact-store",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/78754f63b052e7477e551105ce17679a3db5b8d3...issue/5-artifact-store"
+    },
+    {
+      "kind": "commit",
+      "path": "issue/5-artifact-store",
+      "sha": "issue/5-artifact-store",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/issue/5-artifact-store"
+    },
+    {
+      "kind": "file",
+      "path": "packages/artifact-store/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/5-artifact-store/packages/artifact-store"
+    },
+    {
+      "kind": "file",
+      "path": "tsconfig.json",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/5-artifact-store/tsconfig.json"
+    },
+    {
+      "kind": "file",
+      "path": "packages/artifact-store/src/store.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/artifact-store/src/store.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.7,
+  "review_status": "needs-review"
+}

@@ -5,12 +5,12 @@
     "en": "Artifact Spine"
   },
   "summary": {
-    "de": "Versionierte, hash-integrere Run-Artefakte, Schemas, Statistik und deterministische Rules. Schema-Vertrag existiert; Store und Rules fehlen.",
-    "en": "Versioned, hash-integrity run artifacts, schemas, statistics, and deterministic rules. Schema contract exists; store and rules are missing."
+    "de": "Versionierte, hash-integrere Run-Artefakte. Schema-Vertrag und atomarer Store existieren; Statistik und Rules fehlen.",
+    "en": "Versioned, hash-integrity run artifacts. Schema contract and atomic store exist; statistics and rules are missing."
   },
   "plain_language": {
-    "de": "Das Dateiformat für einen Messlauf ist definiert. Speichern, Regeln und Dashboard kommen später.",
-    "en": "The file format for a measurement run is defined. Storage, rules, and dashboard come later."
+    "de": "Format und Speichern für einen Messlauf sind da. Regeln und Dashboard kommen später.",
+    "en": "Format and storage for a measurement run are in. Rules and dashboard come later."
   },
   "why_it_matters": {
     "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
@@ -20,11 +20,11 @@
   "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence"],
   "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**"],
   "user_impact": {
-    "de": ["Noch kein Nutzerfluss — internes Fundament. Schema-Paket ist vorhanden."],
-    "en": ["No user flow yet — internal foundation. Schema package is present."]
+    "de": ["Noch kein Nutzerfluss — Schema und Store sind internes Fundament."],
+    "en": ["No user flow yet — schema and store are internal foundation."]
   },
-  "related_changes": ["2026-08-13-bootstrap", "2026-08-13-schemas-core"],
+  "related_changes": ["2026-08-13-bootstrap", "2026-08-13-schemas-core", "2026-08-13-artifact-store"],
   "review_status": "needs-review",
-  "confidence": 0.6,
+  "confidence": 0.65,
   "locked": false
 }
