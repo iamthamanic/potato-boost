@@ -1,0 +1,98 @@
+{
+  "id": "2026-08-13-analysis-engine",
+  "date": "2026-08-13",
+  "type": "contract",
+  "status": "recorded",
+  "title": {
+    "de": "Analysis Engine: Quantile, Hitches, Datenqualität",
+    "en": "Analysis engine: quantiles, hitches, data quality"
+  },
+  "summary": {
+    "de": "packages/analysis berechnet p95/p99, Hitch-Zählung und data-quality aus Samples. Noise oder zu wenige Samples setzen inconclusive — nie Pass/Fail. Mittelwert allein reicht nicht (T-007).",
+    "en": "packages/analysis computes p95/p99, hitch count, and data-quality from samples. Noise or too few samples yield inconclusive — never pass/fail. Mean alone is not enough (T-007)."
+  },
+  "plain_language": {
+    "de": "Ein Lauf mit wenigen Hängern sieht im Durchschnitt oft gut aus. Die Analyse zeigt die Hänger trotzdem.",
+    "en": "A run with a few stutters often looks fine on average. Analysis still shows the stutters."
+  },
+  "why_it_matters": {
+    "de": "Sonst werden stutter-lastige Builds fälschlich als grün gewertet.",
+    "en": "Otherwise stuttery builds are falsely treated as green."
+  },
+  "user_impact": {
+    "de": [
+      "Kein UI. Spätere Findings nutzen diese Zahlen."
+    ],
+    "en": [
+      "No UI. Later findings will use these numbers."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "analyzeSamples(samples, { metric, hitchThreshold }) ist rein.",
+      "Leere Samples werfen; Noise liefert inconclusive."
+    ],
+    "en": [
+      "analyzeSamples(samples, { metric, hitchThreshold }) is pure.",
+      "Empty samples throw; noise returns inconclusive."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine I/O, keine neuen Runtime-Deps außer schemas."
+    ],
+    "en": [
+      "No I/O, no new runtime deps except schemas."
+    ]
+  },
+  "git": {
+    "base": "5df157a968664132bdfdc90751adec394b309a18",
+    "head": "issue/6-analysis-engine",
+    "branch": "issue/6-analysis-engine",
+    "pull_request": null
+  },
+  "packages": [
+    "analysis"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/analysis/",
+    "tsconfig.json"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "5df157a968664132bdfdc90751adec394b309a18...issue/6-analysis-engine",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/5df157a968664132bdfdc90751adec394b309a18...issue/6-analysis-engine"
+    },
+    {
+      "kind": "commit",
+      "path": "issue/6-analysis-engine",
+      "sha": "issue/6-analysis-engine",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/issue/6-analysis-engine"
+    },
+    {
+      "kind": "file",
+      "path": "packages/analysis/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/6-analysis-engine/packages/analysis"
+    },
+    {
+      "kind": "file",
+      "path": "tsconfig.json",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/6-analysis-engine/tsconfig.json"
+    },
+    {
+      "kind": "file",
+      "path": "packages/analysis/src/analyze.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/analysis/src/analyze.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.7,
+  "review_status": "needs-review"
+}

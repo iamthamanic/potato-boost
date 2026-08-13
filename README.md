@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
+This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -53,7 +53,7 @@ Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test
 ```
 potato-boost/
 ├── apps/dashboard/       # planned React + Vite UI
-├── packages/             # core, schemas, artifact-store; remaining CLI/adapters planned
+├── packages/             # core, schemas, artifact-store, analysis; remaining CLI/adapters planned
 ├── fixtures/             # planned benchmark fixtures
 ├── docs/
 │   ├── PRD.md
@@ -87,6 +87,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-13** — Analysis engine: p95/p99, hitches, data quality (`issue/6-analysis-engine`).
 - **2026-08-13** — Atomic local artifact store under `.potato/` (`issue/5-artifact-store`).
 - **2026-08-13** — Canonical run-artifact Zod + JSON schemas in `packages/schemas` (`issue/4-schemas-core`).
 - **2026-08-13** — TypeScript workspace gates are real: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm checks` (`issue/2-ts-workspace-bootstrap`).

@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Analysis engine
+
+Reine Statistik: p95/p99, Hitch-Zählung, Datenqualität (`valid`/`noisy`/`incomplete`). Noise setzt `inconclusive`, nicht Fail. Mittelwert allein reicht nicht.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Artifact store
 
 Atomarer lokaler Store unter `.potato` (temp, fsync, Rename, SHA-256). Index ist Source of Truth für completed.

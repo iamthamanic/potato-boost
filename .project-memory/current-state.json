@@ -2,24 +2,24 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Artifact Spine: Schema und Store stehen; als Nächstes Analysis/Rules, CLI-Entrypoint und Three.js-Fixture.",
-      "en": "Artifact spine: schema and store are in; next are analysis/rules, CLI entrypoint, and Three.js fixture."
+      "de": "Artifact Spine: Schema, Store und Analysis stehen; als Nächstes Rules, CLI und Three.js-Fixture.",
+      "en": "Artifact spine: schema, store, and analysis are in; next are rules, CLI, and Three.js fixture."
     }
   ],
   "recently_completed": [
     {
-      "de": "packages/artifact-store: atomares Schreiben unter .potato (issue #5).",
-      "en": "packages/artifact-store: atomic writes under .potato (issue #5)."
+      "de": "packages/analysis: Quantile, Hitches, Datenqualität (issue #6).",
+      "en": "packages/analysis: quantiles, hitches, data quality (issue #6)."
     },
     {
-      "de": "packages/schemas: Zod + JSON Schema (issue #4).",
-      "en": "packages/schemas: Zod + JSON Schema (issue #4)."
+      "de": "packages/artifact-store: atomares Schreiben unter .potato (issue #5).",
+      "en": "packages/artifact-store: atomic writes under .potato (issue #5)."
     }
   ],
   "incomplete": [
     {
-      "de": "analysis, rule-engine, CLI, Dashboard und Fixtures fehlen noch.",
-      "en": "analysis, rule-engine, CLI, dashboard, and fixtures are still missing."
+      "de": "rule-engine, CLI, Dashboard und Fixtures fehlen noch.",
+      "en": "rule-engine, CLI, dashboard, and fixtures are still missing."
     }
   ],
   "risks": [
@@ -28,5 +28,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T10:10:00Z"
+  "updated_at": "2026-08-13T10:45:00Z"
 }
