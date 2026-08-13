@@ -31,6 +31,17 @@ importers:
 
   packages/core: {}
 
+  packages/rule-engine:
+    dependencies:
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+      zod:
+        specifier: ^4.4.3
+        version: 4.4.3
+
+  packages/rules-web: {}
+
   packages/schemas:
     dependencies:
       zod:

@@ -5,12 +5,12 @@
     "en": "Artifact Spine"
   },
   "summary": {
-    "de": "Versionierte Run-Artefakte. Schema, Store und Analysis existieren; Rules fehlen.",
-    "en": "Versioned run artifacts. Schema, store, and analysis exist; rules are missing."
+    "de": "Versionierte Run-Artefakte. Schema, Store, Analysis und Rules existieren; Evidence-Graph fehlt.",
+    "en": "Versioned run artifacts. Schema, store, analysis, and rules exist; evidence graph is missing."
   },
   "plain_language": {
-    "de": "Format, Speichern und Statistik für einen Messlauf sind da. Regeln kommen später.",
-    "en": "Format, storage, and stats for a measurement run are in. Rules come later."
+    "de": "Format, Speichern, Statistik und Regeln für einen Messlauf sind da. Evidence-Graph kommt später.",
+    "en": "Format, storage, stats, and rules for a measurement run are in. Evidence graph comes later."
   },
   "why_it_matters": {
     "de": "Ohne dieses Fundament sind Dashboard, CI und Adapter nicht anschlussfähig.",
@@ -20,14 +20,15 @@
   "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence"],
   "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**"],
   "user_impact": {
-    "de": ["Noch kein Nutzerfluss — Schema, Store und Analysis sind internes Fundament."],
-    "en": ["No user flow yet — schema, store, and analysis are internal foundation."]
+    "de": ["Noch kein Nutzerfluss — Schema, Store, Analysis und Rules sind internes Fundament."],
+    "en": ["No user flow yet — schema, store, analysis, and rules are internal foundation."]
   },
   "related_changes": [
     "2026-08-13-bootstrap",
     "2026-08-13-schemas-core",
     "2026-08-13-artifact-store",
-    "2026-08-13-analysis-engine"
+    "2026-08-13-analysis-engine",
+    "2026-08-13-rule-engine"
   ],
   "review_status": "needs-review",
   "confidence": 0.7,

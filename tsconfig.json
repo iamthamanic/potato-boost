@@ -4,6 +4,7 @@
     { "path": "./packages/core" },
     { "path": "./packages/schemas" },
     { "path": "./packages/artifact-store" },
-    { "path": "./packages/analysis" }
+    { "path": "./packages/analysis" },
+    { "path": "./packages/rule-engine" }
   ]
 }

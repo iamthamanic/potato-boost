@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Rule engine
+
+Deterministic `evaluate()` API and versioned `rules-web` pack. Missing evidence is observation, not fail.
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Analysis engine
 
 Pure stats: p95/p99, hitch count, data quality (`valid`/`noisy`/`incomplete`). Noise yields `inconclusive`, not fail. Mean alone is not enough.

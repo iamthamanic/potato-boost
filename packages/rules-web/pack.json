@@ -1,0 +1,21 @@
+{
+  "id": "rules-web",
+  "version": "1.0.0",
+  "rules": [
+    {
+      "id": "web.frame_time.p95",
+      "version": "1.0.0",
+      "severity": "warning",
+      "preconditions": {
+        "metric": "frame_time_p95",
+        "capability": "web.cdp",
+        "requireEvidence": true
+      },
+      "budget": {
+        "metric": "frame_time_p95",
+        "op": "gt",
+        "value": 33.33
+      }
+    }
+  ]
+}

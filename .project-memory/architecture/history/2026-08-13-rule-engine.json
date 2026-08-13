@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "2026-08-13-rule-engine",
+  "date": "2026-08-13",
+  "title": {
+    "de": "Architektur-Stand",
+    "en": "Architecture snapshot"
+  },
+  "summary": {
+    "de": "Automatischer Snapshot von overview.mermaid",
+    "en": "Automatic snapshot of overview.mermaid"
+  },
+  "commit": "7fb639b294e9f7a4345c6fae87d2de9dfe4b4cbd",
+  "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> S[\"packages/schemas\"]\n    K --> ST[\"packages/artifact-store\"]\n    K --> AN[\"packages/analysis\"]\n    K --> RE[\"packages/rule-engine\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    S --> R\n    ST --> R\n    AN --> R\n    RE --> R\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]",
+  "content_hash": "88508543dcc03c2c2c17a658cb5ef59b4f89bce0c15195fb64accc7f545e28ae",
+  "change_ids": [],
+  "review_status": "needs-review"
+}
