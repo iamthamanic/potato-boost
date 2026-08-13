@@ -1,0 +1,443 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "producer": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["name", "version"],
+      "additionalProperties": {}
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "runId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "queued",
+            "preparing",
+            "running",
+            "completed",
+            "inconclusive",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "startedAt": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+        },
+        "git": {
+          "type": "object",
+          "properties": {
+            "commit": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dirty": {
+              "type": "boolean"
+            }
+          },
+          "required": ["commit", "dirty"],
+          "additionalProperties": {}
+        }
+      },
+      "required": ["runId", "status", "startedAt", "git"],
+      "additionalProperties": {}
+    },
+    "lockedInputs": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["id", "version"],
+          "additionalProperties": {}
+        },
+        "scenario": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["id", "version"],
+          "additionalProperties": {}
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["id", "version"],
+          "additionalProperties": {}
+        },
+        "adapter": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": ["id", "version"],
+          "additionalProperties": {}
+        },
+        "rulePacks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": ["id", "version"],
+            "additionalProperties": {}
+          }
+        }
+      },
+      "required": ["target", "scenario", "profile", "adapter", "rulePacks"],
+      "additionalProperties": {}
+    },
+    "fingerprints": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": {}
+        },
+        "os": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": {}
+        },
+        "runtime": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": {}
+        },
+        "adapter": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": {}
+        },
+        "build": {
+          "type": "object",
+          "properties": {},
+          "additionalProperties": {}
+        },
+        "git": {
+          "type": "object",
+          "properties": {
+            "commit": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "dirty": {
+              "type": "boolean"
+            }
+          },
+          "required": ["commit", "dirty"],
+          "additionalProperties": {}
+        }
+      },
+      "required": ["host", "os", "runtime", "adapter", "build", "git"],
+      "additionalProperties": {}
+    },
+    "rawManifest": {
+      "type": "object",
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "hash": {
+                "type": "string",
+                "minLength": 1
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["path", "hash", "bytes"],
+            "additionalProperties": {}
+          }
+        }
+      },
+      "required": ["files"],
+      "additionalProperties": {}
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["name", "value", "unit"],
+        "additionalProperties": {}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidenceId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "rawHash": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": ["kind", "id", "rawHash"],
+              "additionalProperties": {}
+            }
+          },
+          "calculation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          }
+        },
+        "required": ["evidenceId", "inputs", "calculation", "confidence"],
+        "additionalProperties": {}
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "findingId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ruleId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["info", "warning", "error"]
+          },
+          "evidenceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sourceCandidates": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uri": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "line": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "column": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "method": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "confidenceFactors": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "required": [
+                "uri",
+                "line",
+                "column",
+                "method",
+                "confidenceFactors"
+              ],
+              "additionalProperties": {}
+            }
+          },
+          "confidence": {
+            "type": "string",
+            "enum": ["high", "medium", "low"]
+          },
+          "confidenceFactors": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "findingId",
+          "ruleId",
+          "severity",
+          "evidenceIds",
+          "sourceCandidates",
+          "confidence",
+          "confidenceFactors"
+        ],
+        "additionalProperties": {}
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rawManifestHash": {
+          "type": "string",
+          "minLength": 1
+        },
+        "analysisVersion": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["algorithm", "rawManifestHash", "analysisVersion"],
+      "additionalProperties": {}
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "producer",
+    "run",
+    "lockedInputs",
+    "fingerprints",
+    "rawManifest",
+    "metrics",
+    "evidence",
+    "findings",
+    "integrity"
+  ],
+  "additionalProperties": {}
+}

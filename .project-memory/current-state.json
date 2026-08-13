@@ -2,27 +2,31 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "QA-Scaffolding und PRD importiert; noch kein Anwendungscode.",
-      "en": "QA scaffolding and PRD imported; no application code yet."
+      "de": "Artifact Spine: Schema-Vertrag steht; als Nächstes CLI-Entrypoint und Three.js-Fixture, dann Artifact-Store.",
+      "en": "Artifact spine: schema contract is in; next are CLI entrypoint and Three.js fixture, then artifact store."
     }
   ],
   "recently_completed": [
     {
-      "de": "Project-Setup (init): PRD, AGENTS, README, .qa, Styleguide, Living Docs.",
-      "en": "Project-setup (init): PRD, AGENTS, README, .qa, styleguide, living docs."
+      "de": "packages/schemas: Zod + committed JSON Schema für run-artifact (issue #4).",
+      "en": "packages/schemas: Zod + committed JSON Schema for run-artifact (issue #4)."
+    },
+    {
+      "de": "TypeScript-Workspace-Gates: pnpm checks (issue #2).",
+      "en": "TypeScript workspace gates: pnpm checks (issue #2)."
     }
   ],
   "incomplete": [
     {
-      "de": "Monorepo-Pakete (schemas, artifact-store, adapter-sdk, CLI, Dashboard) existieren nicht.",
-      "en": "Monorepo packages (schemas, artifact-store, adapter-sdk, CLI, dashboard) do not exist yet."
+      "de": "artifact-store, analysis, rule-engine, CLI, Dashboard und Fixtures fehlen noch.",
+      "en": "artifact-store, analysis, rule-engine, CLI, dashboard, and fixtures are still missing."
     }
   ],
   "risks": [
     {
-      "de": "Alle Living-Docs-Claims sind needs-review. Q-001–Q-007 im PRD sind offen.",
-      "en": "All living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
+      "de": "Living-Docs-Claims sind needs-review. Q-001–Q-007 im PRD sind offen.",
+      "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T08:58:00Z"
+  "updated_at": "2026-08-13T10:05:00Z"
 }

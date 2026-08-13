@@ -5,6 +5,6 @@
     "de": "Architektur",
     "en": "Architecture"
   },
-  "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]\n",
+  "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> S[\"packages/schemas\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    S --> R\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]\n",
   "source_path": ".project-memory/architecture/overview.mermaid"
 }

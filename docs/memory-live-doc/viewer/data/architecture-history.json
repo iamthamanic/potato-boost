@@ -3,19 +3,22 @@
   "versions": [
     {
       "schema_version": 1,
-      "id": "overview-current",
+      "id": "2026-08-13-schemas-core",
       "date": "2026-08-13",
       "title": {
-        "de": "Aktuell",
-        "en": "Current"
+        "de": "Architektur-Stand",
+        "en": "Architecture snapshot"
       },
       "summary": {
-        "de": "Aktueller Stand aus overview.mermaid",
-        "en": "Current state from overview.mermaid"
+        "de": "Automatischer Snapshot von overview.mermaid",
+        "en": "Automatic snapshot of overview.mermaid"
       },
-      "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]\n",
-      "source_path": ".project-memory/architecture/overview.mermaid",
-      "is_current": true
+      "commit": "a70bad25a506ec8ac51463c3a21dd483d7d1ea15",
+      "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> S[\"packages/schemas\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    S --> R\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]",
+      "content_hash": "7534a87925dcda560a946b0bd7485a75bcb2b3279c20f328335aa0ade795c323",
+      "change_ids": [],
+      "review_status": "needs-review",
+      "is_current": false
     }
   ]
 }

@@ -1,0 +1,115 @@
+{
+  "id": "2026-08-13-schemas-core",
+  "date": "2026-08-13",
+  "type": "contract",
+  "status": "recorded",
+  "title": {
+    "de": "Kanonische Zod- und JSON-Schemas für Run-Artefakte",
+    "en": "Canonical Zod and JSON schemas for run artifacts"
+  },
+  "summary": {
+    "de": "Neues Paket @potato-boost/schemas: Zod-Verträge plus committed JSON Schema für run-artifact, samples, evidence, findings und das Fehler-Envelope. Unbekannte Majors werden abgelehnt; additive Felder bleiben erlaubt.",
+    "en": "New @potato-boost/schemas package: Zod contracts plus committed JSON Schema for run-artifact, samples, evidence, findings, and the error envelope. Unknown majors are rejected; additive fields stay allowed."
+  },
+  "plain_language": {
+    "de": "CLI, CI und Dashboard können sich jetzt auf dasselbe Dateiformat für einen Messlauf einigen — speichern tut es noch niemand.",
+    "en": "CLI, CI, and dashboard can now agree on the same file format for a measurement run — nothing stores it yet."
+  },
+  "why_it_matters": {
+    "de": "Ohne gemeinsamen Vertrag driftet jede Schicht. Das ist das erste Stück Artifact Spine.",
+    "en": "Without a shared contract every layer drifts. This is the first piece of the artifact spine."
+  },
+  "user_impact": {
+    "de": [
+      "Kein neuer Nutzerfluss. Das CLI misst noch nicht.",
+      "Spätere Runs und Compare-Ansichten lesen dieses Format."
+    ],
+    "en": [
+      "No new user flow. The CLI does not measure yet.",
+      "Later runs and compare views will read this format."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Import aus @potato-boost/schemas; JSON unter packages/schemas/json/.",
+      "parseRunArtifact validiert CON-001-Mindestfelder und schemaVersion-Major 1.",
+      "Kein Artifact-Store, keine Rules, kein Dashboard in diesem Slice."
+    ],
+    "en": [
+      "Import from @potato-boost/schemas; JSON under packages/schemas/json/.",
+      "parseRunArtifact validates CON-001 required fields and schemaVersion major 1.",
+      "No artifact store, rules, or dashboard in this slice."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "pnpm checks bleibt der Root-Gate; Zod ist die einzige neue Runtime-Abhängigkeit (schemas).",
+      "CI erzeugt keine Artefakte — nur Schema-Tests."
+    ],
+    "en": [
+      "pnpm checks remains the root gate; Zod is the only new runtime dependency (schemas).",
+      "CI does not produce artifacts — schema tests only."
+    ]
+  },
+  "git": {
+    "base": "a70bad25a506ec8ac51463c3a21dd483d7d1ea15",
+    "head": "issue/4-schemas-core",
+    "branch": "issue/4-schemas-core",
+    "pull_request": null
+  },
+  "packages": [
+    "schemas"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/schemas/",
+    "tsconfig.json",
+    "pnpm-lock.yaml"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "a70bad25a506ec8ac51463c3a21dd483d7d1ea15...issue/4-schemas-core",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/a70bad25a506ec8ac51463c3a21dd483d7d1ea15...issue/4-schemas-core"
+    },
+    {
+      "kind": "commit",
+      "path": "issue/4-schemas-core",
+      "sha": "issue/4-schemas-core",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/issue/4-schemas-core"
+    },
+    {
+      "kind": "file",
+      "path": "packages/schemas/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/issue/4-schemas-core/packages/schemas"
+    },
+    {
+      "kind": "file",
+      "path": "tsconfig.json",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/4-schemas-core/tsconfig.json"
+    },
+    {
+      "kind": "file",
+      "path": "pnpm-lock.yaml",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/4-schemas-core/pnpm-lock.yaml"
+    },
+    {
+      "kind": "file",
+      "path": "packages/schemas/src/run-artifact.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/schemas/src/run-artifact.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/schemas/json/run-artifact.schema.json",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/schemas/json/run-artifact.schema.json"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.7,
+  "review_status": "needs-review"
+}
