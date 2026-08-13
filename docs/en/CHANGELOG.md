@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Adapter SDK
+
+`packages/adapter-sdk` exports manifest schema, capability enum, and contract harness. Core loads adapters via manifest + allowlist + version lock (FR-024, CON-005).
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Report export
 
 `packages/report` writes validated JSON and static HTML with the same finding IDs. Export is purely local, no network (FR-022, FR-026).

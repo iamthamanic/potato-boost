@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Adapter SDK
+
+`packages/adapter-sdk` exportiert Manifest-Schema, Capability-Enum und Contract-Harness. Kern lädt Adapter über Manifest + Allowlist + Version Lock (FR-024, CON-005).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Report export
 
 `packages/report` schreibt validiertes JSON und statisches HTML mit denselben Finding-IDs. Export ist rein lokal, kein Netzwerk (FR-022, FR-026).
