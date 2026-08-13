@@ -4,13 +4,13 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Read-only Discovery und Scenario Engine stehen; als Nächstes Doctor und Dashboard.
+- Discovery, Scenario Engine und Fixture stehen; als Nächstes Doctor und Dashboard.
 
 ## Zuletzt erledigt
 
+- Deterministische Three.js-Fixture mit zuschaltbaren Problemen (issue #17).
 - Scenario Engine mit Phasen und Wiederholungen (issue #15).
 - Read-only Discovery mit Evidence und Confidence (issue #12).
-- `packages/cli`: npx-Entrypoint, Hilfe, Exit-Code 2 (issue #11).
 - `packages/evidence`: Provenienz und Source Candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministische evaluate() (issue #7).
 - `packages/analysis`: Quantile, Hitches, Datenqualität (issue #6).

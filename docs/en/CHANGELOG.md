@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Three.js fixture
+
+`fixtures/web-threejs` is a deterministic app with toggleable performance problems (draw calls, long task, alloc). No external assets; offline-capable (T-001, T-004).
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Scenario engine
 
 `packages/scenario-engine` models Setup/Warm-up/Measure/Cleanup, repetitions, markers, and timeouts. Quick Scan is a preset scenario (FR-009/010). Timeout aborts a phase without baseline eligibility.

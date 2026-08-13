@@ -1,0 +1,81 @@
+{
+  "id": "2026-08-13-fixture-web-threejs",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Deterministische Three.js-Fixture mit zuschaltbaren Problemen",
+    "en": "Deterministic Three.js fixture with toggleable problems"
+  },
+  "summary": {
+    "de": "fixtures/web-threejs ist eine kleine deterministische App, in der Draw-Calls, Allocations oder Long Tasks per Query-Param zuschaltbar sind (T-001, T-004).",
+    "en": "fixtures/web-threejs is a small deterministic app where draw calls, allocations, or long tasks can be toggled via query param (T-001, T-004)."
+  },
+  "plain_language": {
+    "de": "Ohne kontrollierte App sind Tests Flakes. Jetzt gibt es eine Fixture mit bekannten Hitch-Mustern.",
+    "en": "Without a controlled app, tests are flaky. Now there is a fixture with known hitch patterns."
+  },
+  "why_it_matters": {
+    "de": "Ohne Fixture kann Detection und Quick Scan nicht wahr werden (T-001).",
+    "en": "Without a fixture, detection and quick scan cannot become real (T-001)."
+  },
+  "user_impact": {
+    "de": [
+      "Fixture startet lokal ohne externe Requests.",
+      "Mindestens ein zuschaltbares Problem ist per Query aktivierbar."
+    ],
+    "en": [
+      "Fixture starts locally without external requests.",
+      "At least one toggleable problem is activatable via query."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Query-Param-Switch; keine neuen Server oder Prozesse.",
+      "Problem-Enum ist single source."
+    ],
+    "en": [
+      "Query-param switch; no new servers or processes.",
+      "Problem enum is single source."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine Netzwerk-Assets; offline-fähig."
+    ],
+    "en": [
+      "No network assets; offline-capable."
+    ]
+  },
+  "git": {
+    "base": "30e4b73",
+    "head": "issue/17-fixture-web-threejs",
+    "branch": "issue/17-fixture-web-threejs",
+    "pull_request": null
+  },
+  "packages": [],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "fixtures/web-threejs/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "fixtures/web-threejs/src/main.tsx",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/17-fixture-web-threejs/fixtures/web-threejs/src/main.tsx"
+    },
+    {
+      "kind": "file",
+      "path": "fixtures/web-threejs/README.md",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/17-fixture-web-threejs/fixtures/web-threejs/README.md"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.75,
+  "review_status": "needs-review"
+}
