@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — CLI entrypoint
+
+`packages/cli` mit Commander. `potato-boost`/`potato` zeigen Hilfe; unbekannte Commands/Flags enden mit Exit-Code 2. Subcommands sind Stubs.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Golden artifact tests
 
 Committed `golden-v1.0.0.json`. Pipeline analysis → evidence → rules → store round-trip. Unknown majors are rejected with a readable error; additive fields are accepted.

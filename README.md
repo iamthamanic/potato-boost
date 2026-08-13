@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact (store + analysis + rules). Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
+This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `init`/`doctor`/`run`/`ci` are stubs). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -27,6 +27,11 @@ There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
 ```bash
 pnpm dev
+```
+
+```bash
+pnpm build
+node packages/cli --help
 ```
 
 Once `apps/dashboard` exists, the local dashboard is expected at [http://localhost:5173](http://localhost:5173). The production local API binds loopback only (random port + run token).
@@ -53,7 +58,7 @@ Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test
 ```
 potato-boost/
 ├── apps/dashboard/       # planned React + Vite UI
-├── packages/             # core, schemas, artifact-store, analysis, rule-engine, rules-web, evidence
+├── packages/             # core, schemas, artifact-store, analysis, rule-engine, rules-web, evidence, cli
 ├── fixtures/             # planned benchmark fixtures
 ├── docs/
 │   ├── PRD.md
@@ -87,6 +92,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-13** — CLI entrypoint `potato-boost` / `potato` with help and exit code 2 (`issue/11-cli-entrypoint`).
 - **2026-08-13** — Golden v1.0.0 run artifact + schema compatibility tests (`issue/9-golden-artifact-tests`).
 - **2026-08-13** — Evidence graph: provenance and ordered source candidates (`issue/8-evidence-graph`).
 - **2026-08-13** — Deterministic rule engine + `rules-web` pack (`issue/7-rule-engine`).

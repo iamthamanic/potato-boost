@@ -4,10 +4,11 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Artifact Spine inkl. Golden-v1.0.0; als Nächstes CLI und Three.js-Fixture.
+- CLI-Entrypoint steht; als Nächstes Detection/Doctor und Three.js-Fixture.
 
 ## Zuletzt erledigt
 
+- `packages/cli`: npx-Entrypoint, Hilfe, Exit-Code 2 (issue #11).
 - Golden-Artifact-Tests v1.0.0 inkl. Schema-Kompatibilität (issue #9).
 - `packages/evidence`: Provenienz und Source Candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministische evaluate() (issue #7).
@@ -18,7 +19,7 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- CLI, Dashboard und Three.js-Fixture fehlen noch.
+- Detection/Doctor, Dashboard und Three.js-Fixture fehlen noch.
 
 ## Risiken
 
@@ -28,4 +29,4 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Nächster Schritt
 
-GitHub-Issues #11 (CLI) und #17 (Fixture).
+GitHub-Issues #15 (CLI-Weiterbau) bzw. #17 (Fixture).

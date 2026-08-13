@@ -1,0 +1,24 @@
+{
+  "name": "@potato-boost/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "potato-boost": "./dist/bin.js",
+    "potato": "./dist/bin.js"
+  },
+  "main": "./dist/bin.js",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
+  }
+}

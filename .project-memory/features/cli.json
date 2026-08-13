@@ -1,0 +1,30 @@
+{
+  "id": "cli",
+  "title": {
+    "de": "CLI",
+    "en": "CLI"
+  },
+  "summary": {
+    "de": "npx-Entrypoint mit Hilfe. Discovery, Run und CI sind noch Stubs.",
+    "en": "npx entrypoint with help. Discovery, run, and CI are still stubs."
+  },
+  "plain_language": {
+    "de": "Du kannst das Tool starten und Hilfe sehen. Messen tut es noch nicht.",
+    "en": "You can start the tool and see help. It does not measure yet."
+  },
+  "why_it_matters": {
+    "de": "Stabiler Befehl für Menschen, Agenten und CI.",
+    "en": "A stable command for humans, agents, and CI."
+  },
+  "status": "in-progress",
+  "packages": ["cli"],
+  "paths": ["packages/cli/**"],
+  "user_impact": {
+    "de": ["Hilfe und Exit-Code 2 bei falscher Nutzung."],
+    "en": ["Help and exit code 2 on invalid usage."]
+  },
+  "related_changes": ["2026-08-13-cli-entrypoint"],
+  "review_status": "needs-review",
+  "confidence": 0.7,
+  "locked": false
+}
