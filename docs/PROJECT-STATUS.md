@@ -4,13 +4,13 @@ Stand: 2026-08-13 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Discovery, Scenario Engine, Fixture, Report und Adapter SDK stehen; als Nächstes Doctor und Dashboard.
+- Discovery, Scenario Engine, Fixture, Report, Adapter SDK und VisoDev-Schema stehen; als Nächstes Doctor und Dashboard.
 
 ## Zuletzt erledigt
 
+- VisoDev-Importschema ohne VisoDev-Abhängigkeit (issue #35).
 - Adapter SDK mit Capability-Manifest und Contract-Tests (issue #32).
 - Report-Export mit validiertem JSON und statischem HTML (issue #29).
-- Deterministische Three.js-Fixture mit zuschaltbaren Problemen (issue #17).
 - `packages/evidence`: Provenienz und Source Candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministische evaluate() (issue #7).
 - `packages/analysis`: Quantile, Hitches, Datenqualität (issue #6).
