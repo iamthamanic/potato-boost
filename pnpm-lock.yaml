@@ -31,6 +31,12 @@ importers:
 
   packages/core: {}
 
+  packages/evidence:
+    dependencies:
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+
   packages/rule-engine:
     dependencies:
       '@potato-boost/schemas':

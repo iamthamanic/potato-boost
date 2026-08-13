@@ -4,10 +4,11 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Artifact spine: schema, store, analysis, and rules are in; next are CLI entrypoint and Three.js fixture.
+- Artifact spine: schema, store, analysis, rules, and evidence are in; next are golden tests, CLI, and fixture.
 
 ## Recently completed
 
+- `packages/evidence`: provenance and source candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministic evaluate() (issue #7).
 - `packages/analysis`: quantiles, hitches, data quality (issue #6).
 - `packages/artifact-store`: atomic writes under `.potato` (issue #5).
@@ -16,7 +17,7 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- evidence-graph, CLI, dashboard, and fixtures are still missing.
+- Golden artifact tests, CLI, dashboard, and fixtures are still missing.
 
 ## Risks
 
@@ -26,4 +27,4 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #8 (evidence-graph) or #11 (CLI) and #17 (fixture).
+GitHub issues #9 (golden-artifact) or #11 (CLI) and #17 (fixture).

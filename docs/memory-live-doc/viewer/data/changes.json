@@ -304,6 +304,96 @@
       "review_status": "needs-review"
     },
     {
+      "id": "2026-08-13-evidence-graph",
+      "date": "2026-08-13",
+      "type": "contract",
+      "status": "recorded",
+      "title": {
+        "de": "Evidence-Graph: Provenienz ohne Schuldvorwurf",
+        "en": "Evidence graph: provenance without blaming a line"
+      },
+      "summary": {
+        "de": "packages/evidence speichert Raw-Hashes und geordnete sourceCandidates. Fehlendes Source Mapping senkt Confidence und droppt das Finding nicht.",
+        "en": "packages/evidence stores raw hashes and ordered sourceCandidates. Missing source maps lower confidence and do not drop the finding."
+      },
+      "plain_language": {
+        "de": "Eine verdächtige Zeile ist ein Kandidat, kein Urteil. Ohne Source Map bleibt der Runtime-Beweis.",
+        "en": "A suspicious line is a candidate, not a verdict. Without a source map the runtime proof stays."
+      },
+      "why_it_matters": {
+        "de": "Sonst behauptet Mapping eine falsche Ursache (RISK-006).",
+        "en": "Otherwise mapping claims the wrong cause (RISK-006)."
+      },
+      "user_impact": {
+        "de": [
+          "Kein UI. Spätere Finding-Details nutzen Candidates."
+        ],
+        "en": [
+          "No UI. Later finding details use candidates."
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "buildEvidence + bindFindingEvidence; Pfade nur unter projectRoot."
+        ],
+        "en": [
+          "buildEvidence + bindFindingEvidence; paths only under projectRoot."
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Keine Dateiinhalte in Candidates."
+        ],
+        "en": [
+          "No file contents in candidates."
+        ]
+      },
+      "git": {
+        "base": "b4aafc2fc170c53df67bcdd78f190fe54bdd3e72",
+        "head": "issue/8-evidence-graph",
+        "branch": "issue/8-evidence-graph",
+        "pull_request": null
+      },
+      "packages": [
+        "evidence"
+      ],
+      "affected_features": [
+        "artifact-spine"
+      ],
+      "affected_components": [
+        "packages/evidence/"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [
+        {
+          "kind": "compare",
+          "path": "b4aafc2fc170c53df67bcdd78f190fe54bdd3e72...issue/8-evidence-graph",
+          "url": "https://github.com/iamthamanic/potato-boost/compare/b4aafc2fc170c53df67bcdd78f190fe54bdd3e72...issue/8-evidence-graph"
+        },
+        {
+          "kind": "commit",
+          "path": "issue/8-evidence-graph",
+          "sha": "issue/8-evidence-graph",
+          "url": "https://github.com/iamthamanic/potato-boost/commit/issue/8-evidence-graph"
+        },
+        {
+          "kind": "file",
+          "path": "packages/evidence/",
+          "url": "https://github.com/iamthamanic/potato-boost/tree/issue/8-evidence-graph/packages/evidence"
+        },
+        {
+          "kind": "file",
+          "path": "packages/evidence/src/bind.ts",
+          "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/evidence/src/bind.ts"
+        }
+      ],
+      "screenshots": [],
+      "confidence": 0.7,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-13-rule-engine",
       "date": "2026-08-13",
       "type": "contract",

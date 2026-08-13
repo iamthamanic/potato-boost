@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Evidence graph
+
+Provenance and ordered source candidates. Missing source maps lower confidence and do not drop the finding. Paths stay under the project root.
+
+Review status: **needs-review**.
+
 ## 2026-08-13 — Rule engine
 
 Deterministic `evaluate()` API and versioned `rules-web` pack. Missing evidence is observation, not fail.

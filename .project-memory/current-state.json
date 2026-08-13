@@ -2,28 +2,24 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Artifact Spine: Schema, Store, Analysis und Rules stehen; als Nächstes Evidence-Graph, CLI und Fixture.",
-      "en": "Artifact spine: schema, store, analysis, and rules are in; next are evidence graph, CLI, and fixture."
+      "de": "Artifact Spine fast komplett; als Nächstes Golden-Tests, CLI und Three.js-Fixture.",
+      "en": "Artifact spine nearly complete; next are golden tests, CLI, and Three.js fixture."
     }
   ],
   "recently_completed": [
     {
+      "de": "packages/evidence: Provenienz und Source Candidates (issue #8).",
+      "en": "packages/evidence: provenance and source candidates (issue #8)."
+    },
+    {
       "de": "packages/rule-engine + rules-web: deterministische evaluate() (issue #7).",
       "en": "packages/rule-engine + rules-web: deterministic evaluate() (issue #7)."
-    },
-    {
-      "de": "packages/analysis: Quantile, Hitches, Datenqualität (issue #6).",
-      "en": "packages/analysis: quantiles, hitches, data quality (issue #6)."
-    },
-    {
-      "de": "packages/artifact-store: atomares Schreiben unter .potato (issue #5).",
-      "en": "packages/artifact-store: atomic writes under .potato (issue #5)."
     }
   ],
   "incomplete": [
     {
-      "de": "evidence-graph, CLI, Dashboard und Fixtures fehlen noch.",
-      "en": "evidence-graph, CLI, dashboard, and fixtures are still missing."
+      "de": "Golden-Artifact-Tests, CLI, Dashboard und Fixtures fehlen noch.",
+      "en": "Golden artifact tests, CLI, dashboard, and fixtures are still missing."
     }
   ],
   "risks": [
@@ -32,5 +28,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T10:45:00Z"
+  "updated_at": "2026-08-13T11:00:00Z"
 }
