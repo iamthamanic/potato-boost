@@ -4,16 +4,17 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Artifact spine: schema contract is in; next are CLI entrypoint and Three.js fixture, then artifact store.
+- Artifact spine: schema and store are in; next are analysis/rules, CLI entrypoint, and Three.js fixture.
 
 ## Recently completed
 
+- `packages/artifact-store`: atomic writes under `.potato` (issue #5).
 - `packages/schemas`: Zod + committed JSON Schema for run-artifact (issue #4).
 - TypeScript workspace gates: `pnpm checks` (issue #2).
 
 ## Incomplete
 
-- `artifact-store`, analysis, rule-engine, CLI, dashboard, and fixtures are still missing.
+- analysis, rule-engine, CLI, dashboard, and fixtures are still missing.
 
 ## Risks
 
@@ -23,4 +24,4 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #11 (CLI entrypoint) and #17 (web-threejs fixture), then artifact store (#5).
+GitHub issues #6 (analysis-engine) or #11 (CLI entrypoint) and #17 (web-threejs fixture).

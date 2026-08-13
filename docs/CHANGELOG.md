@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Artifact store
+
+Atomarer lokaler Store unter `.potato` (temp, fsync, Rename, SHA-256). Index ist Source of Truth für completed.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Schemas core
 
 Kanonische Zod- und JSON-Schemas für Run-Artefakte in `packages/schemas`. Unbekannte Schema-Majors werden abgelehnt; additive Felder bleiben erlaubt. Error-Envelope ohne Stack.

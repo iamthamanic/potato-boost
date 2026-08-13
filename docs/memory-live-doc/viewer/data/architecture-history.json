@@ -3,6 +3,25 @@
   "versions": [
     {
       "schema_version": 1,
+      "id": "2026-08-13-artifact-store",
+      "date": "2026-08-13",
+      "title": {
+        "de": "Architektur-Stand",
+        "en": "Architecture snapshot"
+      },
+      "summary": {
+        "de": "Automatischer Snapshot von overview.mermaid",
+        "en": "Automatic snapshot of overview.mermaid"
+      },
+      "commit": "78754f63b052e7477e551105ce17679a3db5b8d3",
+      "mermaid": "flowchart TD\n    U[\"Developer / CI / Agent\"] --> C[\"CLI and Local API\"]\n    C --> K[\"Deterministic Core\"]\n    K --> S[\"packages/schemas\"]\n    K --> ST[\"packages/artifact-store\"]\n    K --> A[\"Stack Adapter\"]\n    A --> P[\"App / Engine / Processes\"]\n    K --> R[\"Run Artifacts\"]\n    S --> R\n    ST --> R\n    R --> D[\"Local Dashboard\"]\n    R --> V[\"VisoDev Import (optional, later)\"]",
+      "content_hash": "2104946ca0837d73c9285b47bc9dc10064796bf9c8c3a47ae17c02598811ec1f",
+      "change_ids": [],
+      "review_status": "needs-review",
+      "is_current": false
+    },
+    {
+      "schema_version": 1,
       "id": "2026-08-13-schemas-core",
       "date": "2026-08-13",
       "title": {

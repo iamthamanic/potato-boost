@@ -2,24 +2,24 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Artifact Spine: Schema-Vertrag steht; als Nächstes CLI-Entrypoint und Three.js-Fixture, dann Artifact-Store.",
-      "en": "Artifact spine: schema contract is in; next are CLI entrypoint and Three.js fixture, then artifact store."
+      "de": "Artifact Spine: Schema und Store stehen; als Nächstes Analysis/Rules, CLI-Entrypoint und Three.js-Fixture.",
+      "en": "Artifact spine: schema and store are in; next are analysis/rules, CLI entrypoint, and Three.js fixture."
     }
   ],
   "recently_completed": [
     {
-      "de": "packages/schemas: Zod + committed JSON Schema für run-artifact (issue #4).",
-      "en": "packages/schemas: Zod + committed JSON Schema for run-artifact (issue #4)."
+      "de": "packages/artifact-store: atomares Schreiben unter .potato (issue #5).",
+      "en": "packages/artifact-store: atomic writes under .potato (issue #5)."
     },
     {
-      "de": "TypeScript-Workspace-Gates: pnpm checks (issue #2).",
-      "en": "TypeScript workspace gates: pnpm checks (issue #2)."
+      "de": "packages/schemas: Zod + JSON Schema (issue #4).",
+      "en": "packages/schemas: Zod + JSON Schema (issue #4)."
     }
   ],
   "incomplete": [
     {
-      "de": "artifact-store, analysis, rule-engine, CLI, Dashboard und Fixtures fehlen noch.",
-      "en": "artifact-store, analysis, rule-engine, CLI, dashboard, and fixtures are still missing."
+      "de": "analysis, rule-engine, CLI, Dashboard und Fixtures fehlen noch.",
+      "en": "analysis, rule-engine, CLI, dashboard, and fixtures are still missing."
     }
   ],
   "risks": [
@@ -28,5 +28,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T10:05:00Z"
+  "updated_at": "2026-08-13T10:10:00Z"
 }
