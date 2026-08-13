@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0.0",
+  "producer": {
+    "name": "potato-boost-golden",
+    "version": "1.0.0"
+  },
+  "run": {
+    "runId": "01J9GOLDENV100000000000000",
+    "status": "completed",
+    "startedAt": "2026-08-13T12:00:00Z",
+    "git": {
+      "commit": null,
+      "dirty": true
+    }
+  },
+  "lockedInputs": {
+    "target": {
+      "id": "web-threejs",
+      "version": "1.0.0"
+    },
+    "scenario": {
+      "id": "quick-scan",
+      "version": "1.0.0"
+    },
+    "profile": {
+      "id": "budget-local",
+      "version": "1.0.0"
+    },
+    "adapter": {
+      "id": "adapter-web",
+      "version": "1.0.0"
+    },
+    "rulePacks": [
+      {
+        "id": "rules-web",
+        "version": "1.0.0"
+      }
+    ]
+  },
+  "fingerprints": {
+    "host": {
+      "arch": "test"
+    },
+    "os": {
+      "name": "synthetic"
+    },
+    "runtime": {
+      "node": "24.0.0"
+    },
+    "adapter": {
+      "id": "adapter-web"
+    },
+    "build": {
+      "mode": "release"
+    },
+    "git": {
+      "commit": null,
+      "dirty": true
+    }
+  },
+  "rawManifest": {
+    "files": [
+      {
+        "path": "samples.jsonl",
+        "hash": "sha256:e7d7927fbb0a5cdb9b5c1e5e570860984156c641496a16e29567aea3f96ab4ad",
+        "bytes": 4061
+      }
+    ]
+  },
+  "metrics": [
+    {
+      "name": "frame_time_p95",
+      "value": 40,
+      "unit": "ms"
+    },
+    {
+      "name": "frame_time_p99",
+      "value": 40,
+      "unit": "ms"
+    }
+  ],
+  "evidence": [
+    {
+      "evidenceId": "ev-golden-1",
+      "inputs": [
+        {
+          "kind": "raw",
+          "id": "samples.jsonl",
+          "rawHash": "sha256:e7d7927fbb0a5cdb9b5c1e5e570860984156c641496a16e29567aea3f96ab4ad"
+        }
+      ],
+      "calculation": "p95 of frame_time over measure window",
+      "confidence": "high"
+    }
+  ],
+  "findings": [
+    {
+      "findingId": "finding:web.frame_time.p95",
+      "ruleId": "web.frame_time.p95",
+      "severity": "warning",
+      "evidenceIds": ["ev-golden-1"],
+      "sourceCandidates": [
+        {
+          "uri": "src/main.ts",
+          "line": 40,
+          "column": 2,
+          "method": "source-map",
+          "confidenceFactors": ["map-present"]
+        }
+      ],
+      "confidence": "medium",
+      "confidenceFactors": ["source-map", "ordered-candidate"]
+    }
+  ],
+  "integrity": {
+    "algorithm": "sha256",
+    "rawManifestHash": "sha256:4fc02be085bcb2a3e33ada6e4b8318721dcf4dc81f0e94192180d9f528ead1d9",
+    "analysisVersion": "1.0.0"
+  }
+}

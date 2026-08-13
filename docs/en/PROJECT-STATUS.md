@@ -4,10 +4,11 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Artifact spine: schema, store, analysis, rules, and evidence are in; next are golden tests, CLI, and fixture.
+- Artifact spine including golden v1.0.0; next are CLI and Three.js fixture.
 
 ## Recently completed
 
+- Golden v1.0.0 artifact tests and schema compatibility (issue #9).
 - `packages/evidence`: provenance and source candidates (issue #8).
 - `packages/rule-engine` + `rules-web`: deterministic evaluate() (issue #7).
 - `packages/analysis`: quantiles, hitches, data quality (issue #6).
@@ -17,7 +18,7 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Golden artifact tests, CLI, dashboard, and fixtures are still missing.
+- CLI, dashboard, and Three.js fixture are still missing.
 
 ## Risks
 
@@ -27,4 +28,4 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #9 (golden-artifact) or #11 (CLI) and #17 (fixture).
+GitHub issues #11 (CLI) and #17 (fixture).

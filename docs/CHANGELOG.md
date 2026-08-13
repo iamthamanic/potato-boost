@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-13 — Golden artifact tests
+
+Committed `golden-v1.0.0.json`. Pipeline analysis → evidence → rules → store round-trip. Unknown majors are rejected with a readable error; additive fields are accepted.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — Evidence graph
 
 Provenienz und geordnete Source Candidates. Fehlendes Source Mapping senkt Confidence, droppt das Finding nicht. Pfade nur unter Projekt-Root.
