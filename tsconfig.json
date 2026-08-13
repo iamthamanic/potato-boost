@@ -9,6 +9,7 @@
     { "path": "./packages/evidence" },
     { "path": "./packages/cli" },
     { "path": "./packages/scenario-engine" },
-    { "path": "./packages/report" }
+    { "path": "./packages/report" },
+    { "path": "./packages/adapter-sdk" }
   ]
 }

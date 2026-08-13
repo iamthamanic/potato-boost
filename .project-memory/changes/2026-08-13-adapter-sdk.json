@@ -1,0 +1,83 @@
+{
+  "id": "2026-08-13-adapter-sdk",
+  "date": "2026-08-13",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Adapter SDK mit Capability-Manifest und Contract-Tests",
+    "en": "Adapter SDK with capability manifest and contract tests"
+  },
+  "summary": {
+    "de": "packages/adapter-sdk exportiert Manifest-Schema, Capability-Enum und Contract-Harness. Kern lädt Adapter über Manifest + Allowlist + Version Lock (FR-024, CON-005).",
+    "en": "packages/adapter-sdk exports manifest schema, capability enum, and contract harness. Core loads adapters via manifest + allowlist + version lock (FR-024, CON-005)."
+  },
+  "plain_language": {
+    "de": "Adapter sind keine Forks. Manifest + Contract-Harness halten die Grenze sauber.",
+    "en": "Adapters are not forks. Manifest + contract harness keep the boundary clean."
+  },
+  "why_it_matters": {
+    "de": "Ohne Adapter SDK können Godot/Tauri nicht sauber angebunden werden (FR-024).",
+    "en": "Without the adapter SDK, Godot/Tauri cannot be plugged in cleanly (FR-024)."
+  },
+  "user_impact": {
+    "de": [
+      "Manifest erfordert id, version, capabilities, detectors.",
+      "Inkompatibles Manifest wird abgelehnt."
+    ],
+    "en": [
+      "Manifest requires id, version, capabilities, detectors.",
+      "Incompatible manifest is rejected."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Adapter implementieren Contract, nicht Core-Interna.",
+      "Fake-Adapter-Tests dokumentieren die Grenze."
+    ],
+    "en": [
+      "Adapters implement contract, not core internals.",
+      "Fake adapter tests document the boundary."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Allowlist + Version Lock; kein eval/exec."
+    ],
+    "en": [
+      "Allowlist + version lock; no eval/exec."
+    ]
+  },
+  "git": {
+    "base": "979b6bc",
+    "head": "issue/32-adapter-sdk",
+    "branch": "issue/32-adapter-sdk",
+    "pull_request": null
+  },
+  "packages": [
+    "adapter-sdk"
+  ],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "packages/adapter-sdk/"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/adapter-sdk/src/manifest.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/32-adapter-sdk/packages/adapter-sdk/src/manifest.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/adapter-sdk/src/harness.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/issue/32-adapter-sdk/packages/adapter-sdk/src/harness.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

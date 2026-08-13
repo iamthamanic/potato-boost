@@ -17,8 +17,8 @@
     "en": "Without this foundation, dashboard, CI, and adapters cannot plug in."
   },
   "status": "in-progress",
-  "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence", "scenario-engine", "report"],
-  "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**", "packages/evidence/**", "packages/scenario-engine/**", "packages/report/**", "tests/golden/**"],
+  "packages": ["schemas", "artifact-store", "analysis", "rule-engine", "evidence", "scenario-engine", "report", "adapter-sdk"],
+  "paths": ["packages/schemas/**", "packages/artifact-store/**", "packages/analysis/**", "packages/rule-engine/**", "packages/evidence/**", "packages/scenario-engine/**", "packages/report/**", "packages/adapter-sdk/**", "tests/golden/**"],
   "user_impact": {
     "de": ["Noch kein Nutzerfluss — Artifact Spine ist internes Fundament."],
     "en": ["No user flow yet — artifact spine is internal foundation."]
