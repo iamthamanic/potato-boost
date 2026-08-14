@@ -6,7 +6,7 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "references": [{ "path": "../collector-hub" }, { "path": "../core" }],
+  "references": [{ "path": "../collector-hub" }],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

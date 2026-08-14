@@ -50,6 +50,9 @@ importers:
       '@playwright/test':
         specifier: ^1.62.1
         version: 1.62.1
+      '@potato-boost/collector-hub':
+        specifier: workspace:*
+        version: link:../collector-hub
       '@potato-boost/core':
         specifier: workspace:*
         version: link:../core
@@ -74,6 +77,18 @@ importers:
       '@potato-boost/core':
         specifier: workspace:*
         version: link:../core
+
+  packages/collector-hub:
+    dependencies:
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+
+  packages/collector-os:
+    dependencies:
+      '@potato-boost/collector-hub':
+        specifier: workspace:*
+        version: link:../collector-hub
 
   packages/core:
     dependencies:

@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/adapter-web` is the Web doctor (Node, Playwright Chromium, start argv, port). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`; `doctor` prints capability checks; `run` is still a stub after a healthy doctor; `ci` is a stub). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
+This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/collector-hub` ingests samples on a shared timeline. `packages/collector-os` samples CPU/RSS and the process tree. `packages/adapter-web` is the Web doctor and CDP collector (Node, Playwright Chromium, start argv, port). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`; `doctor` prints capability checks; `run` is still a stub after a healthy doctor; `ci` is a stub). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -60,7 +60,7 @@ Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test
 ```
 potato-boost/
 ├── apps/dashboard/       # planned React + Vite UI
-├── packages/             # core, schemas, artifact-store, analysis, rule-engine, rules-web, evidence, adapter-web, cli
+├── packages/             # core, schemas, artifact-store, analysis, rule-engine, rules-web, evidence, collector-hub, collector-os, adapter-web, cli
 ├── fixtures/             # web-threejs benchmark fixture (in workspace)
 ├── docs/
 │   ├── PRD.md
@@ -94,6 +94,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — CDP and OS collectors share one timeline; missing CDP is `unsupported` (`issue/16-collectors-web-os`).
 - **2026-08-14** — `potato doctor` checks Node, browser, port, and start argv; missing required capability makes `potato run` exit 3 (`issue/14-web-doctor`).
 - **2026-08-14** — `potato init` previews planned paths and writes `potato.config.yaml` only with `--confirm` (`issue/13-config-write-confirm`).
 - **2026-08-14** — Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`); fixture is a workspace package on 127.0.0.1:5199.

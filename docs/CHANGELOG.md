@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Collectors CDP + OS
+
+Collector-Hub nimmt Samples mit monotonem `timestampNs` auf und weist NaN/Infinity ab. OS-Collector liefert CPU/RSS und Prozessbaum. Fehlt CDP, ist die Capability `unsupported` — kein stiller Null-Wert, kein Budget-Fail (FR-014, EDGE-010).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Web doctor
 
 `potato doctor` prüft Node, Playwright-Chromium, Start-Argv und Port 5199. Checks erscheinen als `ok`/`missing` mit Pfad. Fehlende Pflicht-Capability blockt `potato run` mit Exit 3. Startbefehle werden nicht ausgeführt (FR-005, FR-006).

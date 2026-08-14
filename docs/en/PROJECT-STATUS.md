@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Web doctor is in; next are secret redaction (#38) and collector (#16).
+- Collectors are in; next are secret redaction (#38) and quick scan (#18).
 
 ## Recently completed
 
+- CDP+OS collectors on a shared timeline (issue #16).
 - Web doctor: Node, browser, port, start command; `potato run` exit 3 (issue #14).
 - `potato init` writes config only after `--confirm` (issue #13).
 - Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`).
@@ -23,7 +24,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Collector, quick-scan runner, local API, and dashboard are still missing.
+- Quick-scan runner, local API, and dashboard are still missing.
 
 ## Risks
 
@@ -33,4 +34,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #38 (secret redaction), #16 (collector), or #18 (quick-scan runner).
+GitHub issues #38 (secret redaction) or #18 (quick-scan runner).

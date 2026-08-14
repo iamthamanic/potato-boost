@@ -1,5 +1,5 @@
 {
-  "name": "@potato-boost/adapter-web",
+  "name": "@potato-boost/collector-os",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,9 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@playwright/test": "^1.62.1",
-    "@potato-boost/collector-hub": "workspace:*",
-    "@potato-boost/core": "workspace:*"
+    "@potato-boost/collector-hub": "workspace:*"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts"

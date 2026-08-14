@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Web-Doctor steht; als Nächstes Secret-Redaction (#38) und Collector (#16).",
-      "en": "Web doctor is in; next are secret redaction (#38) and collector (#16)."
+      "de": "Collector stehen; als Nächstes Secret-Redaction (#38) und Quick Scan (#18).",
+      "en": "Collectors are in; next are secret redaction (#38) and quick scan (#18)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Collector CDP+OS auf gemeinsamer Zeitachse (issue #16).",
+      "en": "CDP+OS collectors on a shared timeline (issue #16)."
+    },
     {
       "de": "Web-Doctor: Node, Browser, Port, Startbefehl mit Exit 3 (issue #14).",
       "en": "Web doctor: Node, browser, port, start command with exit 3 (issue #14)."
@@ -26,8 +30,8 @@
   ],
   "incomplete": [
     {
-      "de": "Collector, Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
-      "en": "Collector, quick-scan runner, local API, and dashboard are still missing."
+      "de": "Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
+      "en": "Quick-scan runner, local API, and dashboard are still missing."
     }
   ],
   "risks": [

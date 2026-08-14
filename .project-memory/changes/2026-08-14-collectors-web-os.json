@@ -1,0 +1,76 @@
+{
+  "id": "2026-08-14-collectors-web-os",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Collector: CDP und OS-Prozess auf einer Zeitachse",
+    "en": "Collectors: CDP and OS process on one timeline"
+  },
+  "summary": {
+    "de": "Hub nimmt Samples mit monotonem timestampNs auf. OS liefert CPU/RSS und Prozessbaum. Fehlendes CDP ist unsupported, kein stiller Null-Wert und kein Budget-Fail.",
+    "en": "Hub ingests samples with monotonic timestampNs. OS emits CPU/RSS and a process tree. Missing CDP is unsupported, not a silent null and not a budget fail."
+  },
+  "plain_language": {
+    "de": "Messwerte von Browser und Prozess landen auf derselben Uhr. Fehlt Chrome, ist das ein klares unsupported — kein Fake-Null.",
+    "en": "Browser and process readings share one clock. If Chrome is missing, that is explicit unsupported — not a fake zero."
+  },
+  "why_it_matters": {
+    "de": "Findings brauchen Samples (FR-014, EDGE-010).",
+    "en": "Findings need samples (FR-014, EDGE-010)."
+  },
+  "user_impact": {
+    "de": [
+      "Collector-APIs erzeugen Samples mit Einheit und Zeitstempel.",
+      "Ohne CDP wird der Lauf nicht als Performance-Fail gewertet."
+    ],
+    "en": [
+      "Collector APIs produce samples with unit and timestamp.",
+      "Without CDP the run is not scored as a performance fail."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Neue Pakete collector-hub und collector-os; CDP-Collector in adapter-web.",
+      "DoctorEnv-Muster: Collector sind injizierbar."
+    ],
+    "en": [
+      "New packages collector-hub and collector-os; CDP collector in adapter-web.",
+      "Same injection pattern as doctor: collectors are injectable."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Unit-Tests starten kein Chromium."
+    ],
+    "en": [
+      "Unit tests do not launch Chromium."
+    ]
+  },
+  "git": {
+    "base": "2318d5f",
+    "head": "HEAD",
+    "branch": "issue/16-collectors-web-os",
+    "pull_request": null
+  },
+  "packages": ["collector-hub", "collector-os", "adapter-web"],
+  "affected_features": ["web-cli"],
+  "affected_components": [
+    "packages/collector-hub/",
+    "packages/collector-os/",
+    "packages/adapter-web/src/collector.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/collector-hub/src/hub.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/collector-hub/src/hub.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

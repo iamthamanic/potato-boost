@@ -28,7 +28,8 @@
     "2026-08-13-cli-entrypoint",
     "2026-08-13-readonly-discovery",
     "2026-08-14-config-write-confirm",
-    "2026-08-14-web-doctor"
+    "2026-08-14-web-doctor",
+    "2026-08-14-collectors-web-os"
   ],
   "review_status": "needs-review",
   "confidence": 0.4,
