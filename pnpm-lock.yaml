@@ -147,6 +147,12 @@ importers:
 
   packages/local-api:
     dependencies:
+      '@potato-boost/adapter-web':
+        specifier: workspace:*
+        version: link:../adapter-web
+      '@potato-boost/core':
+        specifier: workspace:*
+        version: link:../core
       '@potato-boost/schemas':
         specifier: workspace:*
         version: link:../schemas

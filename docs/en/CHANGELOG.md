@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Setup detect UI
+
+DetectionCard shows evidence and confidence as a 0–1 fraction. Ambiguous targets sit side by side with no 96% claim. Confirm writes `potato.config.yaml`; cancel writes nothing. Doctor errors name the capability, path, and detail.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Dashboard shell
 
 React+Vite in `apps/dashboard`. PRD routes as empty/loading/error screens. No single performance score. Run token stays in memory (`?token=`).

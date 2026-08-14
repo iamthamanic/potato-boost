@@ -1,0 +1,53 @@
+{
+  "id": "2026-08-14-setup-detect-ui",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Setup-UI mit DetectionCard und Doctor",
+    "en": "Setup UI with DetectionCard and doctor"
+  },
+  "summary": {
+    "de": "Kandidaten mit Evidence und 0–1-Confidence; Confirm schreibt, Abbrechen nicht.",
+    "en": "Candidates with evidence and 0–1 confidence; confirm writes, cancel does not."
+  },
+  "plain_language": {
+    "de": "Im Browser wählst du das erkannte Target, überschreibst den Startbefehl und siehst konkrete Doctor-Fehler.",
+    "en": "In the browser you pick the detected target, override the start command, and see concrete doctor errors."
+  },
+  "why_it_matters": {
+    "de": "Keine uneindeutige 96%-Automatik (SCN-002). Writes nur nach Confirm (FR-007).",
+    "en": "No fake 96% auto-pick (SCN-002). Writes only after confirm (FR-007)."
+  },
+  "user_impact": {
+    "de": ["/setup/detect und /setup/doctor im Dashboard"],
+    "en": ["/setup/detect and /setup/doctor in the dashboard"]
+  },
+  "developer_impact": {
+    "de": ["GET /api/v1/detect, POST /api/v1/config/*, POST /api/v1/doctor"],
+    "en": ["GET /api/v1/detect, POST /api/v1/config/*, POST /api/v1/doctor"]
+  },
+  "operational_impact": {
+    "de": ["Local API bindet projectRoot; Loopback-CORS für das Dashboard."],
+    "en": ["Local API binds projectRoot; loopback CORS for the dashboard."]
+  },
+  "git": {
+    "base": "c6d30d5",
+    "head": "HEAD",
+    "branch": "issue/22-setup-detect-ui",
+    "pull_request": null
+  },
+  "packages": ["dashboard", "local-api", "core", "adapter-web"],
+  "affected_features": ["dashboard", "web-cli"],
+  "affected_components": [
+    "apps/dashboard/src/setup-detect.tsx",
+    "packages/local-api/src/setup.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

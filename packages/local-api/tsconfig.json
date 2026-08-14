@@ -6,7 +6,11 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "references": [{ "path": "../schemas" }],
+  "references": [
+    { "path": "../adapter-web" },
+    { "path": "../core" },
+    { "path": "../schemas" }
+  ],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

@@ -81,4 +81,26 @@ describe("applyInit", () => {
     const gitignore = await readFile(join(root, ".gitignore"), "utf8");
     expect(gitignore.match(/\.potato\//g)?.length).toBe(1);
   });
+
+  it("honors start argv and adapter overrides", async () => {
+    const { fs, writes } = tracingFs();
+    const preview = buildInitPreview({
+      canonicalRoot: "/tmp/potato-override",
+      kinds: ["web"],
+      adapterId: "vite",
+      start: ["npx", "vite", "--port", "5199"],
+      configExists: false,
+      gitignoreExists: false,
+    });
+    expect(preview.config.adapterId).toBe("vite");
+    expect(preview.config.commands.start).toEqual([
+      "npx",
+      "vite",
+      "--port",
+      "5199",
+    ]);
+    const skipped = await applyInit(fs, preview, false);
+    expect(skipped.wrote).toBe(false);
+    expect(writes).toEqual([]);
+  });
 });

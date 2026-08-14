@@ -1,8 +1,10 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { createServer } from "node:net";
+import type { DoctorEnv } from "@potato-boost/adapter-web";
 import { errorEnvelopeSchema } from "@potato-boost/schemas";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { z } from "zod";
+import { registerSetupRoutes } from "./setup.js";
 
 const startRunBody = z.object({
   targetId: z.string().min(1),
@@ -27,6 +29,8 @@ export type LocalApi = {
 export type StartLocalApiOptions = {
   preferredPort?: number;
   token?: string;
+  projectRoot?: string;
+  doctorEnv?: DoctorEnv;
 };
 
 type RunRecord = {
@@ -75,21 +79,21 @@ function readToken(header: string | string[] | undefined): string | undefined {
   return bearer?.[1] ?? raw;
 }
 
-function loopbackOrigin(port: number, origin: string): boolean {
+function loopbackOrigin(origin: string): boolean {
   try {
     const url = new URL(origin);
     if (url.protocol !== "http:") {
       return false;
     }
-    if (url.hostname !== "127.0.0.1" && url.hostname !== "localhost") {
-      return false;
-    }
-    const originPort =
-      url.port === "" ? (url.protocol === "http:" ? "80" : "443") : url.port;
-    return originPort === String(port);
+    return url.hostname === "127.0.0.1" || url.hostname === "localhost";
   } catch {
     return false;
   }
+}
+
+function allowLoopbackCors(reply: FastifyReply, origin: string): void {
+  reply.header("access-control-allow-origin", origin);
+  reply.header("vary", "Origin");
 }
 
 function loopbackHost(port: number, hostHeader: string | undefined): boolean {
@@ -139,7 +143,7 @@ export async function startLocalApi(
     }
     const origin = request.headers.origin;
     if (typeof origin === "string" && origin.length > 0) {
-      if (!loopbackOrigin(boundPort, origin)) {
+      if (!loopbackOrigin(origin)) {
         return sendEnvelope(
           reply,
           "FORBIDDEN",
@@ -147,8 +151,18 @@ export async function startLocalApi(
           403,
         );
       }
+      allowLoopbackCors(reply, origin);
     }
     if (request.method === "OPTIONS") {
+      if (typeof origin === "string" && loopbackOrigin(origin)) {
+        reply.header("access-control-allow-methods", "GET, POST, OPTIONS");
+        reply.header(
+          "access-control-allow-headers",
+          "authorization, content-type, idempotency-key, last-event-id",
+        );
+        reply.header("access-control-max-age", "600");
+        return reply.status(204).send();
+      }
       return sendEnvelope(reply, "FORBIDDEN", "cors preflight denied", 403);
     }
     const provided = readToken(request.headers.authorization);
@@ -157,6 +171,17 @@ export async function startLocalApi(
     }
     return undefined;
   });
+
+  registerSetupRoutes(
+    app,
+    {
+      projectRoot: options.projectRoot ?? process.cwd(),
+      ...(options.doctorEnv === undefined
+        ? {}
+        : { doctorEnv: options.doctorEnv }),
+    },
+    sendEnvelope,
+  );
 
   app.post("/api/v1/runs", async (request, reply) => {
     const keyHeader = request.headers["idempotency-key"];

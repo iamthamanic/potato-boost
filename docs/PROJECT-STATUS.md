@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Dashboard-Shell steht; als Nächstes Fake-Adapter oder weitere Dashboard-Tickets.
+- Setup-UI (Detect/Doctor) steht; als Nächstes weitere Dashboard-Tickets oder Fake-Adapter.
 
 ## Zuletzt erledigt
 
+- Setup-UI: DetectionCard, Command-Override, Doctor, Confirm/Cancel (issue #22).
 - Dashboard-Shell mit PRD-Routen ohne Score-Zahl (issue #21).
 - Offline-E2E: 0 Product-Requests bei blockiertem Netz (issue #39).
 - Security-E2E Origin/Pfad/Shell fail-closed (issue #37).
@@ -31,7 +32,7 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- Dashboard-Screens sind noch Empty-States, keine volle Analyse-UI.
+- Dashboard-Screens außer Setup sind noch Empty-States, keine volle Analyse-UI.
 
 ## Risiken
 

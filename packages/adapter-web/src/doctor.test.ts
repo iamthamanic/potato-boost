@@ -45,6 +45,16 @@ describe("runWebDoctor", () => {
     expect(start?.detail).toMatch(/does not execute/);
   });
 
+  it("uses an overridden start argv without executing it", async () => {
+    const report = await runWebDoctor("/tmp/empty", ["unknown"], env(), {
+      start: ["npx", "vite"],
+    });
+    const start = report.checks.find((check) => check.id === "start-command");
+    expect(start?.status).toBe("ok");
+    expect(start?.detail).toMatch(/npx/);
+    expect(start?.detail).toMatch(/does not execute|not executed/);
+  });
+
   it("reports a busy port without flipping doctor to missing", async () => {
     const report = await runWebDoctor(
       "/tmp/fixture",
