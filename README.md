@@ -49,11 +49,14 @@ Runs `scripts/run-checks.sh`. Until packages exist this is a documented placehol
 ```bash
 pnpm test              # Vitest
 pnpm test:e2e          # Playwright Chromium — fixture smoke on 127.0.0.1:5199
+pnpm test:security     # T-009 origin/path/argv + T-013 offline fetch guard
 ```
+
+Offline / T-013: packages must already be local (`pnpm install` done). The first `npx` download without a network may fail; that is expected. Product code does not phone home. Loopback (fixture, local API, CDP) is allowed.
 
 First e2e run needs a browser: `pnpm exec playwright install chromium`. CI installs Chromium with OS deps automatically.
 
-Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test:performance`.
+Planned additional gates: `pnpm test:contract`, `pnpm test:performance`.
 
 ## Project structure
 
@@ -94,6 +97,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Offline e2e: blocked network, 0 product requests, packages-already-local (`issue/39-offline-e2e`).
 - **2026-08-14** — T-009 security e2e: foreign Origin, path traversal, and shell metacharacters fail closed (`issue/37-security-e2e-local-api`).
 - **2026-08-14** — Local API: loopback Fastify, run token, Origin/Host checks, REST + SSE (`issue/20-local-api-loopback`).
 - **2026-08-14** — Abort/crash cleanup: process groups die within 10 s; cancelled/failed are not baselines (`issue/40-run-cancel-cleanup`).

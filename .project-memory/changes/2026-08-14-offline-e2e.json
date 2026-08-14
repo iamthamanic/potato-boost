@@ -1,0 +1,50 @@
+{
+  "id": "2026-08-14-offline-e2e",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Offline-E2E ohne Product-Requests",
+    "en": "Offline e2e with no product requests"
+  },
+  "summary": {
+    "de": "Blockiertes Netz: Fixture und Quick Scan nutzen nur Loopback. Packages müssen bereits lokal sein (T-013).",
+    "en": "Blocked network: fixture and Quick Scan use loopback only. Packages must already be local (T-013)."
+  },
+  "plain_language": {
+    "de": "Ohne Internet bleibt der lokale Lauf stehen, statt ins Netz zu greifen.",
+    "en": "Without internet the local run still works instead of calling out."
+  },
+  "why_it_matters": {
+    "de": "NFR-012: kein versteckter Traffic.",
+    "en": "NFR-012: no hidden traffic."
+  },
+  "user_impact": {
+    "de": ["pnpm test:e2e deckt die Offline-Route ab."],
+    "en": ["pnpm test:e2e covers the offline route."]
+  },
+  "developer_impact": {
+    "de": ["e2e/offline.spec.ts", "tests/security/t013-offline.test.ts"],
+    "en": ["e2e/offline.spec.ts", "tests/security/t013-offline.test.ts"]
+  },
+  "operational_impact": {
+    "de": ["CI e2e-Job führt die Spec mit aus."],
+    "en": ["The CI e2e job runs the spec."]
+  },
+  "git": {
+    "base": "e1bf7ec",
+    "head": "HEAD",
+    "branch": "issue/39-offline-e2e",
+    "pull_request": null
+  },
+  "packages": ["core", "local-api"],
+  "affected_features": ["web-cli"],
+  "affected_components": ["e2e/offline.spec.ts"],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}
