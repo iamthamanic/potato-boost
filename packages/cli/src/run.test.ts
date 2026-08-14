@@ -272,6 +272,18 @@ describe("runCli", () => {
       expect(parsed.candidates).toHaveLength(1);
       expect(parsed.candidates[0].kind).toBe("unknown");
     });
+
+    it("does not classify a package.json-only repo as web", async () => {
+      const { io, stdout } = capture();
+      const tmp = await mkdtemp(join(tmpdir(), "potato-pkg-"));
+      await writeFile(join(tmp, "package.json"), '{"name":"cli"}');
+      const code = await runCli(["detect", tmp], io);
+      expect(code).toBe(EXIT_OK);
+      const parsed = JSON.parse(stdout.join("")) as {
+        candidates: { kind: string }[];
+      };
+      expect(parsed.candidates.map((c) => c.kind)).toEqual(["unknown"]);
+    });
   });
 
   describe("init", () => {
@@ -296,8 +308,30 @@ describe("runCli", () => {
       expect(yaml).toMatch(/adapterId:/);
       expect(yaml).toMatch(/root: "\."/);
       expect(yaml).toMatch(/commands:/);
+      expect(yaml).toMatch(/startSource: "inferred"/);
       const gitignore = await readFile(join(tmp, ".gitignore"), "utf8");
       expect(gitignore).toMatch(/\.potato\//);
+    });
+
+    it("stores --start as an override only after --confirm", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-init-start-"));
+      const preview = capture();
+      expect(
+        await runCli(["init", tmp, "--start", "node app.js"], preview.io),
+      ).toBe(EXIT_OK);
+      expect(preview.stdout.join("")).toMatch(/startSource: "override"/);
+      expect(await readdir(tmp)).toEqual([]);
+      const wrote = capture();
+      expect(
+        await runCli(
+          ["init", tmp, "--start", "node app.js", "--confirm"],
+          wrote.io,
+        ),
+      ).toBe(EXIT_OK);
+      const yaml = await readFile(join(tmp, "potato.config.yaml"), "utf8");
+      expect(yaml).toMatch(/- "node"/);
+      expect(yaml).toMatch(/- "app.js"/);
+      expect(yaml).toMatch(/startSource: "override"/);
     });
   });
 
@@ -322,6 +356,21 @@ describe("runCli", () => {
       expect(code).toBe(EXIT_OK);
       expect(stdout.join("")).toMatch(/node\tok/);
       expect(stdout.join("")).toMatch(/browser\tok/);
+      expect(stdout.join("")).toMatch(/doctor: ok/);
+    });
+
+    it("does not require a browser for generic unknown repos", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-generic-"));
+      const { io, stdout } = capture();
+      const code = await runCli(["doctor", tmp], io, {
+        doctorEnv: {
+          ...doctorEnv,
+          locateBrowser: async () => null,
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/browser\tunsupported/);
+      expect(stdout.join("")).toMatch(/start-command\tunsupported/);
       expect(stdout.join("")).toMatch(/doctor: ok/);
     });
 
@@ -357,6 +406,30 @@ describe("runCli", () => {
       expect(code).toBe(EXIT_OK);
       expect(stdout.join("")).toMatch(/measure/);
       expect(stdout.join("")).toMatch(/run: completed/);
+    });
+
+    it("does not spawn a process for generic static mode", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-static-"));
+      let spawned = 0;
+      const { io } = capture();
+      const code = await runCli(["run", tmp], io, {
+        doctorEnv: {
+          ...doctorEnv,
+          locateBrowser: async () => null,
+        },
+        quickScan: {
+          store: createArtifactStore(tmp),
+          launcher: {
+            async start() {
+              spawned += 1;
+              return { pid: 0, async kill() {} };
+            },
+          },
+          runId: "run-static",
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(spawned).toBe(0);
     });
   });
 

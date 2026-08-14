@@ -99,6 +99,7 @@ describe("applyInit", () => {
       "--port",
       "5199",
     ]);
+    expect(preview.config.commands.startSource).toBe("override");
     const skipped = await applyInit(fs, preview, false);
     expect(skipped.wrote).toBe(false);
     expect(writes).toEqual([]);

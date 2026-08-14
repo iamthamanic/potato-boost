@@ -34,6 +34,29 @@ export function formatArgv(argv: readonly string[]): string {
   return argv.join(" ");
 }
 
+export function kindLabel(kind: string): string {
+  return kind === "unknown" ? "Generic (unsupported)" : kind;
+}
+
+export function pickInitialTarget(
+  candidates: readonly DetectedCandidate[],
+  ambiguous: boolean,
+): string | undefined {
+  if (ambiguous) {
+    return undefined;
+  }
+  const supported = candidates.find(
+    (candidate) => candidate.kind !== "unknown" && candidate.confidence > 0,
+  );
+  if (supported !== undefined) {
+    return supported.kind;
+  }
+  if (candidates.length === 1) {
+    return candidates[0]?.kind;
+  }
+  return undefined;
+}
+
 export function cardTone(
   candidate: DetectedCandidate,
   ambiguous: boolean,

@@ -10,6 +10,7 @@ import {
   formatArgv,
   isAmbiguous,
   parseArgv,
+  pickInitialTarget,
 } from "./detect.js";
 import { DetectionCard } from "./detection-card.js";
 
@@ -50,10 +51,7 @@ export function SetupDetect() {
         await apiRequest("/api/v1/detect"),
       );
       const ambiguous = detect.ambiguous || isAmbiguous(detect.candidates);
-      const only = detect.candidates.filter(
-        (candidate) => candidate.kind !== "unknown" && candidate.confidence > 0,
-      );
-      const nextSelected = ambiguous ? undefined : only[0]?.kind;
+      const nextSelected = pickInitialTarget(detect.candidates, ambiguous);
       const chosen = detect.candidates.find(
         (candidate) => candidate.kind === nextSelected,
       );
@@ -200,7 +198,8 @@ export function SetupDetect() {
                 spellCheck={false}
               />
               <p className="muted">
-                Whitespace-separated argv, not a shell string. Preview:{" "}
+                Whitespace-separated argv, not a shell string. A manual start is
+                an override, not detect evidence. Preview:{" "}
                 <code>{JSON.stringify(parseArgv(startText))}</code>
               </p>
             </div>

@@ -5,7 +5,9 @@ import {
   cardTone,
   formatConfidence,
   isAmbiguous,
+  kindLabel,
   parseArgv,
+  pickInitialTarget,
 } from "./detect.js";
 import { DetectionCard } from "./detection-card.js";
 
@@ -36,6 +38,33 @@ describe("detection confidence", () => {
         false,
       ),
     ).toBe("unsupported");
+    expect(kindLabel("unknown")).toBe("Generic (unsupported)");
+    expect(kindLabel("vite")).toBe("vite");
+    expect(
+      pickInitialTarget(
+        [{ kind: "unknown", confidence: 0, evidence: [], inferredStart: [] }],
+        false,
+      ),
+    ).toBe("unknown");
+    expect(
+      pickInitialTarget(
+        [
+          {
+            kind: "vite",
+            confidence: 0.5,
+            evidence: [],
+            inferredStart: ["npx", "vite"],
+          },
+          {
+            kind: "react",
+            confidence: 0.3,
+            evidence: [],
+            inferredStart: [],
+          },
+        ],
+        true,
+      ),
+    ).toBeUndefined();
   });
 
   it("renders evidence and radio semantics without a 96% claim", () => {
@@ -59,5 +88,23 @@ describe("detection confidence", () => {
     expect(html).toMatch(/confidence 0\.50/);
     expect(html).toMatch(/Ambiguous/);
     expect(html).not.toMatch(/96/);
+  });
+
+  it("labels unknown as generic unsupported", () => {
+    const html = renderToStaticMarkup(
+      createElement(DetectionCard, {
+        candidate: {
+          kind: "unknown",
+          confidence: 0,
+          evidence: [],
+          inferredStart: [],
+        },
+        selected: true,
+        ambiguous: false,
+        onSelect: () => undefined,
+      }),
+    );
+    expect(html).toMatch(/Generic \(unsupported\)/);
+    expect(html).toMatch(/Override the start argv/);
   });
 });

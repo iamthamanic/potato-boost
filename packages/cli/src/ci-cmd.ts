@@ -12,10 +12,11 @@ import {
 } from "@potato-boost/analysis";
 import {
   createArgvLauncher,
+  createNodeConfigFs,
   detectProject,
   type QuickScanDeps,
+  resolveRunStart,
   runQuickScan,
-  startArgv,
 } from "@potato-boost/core";
 import { exportReport } from "@potato-boost/report";
 import type { RunArtifact } from "@potato-boost/schemas";
@@ -77,11 +78,15 @@ export async function runCi(
     projectPath,
     webDetectors,
   );
-  const doctor = await runWebDoctor(
+  const kinds = detection.candidates.map((candidate) => candidate.kind);
+  const start = await resolveRunStart(
+    createNodeConfigFs(),
     detection.root,
-    detection.candidates.map((candidate) => candidate.kind),
-    doctorEnv,
+    kinds,
   );
+  const doctor = await runWebDoctor(detection.root, kinds, doctorEnv, {
+    start,
+  });
   if (!doctor.ok) {
     io.stderr.write(formatDoctorReport(doctor));
     finishCi(
@@ -97,10 +102,9 @@ export async function runCi(
     return;
   }
 
-  const kinds = detection.candidates.map((candidate) => candidate.kind);
   const result = await runQuickScan(detection.root, {
     launcher: createArgvLauncher(),
-    startArgv: startArgv(kinds),
+    startArgv: start,
     ...deps.quickScan,
   });
 

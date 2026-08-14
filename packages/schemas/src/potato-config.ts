@@ -10,6 +10,7 @@ export const potatoConfigSchema = z
     commands: z
       .object({
         start: z.array(argvEntry),
+        startSource: z.enum(["inferred", "override"]).default("inferred"),
       })
       .strict(),
   })

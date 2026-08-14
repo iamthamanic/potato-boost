@@ -6,6 +6,7 @@ import {
   cardTone,
   type DetectedCandidate,
   formatConfidence,
+  kindLabel,
 } from "./detect.js";
 
 type DetectionCardProps = {
@@ -32,7 +33,7 @@ export function DetectionCard(props: DetectionCardProps) {
       />
       <span className="detect-card-body">
         <span className="detect-card-head">
-          <strong>{props.candidate.kind}</strong>
+          <strong>{kindLabel(props.candidate.kind)}</strong>
           <span className="muted">
             {tone === "unsupported"
               ? "Unsupported"

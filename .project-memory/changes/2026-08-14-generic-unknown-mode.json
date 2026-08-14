@@ -1,0 +1,55 @@
+{
+  "id": "2026-08-14-generic-unknown-mode",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Generic Process/Static Mode für unbekannte Repos",
+    "en": "Generic process/static mode for unknown repos"
+  },
+  "summary": {
+    "de": "Unbekannte Repos sind Generic/unsupported, kein Web-False-Positive. Start-Argv ist Override nach Confirm; ohne Override startet kein Prozess.",
+    "en": "Unknown repos are generic/unsupported, not a web false-positive. Start argv is an override after confirm; without it no process starts."
+  },
+  "plain_language": {
+    "de": "Ein Ordner ohne Web-Marker wird nicht als Three.js verkauft. Ein Startbefehl gilt erst nach Confirm.",
+    "en": "A folder without web markers is not sold as Three.js. A start command counts only after confirm."
+  },
+  "why_it_matters": {
+    "de": "EDGE-001, FR-011, T-003.",
+    "en": "EDGE-001, FR-011, T-003."
+  },
+  "user_impact": {
+    "de": ["Doctor ohne Browser für Generic", "Dashboard-Label Generic (unsupported)"],
+    "en": ["Doctor without a browser for generic", "Dashboard label Generic (unsupported)"]
+  },
+  "developer_impact": {
+    "de": ["startSource inferred|override", "Web-Detector braucht index.html"],
+    "en": ["startSource inferred|override", "web detector requires index.html"]
+  },
+  "operational_impact": {
+    "de": ["Kein Spawn ohne Override; argv-Array, shell:false."],
+    "en": ["No spawn without override; argv array, shell:false."]
+  },
+  "git": {
+    "base": "0fcb81c",
+    "head": "HEAD",
+    "branch": "issue/34-generic-unknown-mode",
+    "pull_request": null
+  },
+  "packages": ["schemas", "core", "adapter-web", "cli", "local-api", "dashboard"],
+  "affected_features": ["web-cli", "dashboard"],
+  "affected_components": [
+    "packages/core/src/discovery/web-detectors.ts",
+    "packages/core/src/config/preview.ts",
+    "packages/adapter-web/src/doctor.ts",
+    "apps/dashboard/src/detect.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}

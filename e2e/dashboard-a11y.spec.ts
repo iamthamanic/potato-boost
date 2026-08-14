@@ -30,6 +30,11 @@ test("core routes have no critical or serious Axe violations", async ({
   await expect(
     page.getByRole("heading", { name: "Setup detect" }),
   ).toBeVisible();
+  await expect(page.getByText("Generic (unsupported)")).toBeVisible();
+  await expect(
+    page.getByText("A manual start is an override, not detect evidence."),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Confirm" })).toBeEnabled();
   await axeCriticalSerious(page);
 
   await page.goto(dash("/runs/new"));
@@ -69,6 +74,7 @@ test("keyboard path: skip link, start, abort, finding", async ({ page }) => {
   await page.goto(dash("/setup/detect"));
   await expect(page.getByRole("button", { name: "Confirm" })).toBeVisible();
   await page.goto(dash("/runs/new"));
+  await expect(page.getByRole("heading", { name: "New run" })).toBeVisible();
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Skip to main content" }),

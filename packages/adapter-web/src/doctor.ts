@@ -1,4 +1,8 @@
-import { type CandidateKind, startArgv } from "@potato-boost/core";
+import {
+  type CandidateKind,
+  isGenericKinds,
+  startArgv,
+} from "@potato-boost/core";
 import type { DoctorCheck, DoctorEnv, DoctorReport } from "./types.js";
 
 function nodeCheck(env: DoctorEnv): DoctorCheck {
@@ -11,7 +15,19 @@ function nodeCheck(env: DoctorEnv): DoctorCheck {
   };
 }
 
-async function browserCheck(env: DoctorEnv): Promise<DoctorCheck> {
+async function browserCheck(
+  env: DoctorEnv,
+  generic: boolean,
+): Promise<DoctorCheck> {
+  if (generic) {
+    return {
+      id: "browser",
+      status: "unsupported",
+      required: false,
+      path: "",
+      detail: "generic mode does not use a browser",
+    };
+  }
   const path = await env.locateBrowser();
   if (path === null) {
     return {
@@ -32,14 +48,19 @@ async function browserCheck(env: DoctorEnv): Promise<DoctorCheck> {
   };
 }
 
-function startCommandCheck(argv: readonly string[]): DoctorCheck {
+function startCommandCheck(
+  argv: readonly string[],
+  generic: boolean,
+): DoctorCheck {
   if (argv.length === 0) {
     return {
       id: "start-command",
-      status: "missing",
-      required: true,
+      status: generic ? "unsupported" : "missing",
+      required: !generic,
       path: "potato.config.yaml",
-      detail: "no start argv inferred; doctor does not execute scripts",
+      detail: generic
+        ? "generic static mode; set an override start argv to launch a process (not executed here)"
+        : "no start argv inferred; doctor does not execute scripts",
     };
   }
   return {
@@ -70,12 +91,13 @@ export async function runWebDoctor(
   env: DoctorEnv,
   options: { start?: readonly string[] } = {},
 ): Promise<DoctorReport> {
+  const generic = isGenericKinds(kinds);
   const argv =
     options.start !== undefined ? [...options.start] : startArgv(kinds);
   const checks: DoctorCheck[] = [
     nodeCheck(env),
-    await browserCheck(env),
-    startCommandCheck(argv),
+    await browserCheck(env, generic),
+    startCommandCheck(argv, generic),
     await portCheck(env),
   ];
   const ok = checks.every((check) => !check.required || check.status === "ok");

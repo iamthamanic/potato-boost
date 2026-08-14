@@ -325,6 +325,7 @@ describe("local api loopback", () => {
     const yaml = await readFile(join(root, "potato.config.yaml"), "utf8");
     expect(yaml).toMatch(/adapterId: "vite"/);
     expect(yaml).toMatch(/- "npx"/);
+    expect(yaml).toMatch(/startSource: "inferred"/);
 
     const doctor = await fetch(`${api.url}/api/v1/doctor`, {
       method: "POST",
