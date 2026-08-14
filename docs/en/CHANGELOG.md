@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Godot detect/doctor
+
+`project.godot` is detected with evidence. A missing Godot binary blocks doctor and run (exit 3) and lists checked paths. No core schema change.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Generic unknown mode
 
 Unknown repos are generic/unsupported, not a web false-positive. Start argv is an override after confirm; without it no process starts.

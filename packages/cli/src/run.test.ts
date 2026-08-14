@@ -284,6 +284,22 @@ describe("runCli", () => {
       };
       expect(parsed.candidates.map((c) => c.kind)).toEqual(["unknown"]);
     });
+
+    it("detects the godot-min fixture with evidence", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["detect", "fixtures/godot-min"], io);
+      expect(code).toBe(EXIT_OK);
+      const parsed = JSON.parse(stdout.join("")) as {
+        wrote: boolean;
+        candidates: { kind: string; evidence: { path: string }[] }[];
+      };
+      expect(parsed.wrote).toBe(false);
+      expect(parsed.candidates.map((c) => c.kind)).toEqual(["godot"]);
+      const godot = parsed.candidates[0];
+      expect(godot?.evidence.map((entry) => entry.path)).toEqual(
+        expect.arrayContaining(["project.godot", "main.gd"]),
+      );
+    });
   });
 
   describe("init", () => {
@@ -374,6 +390,23 @@ describe("runCli", () => {
       expect(stdout.join("")).toMatch(/doctor: ok/);
     });
 
+    it("blocks Godot doctor when the binary is missing", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["doctor", "fixtures/godot-min"], io, {
+        ...healthy,
+        godotEnv: {
+          env: {},
+          pathDirs: ["/usr/bin"],
+          wellKnownPaths: ["/Applications/Godot.app/Contents/MacOS/Godot"],
+          exists: async () => false,
+        },
+      });
+      expect(code).toBe(EXIT_INFRA);
+      expect(stdout.join("")).toMatch(/godot-binary\tmissing/);
+      expect(stdout.join("")).toMatch(/Checked:/);
+      expect(stdout.join("")).not.toMatch(/install godot somehow/i);
+    });
+
     it("blocks potato run with exit 3 when the browser is missing", async () => {
       const { io, stderr } = capture();
       const code = await runCli(["run", "fixtures/web-threejs"], io, {
@@ -430,6 +463,21 @@ describe("runCli", () => {
       });
       expect(code).toBe(EXIT_OK);
       expect(spawned).toBe(0);
+    });
+
+    it("blocks potato run on a Godot repo without a binary", async () => {
+      const { io, stderr } = capture();
+      const code = await runCli(["run", "fixtures/godot-min"], io, {
+        ...healthy,
+        godotEnv: {
+          env: {},
+          pathDirs: [],
+          wellKnownPaths: ["/usr/local/bin/godot"],
+          exists: async () => false,
+        },
+      });
+      expect(code).toBe(EXIT_INFRA);
+      expect(stderr.join("")).toMatch(/godot-binary\tmissing/);
     });
   });
 

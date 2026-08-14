@@ -2,6 +2,83 @@
   "schema_version": 1,
   "changes": [
     {
+      "id": "2026-08-14-godot-detect-doctor",
+      "date": "2026-08-14",
+      "type": "feature",
+      "status": "recorded",
+      "title": {
+        "de": "Godot Detect und Doctor",
+        "en": "Godot detect and doctor"
+      },
+      "summary": {
+        "de": "project.godot/.gd/.csproj werden mit Evidence erkannt. Fehlende Godot-Binary blockt Doctor und Run (Exit 3) mit geprüften Pfaden.",
+        "en": "project.godot/.gd/.csproj are detected with evidence. A missing Godot binary blocks doctor and run (exit 3) with checked paths."
+      },
+      "plain_language": {
+        "de": "Ein Godot-Projekt wird erkannt. Ohne installierte Engine startet kein Run.",
+        "en": "A Godot project is recognized. Without the engine installed, a run does not start."
+      },
+      "why_it_matters": {
+        "de": "SCN-003, S-009, NFR-011.",
+        "en": "SCN-003, S-009, NFR-011."
+      },
+      "user_impact": {
+        "de": [
+          "potato detect auf Godot-Repos",
+          "Doctor listet geprüfte Binary-Pfade"
+        ],
+        "en": [
+          "potato detect on Godot repos",
+          "Doctor lists checked binary paths"
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "packages/adapter-godot",
+          "keine Core-Schema-Änderung"
+        ],
+        "en": [
+          "packages/adapter-godot",
+          "no core schema change"
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Addon wird nicht kopiert. Kein Spawn ohne Binary."
+        ],
+        "en": [
+          "Addon is not copied. No spawn without a binary."
+        ]
+      },
+      "git": {
+        "base": "dcfd9b8",
+        "head": "HEAD",
+        "branch": "issue/42-godot-detect-doctor",
+        "pull_request": null
+      },
+      "packages": [
+        "adapter-godot",
+        "cli",
+        "local-api",
+        "dashboard"
+      ],
+      "affected_features": [
+        "adapter-sdk"
+      ],
+      "affected_components": [
+        "packages/adapter-godot",
+        "packages/cli/src/doctor-gate.ts",
+        "packages/local-api/src/setup.ts"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-14-generic-unknown-mode",
       "date": "2026-08-14",
       "type": "feature",

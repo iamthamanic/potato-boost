@@ -1,5 +1,5 @@
 {
-  "name": "@potato-boost/local-api",
+  "name": "@potato-boost/adapter-godot",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,13 +14,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@potato-boost/analysis": "workspace:*",
-    "@potato-boost/adapter-godot": "workspace:*",
-    "@potato-boost/adapter-web": "workspace:*",
-    "@potato-boost/core": "workspace:*",
-    "@potato-boost/schemas": "workspace:*",
-    "fastify": "^5.6.0",
-    "zod": "^4.1.0"
+    "@potato-boost/adapter-sdk": "workspace:*"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts"

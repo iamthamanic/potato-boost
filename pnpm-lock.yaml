@@ -67,6 +67,12 @@ importers:
         specifier: 8.2.1
         version: 8.2.1(@types/node@24.13.3)(esbuild@0.28.2)
 
+  packages/adapter-godot:
+    dependencies:
+      '@potato-boost/adapter-sdk':
+        specifier: workspace:*
+        version: link:../adapter-sdk
+
   packages/adapter-sdk:
     dependencies:
       zod:
@@ -112,6 +118,9 @@ importers:
         specifier: ^14.0.0
         version: 14.0.3
     devDependencies:
+      '@potato-boost/adapter-godot':
+        specifier: workspace:*
+        version: link:../adapter-godot
       '@potato-boost/adapter-web':
         specifier: workspace:*
         version: link:../adapter-web
@@ -163,6 +172,9 @@ importers:
 
   packages/local-api:
     dependencies:
+      '@potato-boost/adapter-godot':
+        specifier: workspace:*
+        version: link:../adapter-godot
       '@potato-boost/adapter-web':
         specifier: workspace:*
         version: link:../adapter-web

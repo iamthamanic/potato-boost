@@ -35,7 +35,13 @@ export function formatArgv(argv: readonly string[]): string {
 }
 
 export function kindLabel(kind: string): string {
-  return kind === "unknown" ? "Generic (unsupported)" : kind;
+  if (kind === "unknown") {
+    return "Generic (unsupported)";
+  }
+  if (kind === "godot") {
+    return "Godot";
+  }
+  return kind;
 }
 
 export function pickInitialTarget(

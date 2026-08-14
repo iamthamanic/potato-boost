@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Godot Detect/Doctor
+
+`project.godot` wird mit Evidence erkannt. Fehlende Godot-Binary blockt Doctor und Run (Exit 3) und listet geprüfte Pfade. Keine Core-Schema-Änderung.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Generic unknown mode
 
 Unbekannte Repos sind Generic/unsupported, kein Web-False-Positive. Start-Argv ist Override nach Confirm; ohne Override startet kein Prozess.

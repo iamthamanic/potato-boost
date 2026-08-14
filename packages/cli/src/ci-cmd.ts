@@ -1,10 +1,9 @@
 import { join } from "node:path";
 import {
-  createNodeDoctorEnv,
-  type DoctorEnv,
-  formatDoctorReport,
-  runWebDoctor,
-} from "@potato-boost/adapter-web";
+  createNodeGodotEnv,
+  type GodotDoctorEnv,
+} from "@potato-boost/adapter-godot";
+import { createNodeDoctorEnv, type DoctorEnv } from "@potato-boost/adapter-web";
 import {
   type CompareResult,
   compareExitCode,
@@ -12,15 +11,13 @@ import {
 } from "@potato-boost/analysis";
 import {
   createArgvLauncher,
-  createNodeConfigFs,
-  detectProject,
   type QuickScanDeps,
-  resolveRunStart,
   runQuickScan,
 } from "@potato-boost/core";
 import { exportReport } from "@potato-boost/report";
 import type { RunArtifact } from "@potato-boost/schemas";
 import { loadArtifact, parseArtifactJson } from "./compare-cmd.js";
+import { runCombinedDoctor } from "./doctor-gate.js";
 import {
   CliExitError,
   EXIT_BUDGET_FAIL,
@@ -28,8 +25,6 @@ import {
   EXIT_INFRA,
 } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
-import { nodeDiscoveryFs } from "./node-fs.js";
-import { webDetectors } from "./web-detectors.js";
 
 export type CiSummary = {
   exitCode: number;
@@ -70,25 +65,17 @@ export async function runCi(
   io: CliIo,
   projectPath: string,
   options: CiOptions,
-  deps: { doctorEnv?: DoctorEnv; quickScan?: QuickScanDeps } = {},
+  deps: {
+    doctorEnv?: DoctorEnv;
+    godotEnv?: GodotDoctorEnv;
+    quickScan?: QuickScanDeps;
+  } = {},
 ): Promise<void> {
   const doctorEnv = deps.doctorEnv ?? createNodeDoctorEnv();
-  const detection = await detectProject(
-    nodeDiscoveryFs,
-    projectPath,
-    webDetectors,
-  );
-  const kinds = detection.candidates.map((candidate) => candidate.kind);
-  const start = await resolveRunStart(
-    createNodeConfigFs(),
-    detection.root,
-    kinds,
-  );
-  const doctor = await runWebDoctor(detection.root, kinds, doctorEnv, {
-    start,
-  });
+  const godotEnv = deps.godotEnv ?? createNodeGodotEnv();
+  const doctor = await runCombinedDoctor(projectPath, doctorEnv, godotEnv);
   if (!doctor.ok) {
-    io.stderr.write(formatDoctorReport(doctor));
+    io.stderr.write(doctor.text);
     finishCi(
       io,
       {
@@ -102,9 +89,9 @@ export async function runCi(
     return;
   }
 
-  const result = await runQuickScan(detection.root, {
+  const result = await runQuickScan(doctor.root, {
     launcher: createArgvLauncher(),
-    startArgv: start,
+    startArgv: doctor.start,
     ...deps.quickScan,
   });
 
@@ -113,13 +100,13 @@ export async function runCi(
   let artifact: RunArtifact | null = null;
   if (result.artifactPath !== null) {
     artifact = await loadCompletedArtifact(
-      detection.root,
+      doctor.root,
       result.runId,
       result.artifactPath,
       deps.quickScan?.store,
     );
     const outDir =
-      options.out ?? join(detection.root, ".potato", "reports", result.runId);
+      options.out ?? join(doctor.root, ".potato", "reports", result.runId);
     const exported = await exportReport(artifact, outDir);
     jsonPath = exported.jsonPath;
     htmlPath = exported.htmlPath;
