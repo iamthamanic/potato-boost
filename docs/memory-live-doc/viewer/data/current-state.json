@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Hard Compare steht; als Nächstes Fake-Adapter (#33) oder CI-Exit-Codes (#34).",
-      "en": "Hard compare is in; next is the fake adapter (#33) or CI exit codes (#34)."
+      "de": "Hard Compare steht; als Nächstes Fake-Adapter (#33) oder Compare-UI (#34).",
+      "en": "Hard compare is in; next is the fake adapter (#33) or compare UI (#34)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "potato ci Exit-Codes 0/1/2/3/4 mit maschinenlesbaren Report-Pfaden (issue #30).",
+      "en": "potato ci exit codes 0/1/2/3/4 with machine-readable report paths (issue #30)."
+    },
     {
       "de": "Hard Compare: non-comparable statt falscher Regression; Baseline nur mit Confirm (issue #28).",
       "en": "Hard compare: non-comparable instead of a false regression; baseline only with confirm (issue #28)."
@@ -82,8 +86,8 @@
   ],
   "incomplete": [
     {
-      "de": "Rules und Settings im Dashboard sind noch Empty-States. potato ci ist Stub.",
-      "en": "Rules and Settings in the dashboard are still empty states. potato ci is a stub."
+      "de": "Rules und Settings im Dashboard sind noch Empty-States.",
+      "en": "Rules and Settings in the dashboard are still empty states."
     }
   ],
   "risks": [

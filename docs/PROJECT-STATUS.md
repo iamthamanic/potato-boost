@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Hard Compare steht; als Nächstes Fake-Adapter (#33) oder CI-Exit-Codes (#34).
+- Hard Compare steht; als Nächstes Fake-Adapter (#33) oder Compare-UI (#34).
 
 ## Zuletzt erledigt
 
+- `potato ci` Exit-Codes 0/1/2/3/4 mit maschinenlesbaren Report-Pfaden (issue #30).
 - Hard Compare: non-comparable statt falscher Regression; Baseline nur mit Confirm (issue #28).
 - Dashboard-A11y: Skip-Link, Reduced Motion, Axe auf Kernreisen (issue #26).
 - Timeline + Evidence Panel (issue #25).
@@ -37,7 +38,7 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- Rules und Settings im Dashboard sind noch Empty-States. CI-Compare (`potato ci`) ist Stub.
+- Rules und Settings im Dashboard sind noch Empty-States.
 
 ## Risiken
 

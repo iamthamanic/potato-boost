@@ -17,6 +17,7 @@ import {
   startArgv,
 } from "@potato-boost/core";
 import { Command } from "commander";
+import { runCi } from "./ci-cmd.js";
 import { runFileCompare, runSetBaseline } from "./compare-cmd.js";
 import {
   CliExitError,
@@ -29,20 +30,10 @@ import type { CliIo } from "./io.js";
 import { nodeDiscoveryFs } from "./node-fs.js";
 import { webDetectors } from "./web-detectors.js";
 
-const STUB_COMMANDS = [
-  { name: "ci", summary: "CI gate against budgets (stub)" },
-] as const;
-
 export type ProgramDeps = {
   doctorEnv?: DoctorEnv;
   quickScan?: QuickScanDeps;
 };
-
-function stubAction(name: string, io: CliIo): () => void {
-  return () => {
-    io.stdout.write(`${name} is not implemented yet\n`);
-  };
-}
 
 function formatPreview(preview: InitPreview, wrote: boolean): string {
   const lines = [
@@ -226,12 +217,22 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
       },
     );
 
-  for (const command of STUB_COMMANDS) {
-    program
-      .command(command.name)
-      .description(command.summary)
-      .action(stubAction(command.name, io));
-  }
+  program
+    .command("ci")
+    .argument("[path]", "project root", ".")
+    .option("--baseline <path>", "baseline artifact JSON")
+    .option("--out <dir>", "report output directory")
+    .description("CI gate against budgets")
+    .action(
+      async (path: string, options: { baseline?: string; out?: string }) => {
+        await runCi(io, path, options, {
+          doctorEnv,
+          ...(deps.quickScan === undefined
+            ? {}
+            : { quickScan: deps.quickScan }),
+        });
+      },
+    );
 
   return program;
 }

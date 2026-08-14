@@ -98,6 +98,9 @@ importers:
       '@potato-boost/analysis':
         specifier: workspace:*
         version: link:../analysis
+      '@potato-boost/report':
+        specifier: workspace:*
+        version: link:../report
       '@potato-boost/schemas':
         specifier: workspace:*
         version: link:../schemas

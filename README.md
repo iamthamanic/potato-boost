@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This is a pnpm workspace. `apps/dashboard` is the React + Vite shell (PRD routes; `/setup/detect`, `/setup/doctor`, `/runs/new`, `/runs/:id/live`, and `/runs/:id` overview/timeline/findings are live; remaining routes stay empty/error/loading). `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/collector-hub` ingests samples on a shared timeline. `packages/collector-os` samples CPU/RSS and the process tree. `packages/adapter-web` is the Web doctor and CDP collector (Node, Playwright Chromium, start argv, port). `packages/local-api` is the loopback Fastify REST/SSE server (127.0.0.1, random port, per-process run token, Origin/Host checks; detect/doctor/config confirm; golden run artifact GET). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`; `doctor` prints capability checks; `run` executes a smoke Quick Scan and writes a run artifact; `ci` is a stub). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
+This is a pnpm workspace. `apps/dashboard` is the React + Vite shell (PRD routes; `/setup/detect`, `/setup/doctor`, `/runs/new`, `/runs/:id/live`, and `/runs/:id` overview/timeline/findings are live; remaining routes stay empty/error/loading). `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/collector-hub` ingests samples on a shared timeline. `packages/collector-os` samples CPU/RSS and the process tree. `packages/adapter-web` is the Web doctor and CDP collector (Node, Playwright Chromium, start argv, port). `packages/local-api` is the loopback Fastify REST/SSE server (127.0.0.1, random port, per-process run token, Origin/Host checks; detect/doctor/config confirm; golden run artifact GET). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`; `doctor` prints capability checks; `run` executes a smoke Quick Scan and writes a run artifact; `ci` gates a run with exit codes 0/1/2/3/4 and prints JSON/HTML report paths). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -37,6 +37,8 @@ node packages/cli --help
 `pnpm --filter dashboard dev` serves the shell at [http://127.0.0.1:5173](http://127.0.0.1:5173). Pass `?token=` and `?api=` on the query string; the run token stays in memory (not localStorage). The local API binds loopback only.
 
 `potato compare --baseline a.json --candidate b.json` hard-compares two artifacts (exit 4 if non-comparable, exit 1 only on a compatible regression). `potato compare --set-baseline a.json --confirm` writes `.potato/baselines.json`; without `--confirm` it writes nothing.
+
+`potato ci [path] [--baseline artifact.json] [--out dir]` runs doctor + Quick Scan, writes JSON/HTML reports, and exits 0 (pass), 1 (budget-fail), 2 (usage), 3 (infra, including missing browser), or 4 (inconclusive / non-comparable). Stdout is one JSON object `{exitCode,jsonPath,htmlPath,runId}`; stderr repeats `jsonPath` and `htmlPath` as tab-separated lines.
 
 Keyboard path (core journeys, Tab then Enter; skip link is first):
 
@@ -106,6 +108,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — `potato ci` exit codes 0/1/2/3/4 with machine-readable report paths (`issue/30-potato-ci-exit-codes`).
 - **2026-08-14** — Compare: hard compare only when locks match; baseline only with confirm (`issue/28-compare-baseline`).
 - **2026-08-14** — Dashboard a11y: skip link, reduced motion, Axe on core routes (`issue/26-dashboard-a11y`).
 - **2026-08-14** — Timeline + Evidence Panel: markers, selected sample range, keyboard zoom presets (`issue/25-timeline-evidence`).
