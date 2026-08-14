@@ -1,0 +1,50 @@
+{
+  "id": "2026-08-14-live-run-ui",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Live-Run mit Phasen und Abbruch",
+    "en": "Live run with phases and abort"
+  },
+  "summary": {
+    "de": "Phasen mit Operations-Text, Logs, Abort. Cancelled ist keine Baseline.",
+    "en": "Phases with operation text, logs, abort. Cancelled is not a baseline."
+  },
+  "plain_language": {
+    "de": "Du siehst, in welcher Phase der Lauf ist, und kannst ihn abbrechen.",
+    "en": "You see which phase the run is in and can abort it."
+  },
+  "why_it_matters": {
+    "de": "FR-018 / SCN-009: Messung beobachtbar und abbrechbar.",
+    "en": "FR-018 / SCN-009: measurement is observable and abortable."
+  },
+  "user_impact": {
+    "de": ["/runs/new und /runs/:id/live"],
+    "en": ["/runs/new and /runs/:id/live"]
+  },
+  "developer_impact": {
+    "de": ["POST /api/v1/runs/:id/abort"],
+    "en": ["POST /api/v1/runs/:id/abort"]
+  },
+  "operational_impact": {
+    "de": ["runHoldMs hält den Stub-Stream für Abort offen."],
+    "en": ["runHoldMs keeps the stub stream open for abort."]
+  },
+  "git": {
+    "base": "1416c2a",
+    "head": "HEAD",
+    "branch": "issue/23-live-run-ui",
+    "pull_request": null
+  },
+  "packages": ["dashboard", "local-api"],
+  "affected_features": ["dashboard"],
+  "affected_components": ["apps/dashboard/src/live-run.tsx"],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

@@ -31,6 +31,7 @@ export type StartLocalApiOptions = {
   token?: string;
   projectRoot?: string;
   doctorEnv?: DoctorEnv;
+  runHoldMs?: number;
 };
 
 type RunRecord = {
@@ -39,6 +40,9 @@ type RunRecord = {
   payloadHash: string;
   events: { id: number; data: string }[];
   done: boolean;
+  baselineEligible: boolean;
+  sse: import("node:http").ServerResponse[];
+  holdTimer: ReturnType<typeof setTimeout> | undefined;
 };
 
 function envelope(
@@ -108,6 +112,42 @@ function payloadHash(body: unknown): string {
   return Buffer.from(JSON.stringify(body)).toString("hex");
 }
 
+function pushEvent(
+  run: RunRecord,
+  payload: { phase: string; detail: string },
+): void {
+  const event = {
+    id: (run.events.at(-1)?.id ?? 0) + 1,
+    data: JSON.stringify(payload),
+  };
+  run.events.push(event);
+  for (const sse of run.sse) {
+    sse.write(`id: ${event.id}\ndata: ${event.data}\n\n`);
+  }
+}
+
+function endSse(run: RunRecord): void {
+  for (const sse of run.sse) {
+    sse.end();
+  }
+  run.sse = [];
+}
+
+function finishRun(
+  run: RunRecord,
+  status: RunRecord["status"],
+  baselineEligible: boolean,
+): void {
+  if (run.holdTimer !== undefined) {
+    clearTimeout(run.holdTimer);
+    run.holdTimer = undefined;
+  }
+  run.status = status;
+  run.baselineEligible = baselineEligible;
+  run.done = true;
+  endSse(run);
+}
+
 async function portFree(port: number): Promise<boolean> {
   return new Promise((resolve) => {
     const probe = createServer();
@@ -131,6 +171,7 @@ export async function startLocalApi(
   const runs = new Map<string, RunRecord>();
   const idempotency = new Map<string, string>();
   let boundPort = 0;
+  const runHoldMs = options.runHoldMs ?? 0;
 
   const app: FastifyInstance = Fastify({
     logger: false,
@@ -226,6 +267,9 @@ export async function startLocalApi(
       payloadHash: hash,
       events,
       done: false,
+      baselineEligible: false,
+      sse: [],
+      holdTimer: undefined,
     });
     idempotency.set(key, runId);
     return reply.status(202).send({ runId });
@@ -243,6 +287,35 @@ export async function startLocalApi(
     return reply.status(200).send({
       runId: run.runId,
       status: run.status,
+      baselineEligible: run.baselineEligible,
+    });
+  });
+
+  app.post("/api/v1/runs/:id/abort", async (request, reply) => {
+    const parsed = z.object({ id: runIdParam }).safeParse(request.params);
+    if (!parsed.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
+    }
+    const run = runs.get(parsed.data.id);
+    if (run === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
+    }
+    if (run.status === "cancelled") {
+      return reply.status(200).send({
+        runId: run.runId,
+        status: run.status,
+        baselineEligible: false,
+      });
+    }
+    if (run.done) {
+      return sendEnvelope(reply, "CONFLICT", "run already finished", 409);
+    }
+    pushEvent(run, { phase: "cleanup", detail: "aborted" });
+    finishRun(run, "cancelled", false);
+    return reply.status(200).send({
+      runId: run.runId,
+      status: "cancelled",
+      baselineEligible: false,
     });
   });
 
@@ -262,29 +335,43 @@ export async function startLocalApi(
       return sendEnvelope(reply, "GONE", "event stream completed", 410);
     }
     reply.hijack();
-    reply.raw.writeHead(200, {
+    const sseHeaders: Record<string, string> = {
       "content-type": "text/event-stream",
       "cache-control": "no-cache",
       connection: "keep-alive",
-    });
+    };
+    const origin = request.headers.origin;
+    if (typeof origin === "string" && loopbackOrigin(origin)) {
+      sseHeaders["access-control-allow-origin"] = origin;
+      sseHeaders.vary = "Origin";
+    }
+    reply.raw.writeHead(200, sseHeaders);
     for (const event of run.events) {
       if (event.id > lastId) {
         reply.raw.write(`id: ${event.id}\ndata: ${event.data}\n\n`);
       }
     }
-    if (!run.done) {
-      run.events.push({
-        id: (run.events.at(-1)?.id ?? 0) + 1,
-        data: JSON.stringify({ phase: "measure", detail: "stub" }),
-      });
-      const last = run.events.at(-1);
-      if (last !== undefined) {
-        reply.raw.write(`id: ${last.id}\ndata: ${last.data}\n\n`);
-      }
-      run.done = true;
-      run.status = "completed";
+    if (run.done) {
+      reply.raw.end();
+      return;
     }
-    reply.raw.end();
+    run.sse.push(reply.raw);
+    if (runHoldMs <= 0) {
+      pushEvent(run, { phase: "measure", detail: "stub" });
+      finishRun(run, "completed", true);
+      return;
+    }
+    if (run.holdTimer === undefined) {
+      run.holdTimer = setTimeout(() => {
+        if (run.done) {
+          return;
+        }
+        pushEvent(run, { phase: "measure", detail: "stub" });
+        pushEvent(run, { phase: "analyze", detail: "stub" });
+        pushEvent(run, { phase: "report", detail: "stub" });
+        finishRun(run, "completed", true);
+      }, runHoldMs);
+    }
     return;
   });
 
@@ -302,6 +389,13 @@ export async function startLocalApi(
     port: boundPort,
     token,
     close: async () => {
+      for (const run of runs.values()) {
+        if (run.holdTimer !== undefined) {
+          clearTimeout(run.holdTimer);
+          run.holdTimer = undefined;
+        }
+        endSse(run);
+      }
       await app.close();
     },
   };

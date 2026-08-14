@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Live run UI
+
+Live run shows phases with operation text, expandable logs, and abort. Aborted runs are `cancelled` and not a baseline.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Setup detect UI
 
 DetectionCard shows evidence and confidence as a 0–1 fraction. Ambiguous targets sit side by side with no 96% claim. Confirm writes `potato.config.yaml`; cancel writes nothing. Doctor errors name the capability, path, and detail.

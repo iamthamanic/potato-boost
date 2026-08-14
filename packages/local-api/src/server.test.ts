@@ -182,6 +182,54 @@ describe("local api loopback", () => {
     expect(gone.status).toBe(410);
   });
 
+  it("aborts a held run as cancelled and not baseline eligible", async () => {
+    api = await startLocalApi({ runHoldMs: 60_000 });
+    const headers = {
+      "content-type": "application/json",
+      authorization: `Bearer ${api.token}`,
+      origin: api.url,
+    };
+    const created = await fetch(`${api.url}/api/v1/runs`, {
+      method: "POST",
+      headers: { ...headers, "idempotency-key": "abort" },
+      body: JSON.stringify({
+        targetId: "web-threejs",
+        scenarioId: "quick-scan",
+        profileId: "budget-local",
+      }),
+    });
+    const { runId } = (await created.json()) as { runId: string };
+    const aborted = await fetch(`${api.url}/api/v1/runs/${runId}/abort`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${api.token}`,
+        origin: api.url,
+      },
+    });
+    expect(aborted.status).toBe(200);
+    const body = (await aborted.json()) as {
+      status: string;
+      baselineEligible: boolean;
+    };
+    expect(body.status).toBe("cancelled");
+    expect(body.baselineEligible).toBe(false);
+    const read = await fetch(`${api.url}/api/v1/runs/${runId}`, { headers });
+    const listed = (await read.json()) as {
+      status: string;
+      baselineEligible: boolean;
+    };
+    expect(listed.status).toBe("cancelled");
+    expect(listed.baselineEligible).toBe(false);
+    const again = await fetch(`${api.url}/api/v1/runs/${runId}/abort`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${api.token}`,
+        origin: api.url,
+      },
+    });
+    expect(again.status).toBe(200);
+  });
+
   it("detects candidates, writes on confirm only, and reports doctor capabilities", async () => {
     const root = await mkdtemp(join(tmpdir(), "potato-setup-"));
     await writeFile(

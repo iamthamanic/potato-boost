@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Live run UI
+
+Live-Run zeigt Phasen mit Operations-Text, aufklappbare Logs und Abort. Abgebrochene Runs sind `cancelled` und keine Baseline.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Setup detect UI
 
 DetectionCard zeigt Evidence und Confidence als 0–1-Bruch. Mehrdeutige Targets liegen nebeneinander ohne 96%-Behauptung. Confirm schreibt `potato.config.yaml`; Abbrechen schreibt nichts. Doctor-Fehler nennen Capability, Pfad und Detail.

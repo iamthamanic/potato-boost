@@ -97,6 +97,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Live run UI: named phases, expandable logs, abort to cancelled (not baseline) (`issue/23-live-run-ui`).
 - **2026-08-14** — Setup UI: DetectionCard (evidence + 0–1 confidence), start argv override, doctor capability table; confirm writes, cancel does not (`issue/22-setup-detect-ui`).
 - **2026-08-14** — Dashboard shell: PRD routes as empty/error/loading screens; token stays in memory (`issue/21-dashboard-shell`).
 - **2026-08-14** — Offline e2e: blocked network, 0 product requests, packages-already-local (`issue/39-offline-e2e`).
