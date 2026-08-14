@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Abort-Cleanup steht; als Nächstes Dashboard (#20).",
-      "en": "Abort cleanup is in; next is the dashboard (#20)."
+      "de": "Local API steht; als Nächstes Dashboard-UI (#33/#34) nach dem API-Vertrag.",
+      "en": "Local API is in; next is the dashboard UI (#33/#34) on that contract."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Local API: Loopback, Run-Token, Origin/Host, REST+SSE (issue #20).",
+      "en": "Local API: loopback, run token, Origin/Host, REST+SSE (issue #20)."
+    },
     {
       "de": "Abbruch räumt Child-Prozesse auf (issue #40).",
       "en": "Abort cleans up child processes (issue #40)."
@@ -42,8 +46,8 @@
   ],
   "incomplete": [
     {
-      "de": "Local API und Dashboard fehlen noch.",
-      "en": "Local API and dashboard are still missing."
+      "de": "Dashboard-UI fehlt noch.",
+      "en": "Dashboard UI is still missing."
     }
   ],
   "risks": [

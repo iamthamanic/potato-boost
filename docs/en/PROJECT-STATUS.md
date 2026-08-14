@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Abort cleanup is in; next is the dashboard (#20).
+- Local API is in; next is the dashboard UI.
 
 ## Recently completed
 
+- Local API: loopback, run token, Origin/Host, REST+SSE (issue #20).
 - Abort cleans up child processes (issue #40).
 - Secret redaction in recorder and artifacts (issue #38).
 - Quick Scan runner with visible phases and an artifact (issue #18).
@@ -27,7 +28,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Local API and dashboard are still missing.
+- Dashboard UI is still missing.
 
 ## Risks
 
@@ -37,4 +38,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issue #20 (dashboard).
+GitHub issues #33/#34 (dashboard UI).

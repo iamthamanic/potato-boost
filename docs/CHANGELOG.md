@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Local API loopback
+
+Fastify bindet nur `127.0.0.1`, zufälligen Port und ein pro-Prozess-Run-Token. Fremde Origins sind 403; ohne Token 401. `POST /api/v1/runs` ist idempotent; SSE resumed per `Last-Event-ID` (EDGE-011, CON-004/006).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Abort cleanup
 
 Nach Stop sind innerhalb von 10 s keine vom Runner gestarteten Child-Prozesse mehr da. Cancelled/failed Runs sind keine Baselines. Warm-up-Crash bleibt `failed` (kein Budget-Fail). SIGINT bricht `potato run` ab (NFR-007, T-005).
