@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Setup detect UI
+
+DetectionCard zeigt Evidence und Confidence als 0–1-Bruch. Mehrdeutige Targets liegen nebeneinander ohne 96%-Behauptung. Confirm schreibt `potato.config.yaml`; Abbrechen schreibt nichts. Doctor-Fehler nennen Capability, Pfad und Detail.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Dashboard shell
 
 React+Vite in `apps/dashboard`. PRD-Routen als Empty/Loading/Error. Kein einzelner Performance Score. Run-Token nur im Speicher (`?token=`).

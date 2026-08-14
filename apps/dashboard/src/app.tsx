@@ -1,6 +1,8 @@
 import { NavLink, Route, Routes } from "react-router-dom";
 import { ProjectHome } from "./project-home.js";
 import { Screen } from "./screen.js";
+import { SetupDetect } from "./setup-detect.js";
+import { SetupDoctor } from "./setup-doctor.js";
 
 const NAV = [
   { to: "/setup/detect", label: "Setup detect" },
@@ -35,24 +37,8 @@ export function App() {
         <Routes>
           <Route path="/" element={<ProjectHome />} />
           <Route path="/project" element={<ProjectHome />} />
-          <Route
-            path="/setup/detect"
-            element={
-              <Screen
-                title="Setup detect"
-                empty="No target confirmed yet. Run detect from the CLI, then choose a target here."
-              />
-            }
-          />
-          <Route
-            path="/setup/doctor"
-            element={
-              <Screen
-                title="Setup doctor"
-                empty="No doctor report loaded. Run potato doctor, then refresh."
-              />
-            }
-          />
+          <Route path="/setup/detect" element={<SetupDetect />} />
+          <Route path="/setup/doctor" element={<SetupDoctor />} />
           <Route
             path="/scenarios"
             element={

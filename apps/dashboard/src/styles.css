@@ -78,8 +78,13 @@ button {
   padding: var(--space-2) var(--space-3);
 }
 
+button:hover {
+  border-color: var(--color-accent);
+}
+
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+input:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
@@ -152,4 +157,102 @@ main h2 {
   * {
     transition: none;
   }
+}
+
+.banner {
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+  padding: var(--space-3);
+  margin: 0 0 var(--space-4);
+}
+
+.detect-grid {
+  border: 0;
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-3);
+}
+
+.detect-card {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--color-bg);
+}
+
+.detect-card.is-selected {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 0;
+}
+
+.detect-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.detect-card-head {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.evidence {
+  margin: 0;
+  padding-left: var(--space-4);
+  font-size: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.field input {
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: var(--space-2);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-fg);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.preview pre {
+  overflow: auto;
+  padding: var(--space-3);
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+  font-size: 12px;
+}
+
+.checks {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: var(--space-3) 0;
+}
+
+.checks th,
+.checks td {
+  text-align: left;
+  vertical-align: top;
+  padding: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
 }

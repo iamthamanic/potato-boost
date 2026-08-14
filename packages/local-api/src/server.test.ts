@@ -1,4 +1,7 @@
+import { mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { createServer } from "node:net";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
 import { type LocalApi, startLocalApi } from "./server.js";
 
@@ -177,5 +180,108 @@ describe("local api loopback", () => {
       },
     });
     expect(gone.status).toBe(410);
+  });
+
+  it("detects candidates, writes on confirm only, and reports doctor capabilities", async () => {
+    const root = await mkdtemp(join(tmpdir(), "potato-setup-"));
+    await writeFile(
+      join(root, "package.json"),
+      '{"dependencies":{"vite":"1","react":"1"}}',
+    );
+    await writeFile(join(root, "vite.config.ts"), "export default {}");
+    api = await startLocalApi({
+      projectRoot: root,
+      doctorEnv: {
+        nodePath: "/usr/bin/node",
+        nodeVersion: "v24.0.0",
+        wantedNodeRange: ">=24",
+        locateBrowser: async () => null,
+        isPortInUse: async () => false,
+        appPort: 5199,
+      },
+    });
+    const headers = {
+      authorization: `Bearer ${api.token}`,
+      origin: "http://127.0.0.1:5173",
+      "content-type": "application/json",
+    };
+    const before = await readdir(root);
+    const detect = await fetch(`${api.url}/api/v1/detect`, { headers });
+    expect(detect.status).toBe(200);
+    const detected = (await detect.json()) as {
+      wrote: boolean;
+      ambiguous: boolean;
+      candidates: { kind: string; confidence: number }[];
+    };
+    expect(detected.wrote).toBe(false);
+    expect(detected.ambiguous).toBe(true);
+    expect(detected.candidates.map((c) => c.kind)).toEqual(
+      expect.arrayContaining(["vite", "react"]),
+    );
+    expect(JSON.stringify(detected)).not.toMatch(/96%/);
+    expect(await readdir(root)).toEqual(before);
+
+    const preflight = await fetch(`${api.url}/api/v1/detect`, {
+      method: "OPTIONS",
+      headers: { origin: "http://127.0.0.1:5173" },
+    });
+    expect(preflight.status).toBe(204);
+
+    const preview = await fetch(`${api.url}/api/v1/config/preview`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ adapterId: "vite", start: ["npx", "vite"] }),
+    });
+    expect(preview.status).toBe(200);
+    expect(((await preview.json()) as { wrote: boolean }).wrote).toBe(false);
+    expect(await readdir(root)).toEqual(before);
+
+    const cancel = await fetch(`${api.url}/api/v1/config/cancel`, {
+      method: "POST",
+      headers,
+      body: "{}",
+    });
+    expect(cancel.status).toBe(200);
+    expect(((await cancel.json()) as { wrote: boolean }).wrote).toBe(false);
+    expect(await readdir(root)).toEqual(before);
+
+    const rooted = await fetch(`${api.url}/api/v1/config/confirm`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        adapterId: "vite",
+        start: ["npx", "vite"],
+        root: "/etc",
+      }),
+    });
+    expect(rooted.status).toBe(422);
+    expect(await readdir(root)).toEqual(before);
+
+    const confirm = await fetch(`${api.url}/api/v1/config/confirm`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ adapterId: "vite", start: ["npx", "vite"] }),
+    });
+    expect(confirm.status).toBe(200);
+    const confirmed = (await confirm.json()) as { wrote: boolean };
+    expect(confirmed.wrote).toBe(true);
+    const yaml = await readFile(join(root, "potato.config.yaml"), "utf8");
+    expect(yaml).toMatch(/adapterId: "vite"/);
+    expect(yaml).toMatch(/- "npx"/);
+
+    const doctor = await fetch(`${api.url}/api/v1/doctor`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ adapterId: "vite", start: ["npx", "vite"] }),
+    });
+    expect(doctor.status).toBe(200);
+    const report = (await doctor.json()) as {
+      ok: boolean;
+      checks: { id: string; status: string; detail: string }[];
+    };
+    expect(report.ok).toBe(false);
+    const browser = report.checks.find((check) => check.id === "browser");
+    expect(browser?.status).toBe("missing");
+    expect(browser?.detail).toMatch(/Playwright Chromium/);
   });
 });

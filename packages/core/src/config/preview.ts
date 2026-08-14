@@ -58,12 +58,19 @@ export function buildInitPreview(options: {
   kinds: readonly CandidateKind[];
   configExists: boolean;
   gitignoreExists: boolean;
+  adapterId?: string;
+  start?: readonly string[];
 }): InitPreview {
   const config = potatoConfigSchema.parse({
     schemaVersion: "1.0.0",
-    adapterId: pickAdapterId(options.kinds),
+    adapterId: options.adapterId ?? pickAdapterId(options.kinds),
     root: ".",
-    commands: { start: startArgv(options.kinds) },
+    commands: {
+      start:
+        options.start !== undefined
+          ? [...options.start]
+          : startArgv(options.kinds),
+    },
   });
   return {
     root: options.canonicalRoot,

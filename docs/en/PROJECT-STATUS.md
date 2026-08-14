@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Dashboard shell is in; next is the fake adapter or further dashboard tickets.
+- Setup UI (detect/doctor) is in; next is further dashboard tickets or the fake adapter.
 
 ## Recently completed
 
+- Setup UI: DetectionCard, command override, doctor, confirm/cancel (issue #22).
 - Dashboard shell with PRD routes and no score number (issue #21).
 - Offline e2e: 0 product requests on a blocked network (issue #39).
 - Security e2e origin/path/shell fail-closed (issue #37).
@@ -31,7 +32,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Dashboard screens are still empty states, not a full analysis UI.
+- Dashboard screens besides setup are still empty states, not a full analysis UI.
 
 ## Risks
 

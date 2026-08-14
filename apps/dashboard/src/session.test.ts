@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
@@ -22,9 +22,11 @@ describe("dashboard session token", () => {
 
   it("does not write token keys to web storage APIs in source", async () => {
     const dir = fileURLToPath(new URL(".", import.meta.url));
-    const files = ["session.ts", "main.tsx", "app.tsx", "project-home.tsx"];
+    const names = (await readdir(dir)).filter(
+      (name) => /\.(ts|tsx)$/.test(name) && !name.includes(".test."),
+    );
     const text = (
-      await Promise.all(files.map((name) => readFile(join(dir, name), "utf8")))
+      await Promise.all(names.map((name) => readFile(join(dir, name), "utf8")))
     ).join("\n");
     expect(text).not.toMatch(/localStorage|sessionStorage/);
     expect(text).not.toMatch(/Performance Score/);

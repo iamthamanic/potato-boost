@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Dashboard-Shell steht; als Nächstes Fake-Adapter (#33) oder weitere Dashboard-Tickets.",
-      "en": "Dashboard shell is in; next is the fake adapter (#33) or further dashboard tickets."
+      "de": "Setup-UI steht; als Nächstes weitere Dashboard-Tickets oder Fake-Adapter (#33).",
+      "en": "Setup UI is in; next is further dashboard tickets or the fake adapter (#33)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Setup-UI DetectionCard, Override, Doctor, Confirm (issue #22).",
+      "en": "Setup UI DetectionCard, override, doctor, confirm (issue #22)."
+    },
     {
       "de": "Dashboard-Shell mit PRD-Routen ohne Score-Zahl (issue #21).",
       "en": "Dashboard shell with PRD routes and no score number (issue #21)."
@@ -58,8 +62,8 @@
   ],
   "incomplete": [
     {
-      "de": "Dashboard-Screens sind noch Empty-States, keine volle Analyse-UI.",
-      "en": "Dashboard screens are still empty states, not a full analysis UI."
+      "de": "Dashboard-Screens außer Setup sind noch Empty-States, keine volle Analyse-UI.",
+      "en": "Dashboard screens besides setup are still empty states, not a full analysis UI."
     }
   ],
   "risks": [

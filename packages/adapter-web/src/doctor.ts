@@ -32,8 +32,7 @@ async function browserCheck(env: DoctorEnv): Promise<DoctorCheck> {
   };
 }
 
-function startCommandCheck(kinds: readonly CandidateKind[]): DoctorCheck {
-  const argv = startArgv(kinds);
+function startCommandCheck(argv: readonly string[]): DoctorCheck {
   if (argv.length === 0) {
     return {
       id: "start-command",
@@ -69,11 +68,14 @@ export async function runWebDoctor(
   root: string,
   kinds: readonly CandidateKind[],
   env: DoctorEnv,
+  options: { start?: readonly string[] } = {},
 ): Promise<DoctorReport> {
+  const argv =
+    options.start !== undefined ? [...options.start] : startArgv(kinds);
   const checks: DoctorCheck[] = [
     nodeCheck(env),
     await browserCheck(env),
-    startCommandCheck(kinds),
+    startCommandCheck(argv),
     await portCheck(env),
   ];
   const ok = checks.every((check) => !check.required || check.status === "ok");
