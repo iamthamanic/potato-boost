@@ -1,0 +1,72 @@
+{
+  "id": "2026-08-14-local-api-loopback",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Local API nur auf Loopback",
+    "en": "Local API loopback only"
+  },
+  "summary": {
+    "de": "Fastify bindet 127.0.0.1, zufälligen Port und Run-Token. Fremde Origins werden abgelehnt (EDGE-011).",
+    "en": "Fastify binds 127.0.0.1, a random port, and a run token. Foreign origins are rejected (EDGE-011)."
+  },
+  "plain_language": {
+    "de": "Das Dashboard-Backend hört nur auf diesem Rechner und lässt fremde Websites nicht steuern.",
+    "en": "The dashboard backend listens only on this machine and cannot be driven by a foreign website."
+  },
+  "why_it_matters": {
+    "de": "NFR-005 / EDGE-011: Cross-Origin gegen localhost muss scheitern.",
+    "en": "NFR-005 / EDGE-011: cross-origin calls against localhost must fail."
+  },
+  "user_impact": {
+    "de": [
+      "URL und Token gelten nur für diesen Prozess.",
+      "Belegter Port → nächster freier Loopback-Port."
+    ],
+    "en": [
+      "URL and token are per process.",
+      "A busy port falls back to the next free loopback port."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "packages/local-api mit REST + SSE.",
+      "Idempotency-Key für POST /api/v1/runs."
+    ],
+    "en": [
+      "packages/local-api with REST + SSE.",
+      "Idempotency-Key for POST /api/v1/runs."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "pnpm test:security trifft die Local-API-Tests."
+    ],
+    "en": [
+      "pnpm test:security runs the local-api tests."
+    ]
+  },
+  "git": {
+    "base": "83110ac",
+    "head": "HEAD",
+    "branch": "issue/20-local-api-loopback",
+    "pull_request": null
+  },
+  "packages": ["local-api"],
+  "affected_features": ["web-cli"],
+  "affected_components": ["packages/local-api/src/server.ts"],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/local-api/src/server.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/local-api/src/server.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}

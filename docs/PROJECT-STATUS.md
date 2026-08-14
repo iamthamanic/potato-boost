@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Abort-Cleanup steht; als Nächstes Dashboard (#20).
+- Local API steht; als Nächstes Dashboard-UI.
 
 ## Zuletzt erledigt
 
+- Local API: Loopback, Run-Token, Origin/Host, REST+SSE (issue #20).
 - Abbruch räumt Child-Prozesse auf (issue #40).
 - Secret-Redaktion in Recorder und Artifacts (issue #38).
 - Quick-Scan-Runner mit sichtbaren Phasen und Artifact (issue #18).
@@ -27,7 +28,7 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- Local API und Dashboard fehlen noch.
+- Dashboard-UI fehlt noch.
 
 ## Risiken
 
@@ -37,4 +38,4 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Nächster Schritt
 
-GitHub-Issues #20 (Dashboard).
+GitHub-Issues #33/#34 (Dashboard-UI).

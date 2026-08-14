@@ -19,7 +19,7 @@
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:contract": "echo 'Add adapter contract tests after packages/adapter-sdk'",
-    "test:security": "echo 'Add security tests after local-api'",
+    "test:security": "vitest run packages/local-api/src/server.test.ts",
     "test:performance": "echo 'Add fixture benchmarks after fixtures/web-threejs'",
     "test:e2e": "playwright test",
     "checks": "bash scripts/run-checks.sh"
