@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@potato-boost/adapter-web": "workspace:*",
+    "@potato-boost/artifact-store": "workspace:*",
     "@potato-boost/core": "workspace:*"
   }
 }

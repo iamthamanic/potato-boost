@@ -8,11 +8,21 @@ import {
 import {
   applyInit,
   buildInitPreview,
+  createArgvLauncher,
   createNodeConfigFs,
   detectProject,
   type InitPreview,
+  type QuickScanDeps,
+  runQuickScan,
+  startArgv,
 } from "@potato-boost/core";
 import { Command } from "commander";
+import {
+  CliExitError,
+  EXIT_BUDGET_FAIL,
+  EXIT_INCONCLUSIVE,
+  EXIT_INFRA,
+} from "./exit-codes.js";
 import type { CliIo } from "./io.js";
 import { nodeDiscoveryFs } from "./node-fs.js";
 import { webDetectors } from "./web-detectors.js";
@@ -23,6 +33,7 @@ const STUB_COMMANDS = [
 
 export type ProgramDeps = {
   doctorEnv?: DoctorEnv;
+  quickScan?: QuickScanDeps;
 };
 
 function stubAction(name: string, io: CliIo): () => void {
@@ -141,7 +152,25 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         io.stderr.write(formatDoctorReport(report));
         throw new Error("doctor blocked: required capability missing");
       }
-      io.stdout.write("run is not implemented yet\n");
+      const kinds = detection.candidates.map((candidate) => candidate.kind);
+      const result = await runQuickScan(detection.root, {
+        launcher: createArgvLauncher(),
+        startArgv: startArgv(kinds),
+        ...deps.quickScan,
+      });
+      for (const event of result.phases) {
+        io.stdout.write(`${event.phase}\t${event.detail ?? ""}\n`);
+      }
+      io.stdout.write(`run: ${result.status}\t${result.artifactPath ?? "-"}\n`);
+      if (result.status === "failed") {
+        throw new CliExitError(EXIT_INFRA, result.error ?? "quick scan failed");
+      }
+      if (result.status === "inconclusive") {
+        throw new CliExitError(EXIT_INCONCLUSIVE, "quick scan inconclusive");
+      }
+      if (result.budgetFail) {
+        throw new CliExitError(EXIT_BUDGET_FAIL, "budget exceeded");
+      }
     });
 
   for (const command of STUB_COMMANDS) {

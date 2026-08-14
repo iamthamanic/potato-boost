@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Collector stehen; als Nächstes Secret-Redaction (#38) und Quick Scan (#18).",
-      "en": "Collectors are in; next are secret redaction (#38) and quick scan (#18)."
+      "de": "Quick Scan steht; als Nächstes Secret-Redaction (#38) und Dashboard.",
+      "en": "Quick Scan is in; next are secret redaction (#38) and the dashboard."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Quick-Scan-Runner mit Phasen und Artifact (issue #18).",
+      "en": "Quick Scan runner with phases and artifact (issue #18)."
+    },
     {
       "de": "Collector CDP+OS auf gemeinsamer Zeitachse (issue #16).",
       "en": "CDP+OS collectors on a shared timeline (issue #16)."
@@ -30,8 +34,8 @@
   ],
   "incomplete": [
     {
-      "de": "Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
-      "en": "Quick-scan runner, local API, and dashboard are still missing."
+      "de": "Local API und Dashboard fehlen noch.",
+      "en": "Local API and dashboard are still missing."
     }
   ],
   "risks": [

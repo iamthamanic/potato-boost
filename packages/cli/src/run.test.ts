@@ -1,6 +1,7 @@
 import { mkdtemp, readdir, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { createArtifactStore } from "@potato-boost/artifact-store";
 import { describe, expect, it } from "vitest";
 import { EXIT_INFRA, EXIT_OK, EXIT_USAGE } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
@@ -151,6 +152,27 @@ describe("runCli", () => {
       expect(code).toBe(EXIT_INFRA);
       expect(code).not.toBe(1);
       expect(stderr.join("")).toMatch(/browser\tmissing/);
+    });
+
+    it("prints quick-scan phases and writes an artifact when healthy", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-run-cli-"));
+      const { io, stdout } = capture();
+      const code = await runCli(["run", "fixtures/web-threejs"], io, {
+        ...healthy,
+        quickScan: {
+          store: createArtifactStore(tmp),
+          startArgv: [],
+          launcher: {
+            async start() {
+              return { pid: 0, async kill() {} };
+            },
+          },
+          runId: "run-cli",
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/measure/);
+      expect(stdout.join("")).toMatch(/run: completed/);
     });
   });
 });

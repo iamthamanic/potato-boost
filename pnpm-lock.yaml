@@ -74,6 +74,9 @@ importers:
       '@potato-boost/adapter-web':
         specifier: workspace:*
         version: link:../adapter-web
+      '@potato-boost/artifact-store':
+        specifier: workspace:*
+        version: link:../artifact-store
       '@potato-boost/core':
         specifier: workspace:*
         version: link:../core
@@ -92,6 +95,21 @@ importers:
 
   packages/core:
     dependencies:
+      '@potato-boost/analysis':
+        specifier: workspace:*
+        version: link:../analysis
+      '@potato-boost/artifact-store':
+        specifier: workspace:*
+        version: link:../artifact-store
+      '@potato-boost/collector-hub':
+        specifier: workspace:*
+        version: link:../collector-hub
+      '@potato-boost/rule-engine':
+        specifier: workspace:*
+        version: link:../rule-engine
+      '@potato-boost/scenario-engine':
+        specifier: workspace:*
+        version: link:../scenario-engine
       '@potato-boost/schemas':
         specifier: workspace:*
         version: link:../schemas

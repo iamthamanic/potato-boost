@@ -1,5 +1,5 @@
 import { CommanderError } from "commander";
-import { EXIT_INFRA, EXIT_OK, EXIT_USAGE } from "./exit-codes.js";
+import { CliExitError, EXIT_INFRA, EXIT_OK, EXIT_USAGE } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
 import { createProgram, type ProgramDeps } from "./program.js";
 
@@ -23,6 +23,10 @@ export async function runCli(
         return EXIT_OK;
       }
       return EXIT_USAGE;
+    }
+    if (error instanceof CliExitError) {
+      io.stderr.write(`${error.message}\n`);
+      return error.exitCode;
     }
     const message = error instanceof Error ? error.message : "cli failed";
     io.stderr.write(`${message}\n`);
