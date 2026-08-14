@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Dashboard-A11y steht; als Nächstes Compare (#28) oder Fake-Adapter (#33).
+- Hard Compare steht; als Nächstes Fake-Adapter (#33) oder CI-Exit-Codes (#34).
 
 ## Zuletzt erledigt
 
+- Hard Compare: non-comparable statt falscher Regression; Baseline nur mit Confirm (issue #28).
 - Dashboard-A11y: Skip-Link, Reduced Motion, Axe auf Kernreisen (issue #26).
 - Timeline + Evidence Panel (issue #25).
 - Run-Detail: Overview ohne Score, sechs Finding-Blöcke (issue #24).
@@ -36,7 +37,7 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- Compare, Rules und Settings im Dashboard sind noch Empty-States, keine volle Analyse-UI.
+- Rules und Settings im Dashboard sind noch Empty-States. CI-Compare (`potato ci`) ist Stub.
 
 ## Risiken
 

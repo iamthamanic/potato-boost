@@ -3,6 +3,7 @@
  * Location: apps/dashboard/src/app.tsx
  */
 import { NavLink, Route, Routes } from "react-router-dom";
+import { Compare } from "./compare.js";
 import { LiveRun } from "./live-run.js";
 import { NewRun } from "./new-run.js";
 import { ProjectHome } from "./project-home.js";
@@ -71,15 +72,7 @@ export function App() {
           <Route path="/runs/new" element={<NewRun />} />
           <Route path="/runs/:id/live" element={<LiveRun />} />
           <Route path="/runs/:id" element={<RunDetail />} />
-          <Route
-            path="/compare"
-            element={
-              <Screen
-                title="Compare"
-                empty="No comparable runs yet. Complete a baseline and a candidate first."
-              />
-            }
-          />
+          <Route path="/compare" element={<Compare />} />
           <Route
             path="/rules"
             element={

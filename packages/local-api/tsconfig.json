@@ -8,6 +8,7 @@
   },
   "references": [
     { "path": "../adapter-web" },
+    { "path": "../analysis" },
     { "path": "../core" },
     { "path": "../schemas" }
   ],

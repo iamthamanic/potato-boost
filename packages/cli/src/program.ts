@@ -17,11 +17,13 @@ import {
   startArgv,
 } from "@potato-boost/core";
 import { Command } from "commander";
+import { runFileCompare, runSetBaseline } from "./compare-cmd.js";
 import {
   CliExitError,
   EXIT_BUDGET_FAIL,
   EXIT_INCONCLUSIVE,
   EXIT_INFRA,
+  EXIT_USAGE,
 } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
 import { nodeDiscoveryFs } from "./node-fs.js";
@@ -188,6 +190,41 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         throw new CliExitError(EXIT_BUDGET_FAIL, "budget exceeded");
       }
     });
+
+  program
+    .command("compare")
+    .description("Hard-compare two run artifacts when locks match")
+    .option("--baseline <path>", "baseline artifact JSON")
+    .option("--candidate <path>", "candidate artifact JSON")
+    .option("--set-baseline <path>", "artifact JSON to store as baseline")
+    .option("--confirm", "write the baseline file", false)
+    .option("--root <path>", "project root for baselines.json", ".")
+    .action(
+      async (options: {
+        baseline?: string;
+        candidate?: string;
+        setBaseline?: string;
+        confirm: boolean;
+        root: string;
+      }) => {
+        if (options.setBaseline !== undefined) {
+          await runSetBaseline(
+            io,
+            options.setBaseline,
+            options.root,
+            options.confirm,
+          );
+          return;
+        }
+        if (options.baseline === undefined || options.candidate === undefined) {
+          throw new CliExitError(
+            EXIT_USAGE,
+            "compare needs --baseline and --candidate, or --set-baseline",
+          );
+        }
+        await runFileCompare(io, options.baseline, options.candidate);
+      },
+    );
 
   for (const command of STUB_COMMANDS) {
     program

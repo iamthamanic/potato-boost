@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Compare baseline
+
+Hard compare only when locks match. Otherwise `non-comparable`, not a budget-fail. Baseline only after confirm; the previous id stays in history.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Dashboard a11y
 
 Skip link, `prefers-reduced-motion`, and 200% zoom on core journeys. Playwright+Axe on detect, new run, live, and findings; only critical/serious fail the gate. Keyboard path is in the README.

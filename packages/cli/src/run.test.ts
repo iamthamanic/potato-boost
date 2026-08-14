@@ -1,9 +1,15 @@
-import { mkdtemp, readdir, readFile } from "node:fs/promises";
+import { mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createArtifactStore } from "@potato-boost/artifact-store";
 import { describe, expect, it } from "vitest";
-import { EXIT_INFRA, EXIT_OK, EXIT_USAGE } from "./exit-codes.js";
+import {
+  EXIT_BUDGET_FAIL,
+  EXIT_INCONCLUSIVE,
+  EXIT_INFRA,
+  EXIT_OK,
+  EXIT_USAGE,
+} from "./exit-codes.js";
 import type { CliIo } from "./io.js";
 import type { ProgramDeps } from "./program.js";
 import { runCli } from "./run.js";
@@ -40,6 +46,7 @@ describe("runCli", () => {
     expect(help).toMatch(/doctor/);
     expect(help).toMatch(/run/);
     expect(help).toMatch(/ci/);
+    expect(help).toMatch(/compare/);
     expect(stderr.join("")).not.toMatch(/\/Users\//);
     expect(help).not.toMatch(/at runCli/);
   });
@@ -173,6 +180,53 @@ describe("runCli", () => {
       expect(code).toBe(EXIT_OK);
       expect(stdout.join("")).toMatch(/measure/);
       expect(stdout.join("")).toMatch(/run: completed/);
+    });
+  });
+
+  describe("compare", () => {
+    const golden = "packages/schemas/fixtures/golden-v1.0.0.json";
+
+    it("exits 4 for debug vs release without treating it as budget-fail", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-compare-"));
+      const baseline = JSON.parse(await readFile(golden, "utf8")) as {
+        fingerprints: { build: { mode: string } };
+        metrics: { name: string; value: number }[];
+      };
+      baseline.fingerprints.build.mode = "debug";
+      const candidatePath = join(tmp, "debug.json");
+      await writeFile(candidatePath, `${JSON.stringify(baseline)}\n`);
+      const { io } = capture();
+      const code = await runCli(
+        ["compare", "--baseline", golden, "--candidate", candidatePath],
+        io,
+      );
+      expect(code).toBe(EXIT_INCONCLUSIVE);
+      expect(code).not.toBe(EXIT_BUDGET_FAIL);
+    });
+
+    it("writes a baseline only with --confirm", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-base-"));
+      const { io, stdout } = capture();
+      const preview = await runCli(
+        ["compare", "--set-baseline", golden, "--root", tmp],
+        io,
+      );
+      expect(preview).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/No files written/);
+      const names = await readdir(tmp);
+      expect(names).not.toContain(".potato");
+      const { io: io2, stdout: out2 } = capture();
+      const wrote = await runCli(
+        ["compare", "--set-baseline", golden, "--root", tmp, "--confirm"],
+        io2,
+      );
+      expect(wrote).toBe(EXIT_OK);
+      expect(out2.join("")).toMatch(/Wrote/);
+      const saved = JSON.parse(
+        await readFile(join(tmp, ".potato", "baselines.json"), "utf8"),
+      ) as { current: { runId: string }[]; history: unknown[] };
+      expect(saved.current[0]?.runId).toBe("01J9GOLDENV100000000000000");
+      expect(saved.history).toEqual([]);
     });
   });
 });

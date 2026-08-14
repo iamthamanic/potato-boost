@@ -1,10 +1,17 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { createServer } from "node:net";
 import type { DoctorEnv } from "@potato-boost/adapter-web";
+import {
+  applyBaseline,
+  type BaselinesFile,
+  baselineGate,
+  compareRuns,
+  emptyBaselines,
+} from "@potato-boost/analysis";
 import { errorEnvelopeSchema } from "@potato-boost/schemas";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { z } from "zod";
-import { GOLDEN_RUN_ID, goldenSamples, loadGoldenArtifact } from "./golden.js";
+import { GOLDEN_RUN_ID, goldenSamples, loadArtifactByRunId } from "./golden.js";
 import { registerSetupRoutes } from "./setup.js";
 
 const startRunBody = z.object({
@@ -173,6 +180,7 @@ export async function startLocalApi(
   const idempotency = new Map<string, string>();
   let boundPort = 0;
   const runHoldMs = options.runHoldMs ?? 0;
+  let baselines: BaselinesFile = emptyBaselines();
 
   const app: FastifyInstance = Fastify({
     logger: false,
@@ -288,15 +296,15 @@ export async function startLocalApi(
       return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
     }
     const run = runs.get(parsed.data.id);
-    if (run === undefined && parsed.data.id === GOLDEN_RUN_ID) {
-      const golden = await loadGoldenArtifact();
-      return reply.status(200).send({
-        runId: golden.run.runId,
-        status: golden.run.status,
-        baselineEligible: golden.run.status === "completed",
-      });
-    }
     if (run === undefined) {
+      const fixture = await loadArtifactByRunId(parsed.data.id);
+      if (fixture !== undefined) {
+        return reply.status(200).send({
+          runId: fixture.run.runId,
+          status: fixture.run.status,
+          baselineEligible: fixture.run.status === "completed",
+        });
+      }
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }
     return reply.status(200).send({
@@ -311,8 +319,9 @@ export async function startLocalApi(
     if (!parsed.success) {
       return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
     }
-    if (parsed.data.id === GOLDEN_RUN_ID) {
-      return reply.status(200).send(await loadGoldenArtifact());
+    const fixture = await loadArtifactByRunId(parsed.data.id);
+    if (fixture !== undefined) {
+      return reply.status(200).send(fixture);
     }
     return sendEnvelope(reply, "NOT_FOUND", "artifact not found", 404);
   });
@@ -354,6 +363,73 @@ export async function startLocalApi(
       status: "cancelled",
       baselineEligible: false,
     });
+  });
+
+  const compareBody = z.object({
+    baselineRunId: runIdParam,
+    candidateRunId: runIdParam,
+  });
+  const baselineBody = z.object({
+    runId: runIdParam,
+    confirm: z.boolean(),
+  });
+
+  app.post("/api/v1/compare", async (request, reply) => {
+    const parsed = compareBody.safeParse(request.body);
+    if (!parsed.success) {
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid compare request",
+        422,
+      );
+    }
+    const baseline = await loadArtifactByRunId(parsed.data.baselineRunId);
+    const candidate = await loadArtifactByRunId(parsed.data.candidateRunId);
+    if (baseline === undefined || candidate === undefined) {
+      return sendEnvelope(
+        reply,
+        "NOT_FOUND",
+        "compare artifact not found",
+        404,
+      );
+    }
+    return reply.status(200).send(compareRuns(baseline, candidate));
+  });
+
+  app.get("/api/v1/baselines", async (_request, reply) => {
+    return reply.status(200).send(baselines);
+  });
+
+  app.post("/api/v1/baselines", async (request, reply) => {
+    const parsed = baselineBody.safeParse(request.body);
+    if (!parsed.success) {
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid baseline request",
+        422,
+      );
+    }
+    const artifact = await loadArtifactByRunId(parsed.data.runId);
+    if (artifact === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "artifact not found", 404);
+    }
+    const gate = baselineGate(artifact);
+    if (!gate.ok) {
+      return sendEnvelope(reply, gate.code, gate.message, 409);
+    }
+    if (!parsed.data.confirm) {
+      return reply.status(200).send({ wrote: false, baselines });
+    }
+    baselines = applyBaseline(baselines, {
+      targetId: artifact.lockedInputs.target.id,
+      scenarioId: artifact.lockedInputs.scenario.id,
+      profileId: artifact.lockedInputs.profile.id,
+      runId: artifact.run.runId,
+      setAt: new Date().toISOString().replace(/\.\d+Z$/, "Z"),
+    });
+    return reply.status(200).send({ wrote: true, baselines });
   });
 
   app.get("/api/v1/runs/:id/events", async (request, reply) => {

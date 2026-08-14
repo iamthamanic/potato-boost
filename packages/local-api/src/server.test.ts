@@ -3,6 +3,11 @@ import { createServer } from "node:net";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
+import {
+  COMPARE_CANDIDATE_ID,
+  COMPARE_DEBUG_ID,
+  GOLDEN_RUN_ID,
+} from "./golden.js";
 import { type LocalApi, startLocalApi } from "./server.js";
 
 async function occupyPort(): Promise<{
@@ -335,5 +340,67 @@ describe("local api loopback", () => {
     const browser = report.checks.find((check) => check.id === "browser");
     expect(browser?.status).toBe("missing");
     expect(browser?.detail).toMatch(/Playwright Chromium/);
+  });
+
+  it("compares compatible runs and refuses baseline without confirm", async () => {
+    api = await startLocalApi();
+    const headers = {
+      authorization: `Bearer ${api.token}`,
+      origin: api.url,
+      "content-type": "application/json",
+    };
+    const compared = await fetch(`${api.url}/api/v1/compare`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        baselineRunId: GOLDEN_RUN_ID,
+        candidateRunId: COMPARE_CANDIDATE_ID,
+      }),
+    });
+    expect(compared.status).toBe(200);
+    const body = (await compared.json()) as {
+      comparability: string;
+      overall: string;
+    };
+    expect(body.comparability).toBe("comparable");
+    expect(body.overall).toBe("regressed");
+
+    const blocked = await fetch(`${api.url}/api/v1/compare`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        baselineRunId: GOLDEN_RUN_ID,
+        candidateRunId: COMPARE_DEBUG_ID,
+      }),
+    });
+    const debug = (await blocked.json()) as {
+      comparability: string;
+      overall: string;
+    };
+    expect(debug.comparability).toBe("non-comparable");
+    expect(debug.overall).toBe("non-comparable");
+
+    const preview = await fetch(`${api.url}/api/v1/baselines`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ runId: GOLDEN_RUN_ID, confirm: false }),
+    });
+    expect(((await preview.json()) as { wrote: boolean }).wrote).toBe(false);
+    const empty = await fetch(`${api.url}/api/v1/baselines`, { headers });
+    expect(((await empty.json()) as { current: unknown[] }).current).toEqual(
+      [],
+    );
+
+    const confirm = await fetch(`${api.url}/api/v1/baselines`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ runId: GOLDEN_RUN_ID, confirm: true }),
+    });
+    const saved = (await confirm.json()) as {
+      wrote: boolean;
+      baselines: { current: { runId: string }[]; history: unknown[] };
+    };
+    expect(saved.wrote).toBe(true);
+    expect(saved.baselines.current[0]?.runId).toBe(GOLDEN_RUN_ID);
   });
 });

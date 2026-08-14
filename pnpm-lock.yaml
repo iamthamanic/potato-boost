@@ -95,6 +95,12 @@ importers:
 
   packages/cli:
     dependencies:
+      '@potato-boost/analysis':
+        specifier: workspace:*
+        version: link:../analysis
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
       commander:
         specifier: ^14.0.0
         version: 14.0.3
@@ -153,6 +159,9 @@ importers:
       '@potato-boost/adapter-web':
         specifier: workspace:*
         version: link:../adapter-web
+      '@potato-boost/analysis':
+        specifier: workspace:*
+        version: link:../analysis
       '@potato-boost/core':
         specifier: workspace:*
         version: link:../core

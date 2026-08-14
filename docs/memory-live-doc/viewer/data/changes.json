@@ -2,6 +2,86 @@
   "schema_version": 1,
   "changes": [
     {
+      "id": "2026-08-14-compare-baseline",
+      "date": "2026-08-14",
+      "type": "feature",
+      "status": "recorded",
+      "title": {
+        "de": "Compare: harte Bewertung nur bei kompatibler Umgebung",
+        "en": "Compare: hard evaluation only in a compatible environment"
+      },
+      "summary": {
+        "de": "Inkompatible Locks ergeben non-comparable, kein Budget-Fail. Baseline nur nach Confirm; alte ID bleibt in der History.",
+        "en": "Incompatible locks yield non-comparable, not a budget-fail. Baseline only after confirm; the previous id stays in history."
+      },
+      "plain_language": {
+        "de": "Zwei Läufe werden nur dann als Regression gewertet, wenn Szenario, Profil und Umgebung zusammenpassen. Debug gegen Release zählt nicht als Fail.",
+        "en": "Two runs count as a regression only when scenario, profile, and environment match. Debug versus release is not a fail."
+      },
+      "why_it_matters": {
+        "de": "FR-020/021, BR-003, T-008, EDGE-007.",
+        "en": "FR-020/021, BR-003, T-008, EDGE-007."
+      },
+      "user_impact": {
+        "de": [
+          "/compare",
+          "potato compare"
+        ],
+        "en": [
+          "/compare",
+          "potato compare"
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "packages/analysis compareRuns",
+          "POST /api/v1/compare",
+          ".potato/baselines.json"
+        ],
+        "en": [
+          "packages/analysis compareRuns",
+          "POST /api/v1/compare",
+          ".potato/baselines.json"
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Exit 4 = non-comparable; Exit 1 nur bei kompatibler Regression."
+        ],
+        "en": [
+          "Exit 4 = non-comparable; exit 1 only on a compatible regression."
+        ]
+      },
+      "git": {
+        "base": "7b40191",
+        "head": "HEAD",
+        "branch": "issue/28-compare-baseline",
+        "pull_request": null
+      },
+      "packages": [
+        "analysis",
+        "cli",
+        "local-api",
+        "dashboard"
+      ],
+      "affected_features": [
+        "compare-ci",
+        "dashboard"
+      ],
+      "affected_components": [
+        "packages/analysis/src/compare.ts",
+        "packages/cli/src/compare-cmd.ts",
+        "apps/dashboard/src/compare.tsx"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-14-dashboard-a11y",
       "date": "2026-08-14",
       "type": "feature",

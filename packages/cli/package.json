@@ -19,6 +19,8 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@potato-boost/analysis": "workspace:*",
+    "@potato-boost/schemas": "workspace:*",
     "commander": "^14.0.0"
   },
   "devDependencies": {
