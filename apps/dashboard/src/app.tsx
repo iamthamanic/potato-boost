@@ -1,4 +1,6 @@
 import { NavLink, Route, Routes } from "react-router-dom";
+import { LiveRun } from "./live-run.js";
+import { NewRun } from "./new-run.js";
 import { ProjectHome } from "./project-home.js";
 import { Screen } from "./screen.js";
 import { SetupDetect } from "./setup-detect.js";
@@ -57,24 +59,8 @@ export function App() {
               />
             }
           />
-          <Route
-            path="/runs/new"
-            element={
-              <Screen
-                title="New run"
-                empty="Configure scenario, target, and rule pack, then start a Quick Scan."
-              />
-            }
-          />
-          <Route
-            path="/runs/:id/live"
-            element={
-              <Screen
-                title="Live run"
-                empty="No run is in progress. Start a run to watch phases here."
-              />
-            }
-          />
+          <Route path="/runs/new" element={<NewRun />} />
+          <Route path="/runs/:id/live" element={<LiveRun />} />
           <Route
             path="/runs/:id"
             element={
