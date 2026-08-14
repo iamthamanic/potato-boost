@@ -5,14 +5,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { ApiRequestError, apiRequest, readJson } from "./api.js";
+import { EvidencePanel } from "./evidence-panel.js";
 import { FindingDetail } from "./finding-detail.js";
 import { parseRunArtifactView, type RunArtifactView } from "./run-artifact.js";
 import { RunOverview } from "./run-overview.js";
+import { RunTimeline } from "./run-timeline.js";
+import { parseSamples, type SampleView } from "./timeline.js";
 
-type TabId = "overview" | "findings" | "raw";
+type TabId = "overview" | "timeline" | "findings" | "raw";
 
 function parseTab(value: string | null): TabId {
-  if (value === "findings" || value === "raw") {
+  if (value === "findings" || value === "raw" || value === "timeline") {
     return value;
   }
   return "overview";
@@ -22,7 +25,7 @@ type PageState =
   | { kind: "loading"; operation: string }
   | { kind: "error"; message: string; retryable: boolean }
   | { kind: "empty"; message: string }
-  | { kind: "ready"; artifact: RunArtifactView };
+  | { kind: "ready"; artifact: RunArtifactView; samples: SampleView[] };
 
 export function RunDetail() {
   const params = useParams();
@@ -66,7 +69,23 @@ export function RunDetail() {
         return;
       }
       setSelectedId(artifact.findings[0]?.findingId);
-      setPage({ kind: "ready", artifact });
+      let samples: SampleView[] = [];
+      try {
+        samples = parseSamples(
+          await readJson<unknown>(
+            await apiRequest(`/api/v1/runs/${runId}/samples`),
+          ),
+        );
+      } catch (sampleError) {
+        if (
+          !(
+            sampleError instanceof ApiRequestError && sampleError.status === 404
+          )
+        ) {
+          throw sampleError;
+        }
+      }
+      setPage({ kind: "ready", artifact, samples });
     } catch (error) {
       if (error instanceof ApiRequestError && error.status === 404) {
         setPage({
@@ -145,6 +164,12 @@ export function RunDetail() {
                 label="Overview"
               />
               <TabButton
+                id="timeline"
+                current={tab}
+                onSelect={setTab}
+                label="Timeline"
+              />
+              <TabButton
                 id="findings"
                 current={tab}
                 onSelect={setTab}
@@ -155,6 +180,16 @@ export function RunDetail() {
             {tab === "overview" ? (
               <div id="panel-overview" role="tabpanel">
                 <RunOverview artifact={page.artifact} />
+              </div>
+            ) : null}
+            {tab === "timeline" ? (
+              <div
+                id="panel-timeline"
+                role="tabpanel"
+                className="timeline-layout"
+              >
+                <RunTimeline samples={page.samples} />
+                <EvidencePanel artifact={page.artifact} />
               </div>
             ) : null}
             {tab === "findings" ? (

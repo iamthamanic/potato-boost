@@ -51,9 +51,10 @@ Document project primitives (not every third-party widget). Planned from PRD:
 | DetectionCard | `apps/dashboard/src/detection-card.tsx` | confirmed / ambiguous / unsupported; radio semantics |
 | RunPhaseStepper | `apps/dashboard/src/run-phase-stepper.tsx` | queued → completed/failed; named operation text |
 | MetricBudgetCard | `apps/dashboard/src/run-overview.tsx` | pass / fail / inconclusive / unsupported; icon+text |
-| Timeline | planned | zoom, markers, selected range; keyboard + data table fallback |
+| Timeline | `apps/dashboard/src/run-timeline.tsx` | zoom presets, markers, selected range; keyboard + table fallback |
 | FindingRow | `apps/dashboard/src/run-detail.tsx` | severity, confidence; semantic table |
 | FindingDetail | `apps/dashboard/src/finding-detail.tsx` | six PRD §10 blocks; ruleId + confidence |
+| EvidencePanel | `apps/dashboard/src/evidence-panel.tsx` | raw / derived / source; heading structure |
 | EvidencePanel | planned | raw / derived / source; heading structure |
 | CompareTable | planned | improved / regressed / neutral / incomparable |
 

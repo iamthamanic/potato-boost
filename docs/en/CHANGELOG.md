@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Timeline evidence
+
+Timeline shows scenario markers and a selected sample range. Evidence panel splits raw, derived, and source. Narrow widths fall back to a table.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Run detail findings
 
 Overview shows run quality and budget categories with no overall score. Finding detail has six blocks including ruleId and confidence. Golden artifact via `GET /api/v1/runs/:id/artifact`.
