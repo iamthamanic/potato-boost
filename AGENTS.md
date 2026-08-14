@@ -32,7 +32,7 @@ Potato Boost ist ein lokal ausgeführtes Entwicklerwerkzeug (CLI + Browser-Dashb
 | Runtime | Node.js 24 LTS | CLI, Local API, Orchestrierung |
 | Sprache | TypeScript (strict) | gemeinsame Schemas |
 | Package Manager | pnpm Workspaces | Root orchestriert `apps/*` und `packages/*` |
-| Frontend | React + Vite | `apps/dashboard` — noch nicht scaffolded |
+| Frontend | React + Vite | `apps/dashboard` — shell with PRD routes (empty/error/loading) |
 | Local API | Fastify + SSE | Loopback-only, Run-Token |
 | Schemas | Zod + JSON Schema | `packages/schemas` ist die kanonische Schicht |
 | Web Runner | Playwright + CDP | Web-Adapter |

@@ -14,6 +14,7 @@
     { "path": "./packages/adapter-web" },
     { "path": "./packages/collector-hub" },
     { "path": "./packages/collector-os" },
-    { "path": "./packages/local-api" }
+    { "path": "./packages/local-api" },
+    { "path": "./apps/dashboard" }
   ]
 }

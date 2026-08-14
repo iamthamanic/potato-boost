@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Offline-E2E steht; als Nächstes Fake-Adapter (#33) oder Dashboard-UI.",
-      "en": "Offline e2e is in; next is the fake adapter (#33) or dashboard UI."
+      "de": "Dashboard-Shell steht; als Nächstes Fake-Adapter (#33) oder weitere Dashboard-Tickets.",
+      "en": "Dashboard shell is in; next is the fake adapter (#33) or further dashboard tickets."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Dashboard-Shell mit PRD-Routen ohne Score-Zahl (issue #21).",
+      "en": "Dashboard shell with PRD routes and no score number (issue #21)."
+    },
     {
       "de": "Offline-E2E: 0 Product-Requests bei blockiertem Netz (issue #39).",
       "en": "Offline e2e: 0 product requests on a blocked network (issue #39)."
@@ -54,8 +58,8 @@
   ],
   "incomplete": [
     {
-      "de": "Dashboard-UI fehlt noch.",
-      "en": "Dashboard UI is still missing."
+      "de": "Dashboard-Screens sind noch Empty-States, keine volle Analyse-UI.",
+      "en": "Dashboard screens are still empty states, not a full analysis UI."
     }
   ],
   "risks": [

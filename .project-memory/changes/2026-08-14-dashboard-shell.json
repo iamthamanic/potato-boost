@@ -1,0 +1,50 @@
+{
+  "id": "2026-08-14-dashboard-shell",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Dashboard-Shell ohne Score-Zahl",
+    "en": "Dashboard shell without a score number"
+  },
+  "summary": {
+    "de": "React+Vite-Shell mit PRD-Routen als Empty/Loading/Error. Token nur im Speicher.",
+    "en": "React+Vite shell with PRD routes as empty/loading/error. Token in memory only."
+  },
+  "plain_language": {
+    "de": "Die Oberfläche startet lokal und zeigt ehrliche Leerseiten statt einer Fake-Note.",
+    "en": "The UI starts locally and shows honest empty pages instead of a fake score."
+  },
+  "why_it_matters": {
+    "de": "PRD §10: kein einzelner Performance Score. F-03: kein Token in localStorage.",
+    "en": "PRD §10: no single performance score. F-03: no token in localStorage."
+  },
+  "user_impact": {
+    "de": ["pnpm --filter dashboard dev auf 127.0.0.1:5173"],
+    "en": ["pnpm --filter dashboard dev on 127.0.0.1:5173"]
+  },
+  "developer_impact": {
+    "de": ["apps/dashboard"],
+    "en": ["apps/dashboard"]
+  },
+  "operational_impact": {
+    "de": ["pnpm dev startet das Dashboard."],
+    "en": ["pnpm dev starts the dashboard."]
+  },
+  "git": {
+    "base": "36e6f83",
+    "head": "HEAD",
+    "branch": "issue/21-dashboard-shell",
+    "pull_request": null
+  },
+  "packages": ["dashboard"],
+  "affected_features": ["web-cli"],
+  "affected_components": ["apps/dashboard/src/app.tsx"],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/collector-hub` ingests samples on a shared timeline. `packages/collector-os` samples CPU/RSS and the process tree. `packages/adapter-web` is the Web doctor and CDP collector (Node, Playwright Chromium, start argv, port). `packages/local-api` is the loopback Fastify REST/SSE server (127.0.0.1, random port, per-process run token, Origin/Host checks). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`; `doctor` prints capability checks; `run` executes a smoke Quick Scan and writes a run artifact; `ci` is a stub). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
+This is a pnpm workspace. `apps/dashboard` is the React + Vite shell (PRD routes as empty/error/loading screens; no overall performance score). `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/collector-hub` ingests samples on a shared timeline. `packages/collector-os` samples CPU/RSS and the process tree. `packages/adapter-web` is the Web doctor and CDP collector (Node, Playwright Chromium, start argv, port). `packages/local-api` is the loopback Fastify REST/SSE server (127.0.0.1, random port, per-process run token, Origin/Host checks). `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`; `doctor` prints capability checks; `run` executes a smoke Quick Scan and writes a run artifact; `ci` is a stub). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -34,7 +34,7 @@ pnpm build
 node packages/cli --help
 ```
 
-Once `apps/dashboard` exists, the local dashboard is expected at [http://localhost:5173](http://localhost:5173). The production local API binds loopback only (random port + run token).
+`pnpm --filter dashboard dev` serves the shell at [http://127.0.0.1:5173](http://127.0.0.1:5173). Pass `?token=` and `?api=` on the query string; the run token stays in memory (not localStorage). The local API binds loopback only.
 
 ## Checks (quality gate)
 
@@ -97,6 +97,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Dashboard shell: PRD routes as empty/error/loading screens; token stays in memory (`issue/21-dashboard-shell`).
 - **2026-08-14** — Offline e2e: blocked network, 0 product requests, packages-already-local (`issue/39-offline-e2e`).
 - **2026-08-14** — T-009 security e2e: foreign Origin, path traversal, and shell metacharacters fail closed (`issue/37-security-e2e-local-api`).
 - **2026-08-14** — Local API: loopback Fastify, run token, Origin/Host checks, REST + SSE (`issue/20-local-api-loopback`).

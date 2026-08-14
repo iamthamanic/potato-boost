@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Dashboard shell
+
+React+Vite in `apps/dashboard`. PRD routes as empty/loading/error screens. No single performance score. Run token stays in memory (`?token=`).
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Offline e2e (T-013)
 
 With the network blocked, the fixture uses loopback only. Quick Scan and the local API make no product requests. Prerequisite: packages already local (the first npx download may fail offline).

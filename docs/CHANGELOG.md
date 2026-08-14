@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Dashboard shell
+
+React+Vite in `apps/dashboard`. PRD-Routen als Empty/Loading/Error. Kein einzelner Performance Score. Run-Token nur im Speicher (`?token=`).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Offline e2e (T-013)
 
 Mit blockiertem Netz lädt die Fixture nur Loopback. Quick Scan und Local API machen keine Product-Requests. Voraussetzung: Packages bereits lokal (erster npx-Download darf offline scheitern).
