@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Quick Scan steht; als Nächstes Secret-Redaction (#38) und Dashboard.",
-      "en": "Quick Scan is in; next are secret redaction (#38) and the dashboard."
+      "de": "Secret-Redaction steht; als Nächstes Noise-Gate (#40) und Dashboard (#20).",
+      "en": "Secret redaction is in; next are the noise gate (#40) and dashboard (#20)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Secret-Redaktion in Recorder und Artifacts (issue #38).",
+      "en": "Secret redaction in recorder and artifacts (issue #38)."
+    },
     {
       "de": "Quick-Scan-Runner mit Phasen und Artifact (issue #18).",
       "en": "Quick Scan runner with phases and artifact (issue #18)."

@@ -95,4 +95,48 @@ describe("runQuickScan", () => {
     expect(result.baselineEligible).toBe(false);
     expect(killed).toBe(true);
   });
+
+  it("does not persist a canary Bearer token in the written artifact", async () => {
+    const root = await mkdtemp(join(tmpdir(), "potato-scan-canary-"));
+    const store = createArtifactStore(root);
+    const canary = "CANARY_SECRET_t011_do_not_store";
+    const result = await runQuickScan(root, {
+      store,
+      runId: "run-canary",
+      collect: async () => ({
+        samples: [
+          {
+            sampleId: "s1",
+            source: "cdp",
+            metric: "frame_time",
+            timestampNs: 1,
+            value: 16,
+            unit: "ms",
+          },
+        ],
+        capabilities: [
+          {
+            id: "os",
+            status: "ok",
+            required: true,
+            detail: `Bearer ${canary}`,
+          },
+          {
+            id: "cdp",
+            status: "ok",
+            required: true,
+            detail: "ok",
+          },
+        ],
+        processTree: [],
+        budgetEligible: true,
+        outcome: "ready",
+      }),
+    });
+    expect(result.status).toBe("completed");
+    const stored = await store.readCompleted("run-canary");
+    const text = new TextDecoder().decode(stored.bytes);
+    expect(text).not.toContain(canary);
+    expect(text).toMatch(/Bearer redacted/);
+  });
 });

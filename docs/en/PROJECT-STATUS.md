@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Quick Scan is in; next are secret redaction (#38) and the dashboard.
+- Secret redaction is in; next are the noise gate (#40) and dashboard (#20).
 
 ## Recently completed
 
+- Secret redaction in recorder and artifacts (issue #38).
 - Quick Scan runner with visible phases and an artifact (issue #18).
 - CDP+OS collectors on a shared timeline (issue #16).
 - Web doctor: Node, browser, port, start command; `potato run` exit 3 (issue #14).
@@ -35,4 +36,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #38 (secret redaction) or dashboard epics.
+GitHub issues #40 (noise gate) or #20 (dashboard).

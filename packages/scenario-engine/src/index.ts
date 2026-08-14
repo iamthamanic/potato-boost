@@ -2,6 +2,13 @@ export type { ScenarioDriver } from "./driver.js";
 export { isTimeoutError } from "./driver.js";
 export { runScenario } from "./engine.js";
 export { createFakeDriver } from "./fake-driver.js";
+export {
+  REDACTED,
+  redactRecordedInput,
+  redactScenarioStep,
+  redactUrl,
+  scrubJsonText,
+} from "./redact.js";
 export type {
   Phase,
   PhaseEvent,

@@ -1,9 +1,15 @@
 import type { ScenarioDriver } from "./driver.js";
-import type { PhaseEvent, Scenario, ScenarioRunResult } from "./schema.js";
+import { redactScenarioStep, scrubJsonText } from "./redact.js";
+import type {
+  PhaseEvent,
+  Scenario,
+  ScenarioRunResult,
+  ScenarioStep,
+} from "./schema.js";
 
 async function runPhase(
   driver: ScenarioDriver,
-  steps: readonly { action: string }[],
+  steps: readonly ScenarioStep[],
   phase: PhaseEvent["phase"],
   events: PhaseEvent[],
   timeoutMs: number,
@@ -14,13 +20,14 @@ async function runPhase(
     if (Date.now() > deadline) {
       throw new Error(`timeout in phase ${phase}`);
     }
-    events.push({ phase, at: driver.now(), detail: step.action });
+    const safe = redactScenarioStep(step);
+    events.push({ phase, at: driver.now(), detail: safe.action });
     const remaining = deadline - Date.now();
     if (remaining <= 0) {
       throw new Error(`timeout in phase ${phase}`);
     }
     await Promise.race([
-      driver.execute(step),
+      driver.execute(safe),
       new Promise((_, reject) =>
         setTimeout(
           () => reject(new Error(`timeout in phase ${phase}`)),
@@ -68,7 +75,9 @@ export async function runScenario(
     );
   } catch (cause) {
     baselineEligible = false;
-    error = cause instanceof Error ? cause.message : "scenario failed";
+    error = scrubJsonText(
+      cause instanceof Error ? cause.message : "scenario failed",
+    );
   }
 
   return {

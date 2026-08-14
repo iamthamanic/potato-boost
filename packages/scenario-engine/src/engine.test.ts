@@ -65,4 +65,31 @@ describe("runScenario", () => {
     expect(step.secretRef).toBe("GITHUB_TOKEN");
     expect(step).not.toHaveProperty("secretValue");
   });
+
+  it("redacts Authorization args before the driver runs", async () => {
+    const seen: string[] = [];
+    const driver = {
+      ...createFakeDriver(),
+      execute: async (step: {
+        action: string;
+        args?: Record<string, unknown>;
+      }) => {
+        seen.push(JSON.stringify(step));
+      },
+    };
+    const scenario = scenarioSchema.parse({
+      id: "login",
+      version: "1",
+      measure: [
+        {
+          action: "login",
+          secretRef: "GITHUB_TOKEN",
+          args: { authorization: "Bearer CANARY_SECRET_t011_do_not_store" },
+        },
+      ],
+    });
+    await runScenario(driver, scenario);
+    expect(seen.join("")).not.toContain("CANARY_SECRET_t011_do_not_store");
+    expect(seen.join("")).toContain("GITHUB_TOKEN");
+  });
 });
