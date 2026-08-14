@@ -1,5 +1,11 @@
 import { join } from "node:path";
 import {
+  createNodeDoctorEnv,
+  type DoctorEnv,
+  formatDoctorReport,
+  runWebDoctor,
+} from "@potato-boost/adapter-web";
+import {
   applyInit,
   buildInitPreview,
   createNodeConfigFs,
@@ -12,10 +18,12 @@ import { nodeDiscoveryFs } from "./node-fs.js";
 import { webDetectors } from "./web-detectors.js";
 
 const STUB_COMMANDS = [
-  { name: "doctor", summary: "Check the local toolchain (stub)" },
-  { name: "run", summary: "Run a performance scenario (stub)" },
   { name: "ci", summary: "CI gate against budgets (stub)" },
 ] as const;
+
+export type ProgramDeps = {
+  doctorEnv?: DoctorEnv;
+};
 
 function stubAction(name: string, io: CliIo): () => void {
   return () => {
@@ -42,7 +50,8 @@ function formatPreview(preview: InitPreview, wrote: boolean): string {
   return `${lines.join("\n")}\n`;
 }
 
-export function createProgram(io: CliIo): Command {
+export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
+  const doctorEnv = deps.doctorEnv ?? createNodeDoctorEnv();
   const program = new Command();
   program
     .name("potato-boost")
@@ -90,6 +99,49 @@ export function createProgram(io: CliIo): Command {
       });
       const result = await applyInit(fs, preview, options.confirm);
       io.stdout.write(formatPreview(preview, result.wrote));
+    });
+
+  program
+    .command("doctor")
+    .argument("[path]", "project root", ".")
+    .description("Check Node, browser, port, and start command")
+    .action(async (path: string) => {
+      const detection = await detectProject(
+        nodeDiscoveryFs,
+        path,
+        webDetectors,
+      );
+      const report = await runWebDoctor(
+        detection.root,
+        detection.candidates.map((candidate) => candidate.kind),
+        doctorEnv,
+      );
+      io.stdout.write(formatDoctorReport(report));
+      if (!report.ok) {
+        throw new Error("doctor blocked: required capability missing");
+      }
+    });
+
+  program
+    .command("run")
+    .argument("[path]", "project root", ".")
+    .description("Run a performance scenario")
+    .action(async (path: string) => {
+      const detection = await detectProject(
+        nodeDiscoveryFs,
+        path,
+        webDetectors,
+      );
+      const report = await runWebDoctor(
+        detection.root,
+        detection.candidates.map((candidate) => candidate.kind),
+        doctorEnv,
+      );
+      if (!report.ok) {
+        io.stderr.write(formatDoctorReport(report));
+        throw new Error("doctor blocked: required capability missing");
+      }
+      io.stdout.write("run is not implemented yet\n");
     });
 
   for (const command of STUB_COMMANDS) {

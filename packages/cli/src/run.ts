@@ -1,7 +1,7 @@
 import { CommanderError } from "commander";
 import { EXIT_INFRA, EXIT_OK, EXIT_USAGE } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
-import { createProgram } from "./program.js";
+import { createProgram, type ProgramDeps } from "./program.js";
 
 function isCommanderError(error: unknown): error is CommanderError {
   return error instanceof CommanderError;
@@ -11,8 +11,9 @@ function isCommanderError(error: unknown): error is CommanderError {
 export async function runCli(
   argv: readonly string[],
   io: CliIo,
+  deps: ProgramDeps = {},
 ): Promise<number> {
-  const program = createProgram(io);
+  const program = createProgram(io, deps);
   try {
     await program.parseAsync([...argv], { from: "user" });
     return EXIT_OK;

@@ -45,6 +45,15 @@ importers:
         specifier: ^4.1.0
         version: 4.4.3
 
+  packages/adapter-web:
+    dependencies:
+      '@playwright/test':
+        specifier: ^1.62.1
+        version: 1.62.1
+      '@potato-boost/core':
+        specifier: workspace:*
+        version: link:../core
+
   packages/analysis:
     dependencies:
       '@potato-boost/schemas':
@@ -59,6 +68,9 @@ importers:
         specifier: ^14.0.0
         version: 14.0.3
     devDependencies:
+      '@potato-boost/adapter-web':
+        specifier: workspace:*
+        version: link:../adapter-web
       '@potato-boost/core':
         specifier: workspace:*
         version: link:../core

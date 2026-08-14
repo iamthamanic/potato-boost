@@ -9,21 +9,27 @@
     "en": "npx start, read-only project detection, doctor, and quick scan for Web/Three.js. Planned as slice 2."
   },
   "plain_language": {
-    "de": "Im Repo starten, erkennen lassen, messen — der erste sichtbare Nutzerwert. Noch nicht implementiert.",
-    "en": "Start in a repo, confirm detection, measure — the first visible user value. Not implemented yet."
+    "de": "Im Repo starten, erkennen lassen, Doctor ausführen. Quick Scan und Messen folgen.",
+    "en": "Start in a repo, confirm detection, run doctor. Quick scan and measuring come next."
   },
   "why_it_matters": {
     "de": "Time-to-first-finding (G-001) hängt an diesem Slice.",
     "en": "Time-to-first-finding (G-001) depends on this slice."
   },
-  "status": "planned",
+  "status": "in-progress",
   "packages": ["cli", "adapter-web", "collector-os", "collector-hub", "scenario-engine"],
   "paths": ["packages/cli/**", "packages/adapter-web/**"],
   "user_impact": {
     "de": ["Entwickler können ein unterstütztes Web-Projekt erkennen und einen Quick Scan starten — sobald gebaut."],
     "en": ["Developers will be able to detect a supported web project and start a quick scan — once built."]
   },
-  "related_changes": ["2026-08-13-bootstrap"],
+  "related_changes": [
+    "2026-08-13-bootstrap",
+    "2026-08-13-cli-entrypoint",
+    "2026-08-13-readonly-discovery",
+    "2026-08-14-config-write-confirm",
+    "2026-08-14-web-doctor"
+  ],
   "review_status": "needs-review",
   "confidence": 0.4,
   "locked": false

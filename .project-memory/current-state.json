@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Fixture-E2E und potato init --confirm stehen; als Nächstes Doctor (#14).",
-      "en": "Fixture e2e and potato init --confirm are in; next is doctor (#14)."
+      "de": "Web-Doctor steht; als Nächstes Secret-Redaction (#38) und Collector (#16).",
+      "en": "Web doctor is in; next are secret redaction (#38) and collector (#16)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Web-Doctor: Node, Browser, Port, Startbefehl mit Exit 3 (issue #14).",
+      "en": "Web doctor: Node, browser, port, start command with exit 3 (issue #14)."
+    },
     {
       "de": "potato init schreibt Config erst nach --confirm (issue #13).",
       "en": "potato init writes config only after --confirm (issue #13)."
@@ -18,16 +22,12 @@
     {
       "de": "Adapter SDK mit Capability-Manifest und Contract-Tests (issue #32).",
       "en": "Adapter SDK with capability manifest and contract tests (issue #32)."
-    },
-    {
-      "de": "Report-Export mit validiertem JSON und statischem HTML (issue #29).",
-      "en": "Report export with validated JSON and static HTML (issue #29)."
     }
   ],
   "incomplete": [
     {
-      "de": "Doctor, Collector, Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
-      "en": "Doctor, collector, quick-scan runner, local API, and dashboard are still missing."
+      "de": "Collector, Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
+      "en": "Collector, quick-scan runner, local API, and dashboard are still missing."
     }
   ],
   "risks": [
@@ -36,5 +36,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-14T06:30:00Z"
+  "updated_at": "2026-08-14T06:50:00Z"
 }

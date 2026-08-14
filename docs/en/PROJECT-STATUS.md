@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Fixture e2e and `potato init --confirm` are in; next is doctor (#14).
+- Web doctor is in; next are secret redaction (#38) and collector (#16).
 
 ## Recently completed
 
+- Web doctor: Node, browser, port, start command; `potato run` exit 3 (issue #14).
 - `potato init` writes config only after `--confirm` (issue #13).
 - Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`).
 - VisoDev import schema without VisoDev dependency (issue #35).
@@ -22,7 +23,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Doctor, collector, quick-scan runner, local API, and dashboard are still missing.
+- Collector, quick-scan runner, local API, and dashboard are still missing.
 
 ## Risks
 
@@ -32,4 +33,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #14 (doctor), #16 (collector), or #18 (quick-scan runner).
+GitHub issues #38 (secret redaction), #16 (collector), or #18 (quick-scan runner).
