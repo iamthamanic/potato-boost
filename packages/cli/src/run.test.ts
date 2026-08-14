@@ -2,6 +2,7 @@ import { mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createArtifactStore } from "@potato-boost/artifact-store";
+import type { QuickScanDeps } from "@potato-boost/core";
 import { describe, expect, it } from "vitest";
 import {
   EXIT_BUDGET_FAIL,
@@ -66,11 +67,187 @@ describe("runCli", () => {
     expect(code).not.toBe(1);
   });
 
-  it("runs a stub command without touching the network", async () => {
-    const { io, stdout } = capture();
-    const code = await runCli(["ci"], io);
-    expect(code).toBe(EXIT_OK);
-    expect(stdout.join("")).toMatch(/not implemented yet/);
+  describe("ci", () => {
+    const doctorEnv = {
+      nodePath: "/usr/bin/node",
+      nodeVersion: "v24.0.0",
+      wantedNodeRange: ">=24",
+      locateBrowser: async () => "/tmp/fake-chrome",
+      isPortInUse: async () => false,
+      appPort: 5199,
+    };
+
+    function scanDeps(
+      tmp: string,
+      collect?: QuickScanDeps["collect"],
+    ): ProgramDeps {
+      return {
+        doctorEnv,
+        quickScan: {
+          store: createArtifactStore(tmp),
+          startArgv: [],
+          launcher: {
+            async start() {
+              return { pid: 0, async kill() {} };
+            },
+          },
+          runId: "run-ci",
+          ...(collect === undefined ? {} : { collect }),
+        },
+      };
+    }
+
+    function frameCollect(
+      value: number,
+      budgetEligible: boolean,
+    ): NonNullable<QuickScanDeps["collect"]> {
+      return async () => ({
+        samples: [
+          {
+            sampleId: "s1",
+            source: "cdp",
+            metric: "frame_time",
+            timestampNs: 1,
+            value,
+            unit: "ms",
+          },
+        ],
+        capabilities: [
+          { id: "os", status: "ok", required: true, detail: "ok" },
+          { id: "cdp", status: "ok", required: true, detail: "ok" },
+        ],
+        processTree: [],
+        budgetEligible,
+        outcome: budgetEligible ? "ready" : "collector-incomplete",
+      });
+    }
+
+    function summaryFrom(stdout: string[]): {
+      exitCode: number;
+      jsonPath: string | null;
+      htmlPath: string | null;
+      runId: string | null;
+    } {
+      const parsed: unknown = JSON.parse(stdout.join("").trim());
+      if (
+        typeof parsed !== "object" ||
+        parsed === null ||
+        !("exitCode" in parsed) ||
+        !("jsonPath" in parsed) ||
+        !("htmlPath" in parsed) ||
+        !("runId" in parsed)
+      ) {
+        throw new Error("ci stdout was not a summary");
+      }
+      const exitCode = parsed.exitCode;
+      const jsonPath = parsed.jsonPath;
+      const htmlPath = parsed.htmlPath;
+      const runId = parsed.runId;
+      if (typeof exitCode !== "number") {
+        throw new Error("exitCode");
+      }
+      if (jsonPath !== null && typeof jsonPath !== "string") {
+        throw new Error("jsonPath");
+      }
+      if (htmlPath !== null && typeof htmlPath !== "string") {
+        throw new Error("htmlPath");
+      }
+      if (runId !== null && typeof runId !== "string") {
+        throw new Error("runId");
+      }
+      return { exitCode, jsonPath, htmlPath, runId };
+    }
+
+    it("exits 0 and prints report paths on a passing fixture run", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-ci-ok-"));
+      const out = join(tmp, "out");
+      const { io, stdout, stderr } = capture();
+      const code = await runCli(
+        ["ci", "fixtures/web-threejs", "--out", out],
+        io,
+        scanDeps(tmp),
+      );
+      expect(code).toBe(EXIT_OK);
+      const summary = summaryFrom(stdout);
+      expect(summary.exitCode).toBe(EXIT_OK);
+      expect(summary.jsonPath).toMatch(/report\.json$/);
+      expect(summary.htmlPath).toMatch(/report\.html$/);
+      expect(stderr.join("")).toMatch(/jsonPath\t/);
+      expect(stderr.join("")).toMatch(/htmlPath\t/);
+      await readFile(join(out, "report.json"), "utf8");
+      await readFile(join(out, "report.html"), "utf8");
+    });
+
+    it("exits 1 on a budget fail, not 3", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-ci-budget-"));
+      const { io, stdout } = capture();
+      const code = await runCli(
+        ["ci", "fixtures/web-threejs", "--out", join(tmp, "out")],
+        io,
+        scanDeps(tmp, frameCollect(80, true)),
+      );
+      expect(code).toBe(EXIT_BUDGET_FAIL);
+      expect(code).not.toBe(EXIT_INFRA);
+      const summary = summaryFrom(stdout);
+      expect(summary.exitCode).toBe(EXIT_BUDGET_FAIL);
+      expect(summary.jsonPath).toMatch(/report\.json$/);
+    });
+
+    it("exits 2 for a missing baseline file after emitting report paths", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-ci-usage-"));
+      const { io, stdout } = capture();
+      const code = await runCli(
+        [
+          "ci",
+          "fixtures/web-threejs",
+          "--baseline",
+          join(tmp, "missing.json"),
+          "--out",
+          join(tmp, "out"),
+        ],
+        io,
+        scanDeps(tmp),
+      );
+      expect(code).toBe(EXIT_USAGE);
+      expect(code).not.toBe(EXIT_BUDGET_FAIL);
+      const summary = summaryFrom(stdout);
+      expect(summary.exitCode).toBe(EXIT_USAGE);
+      expect(summary.jsonPath).toMatch(/report\.json$/);
+      expect(summary.htmlPath).toMatch(/report\.html$/);
+    });
+
+    it("exits 3 when the browser is missing, not 1", async () => {
+      const { io, stdout, stderr } = capture();
+      const code = await runCli(["ci", "fixtures/web-threejs"], io, {
+        doctorEnv: {
+          ...doctorEnv,
+          locateBrowser: async () => null,
+        },
+      });
+      expect(code).toBe(EXIT_INFRA);
+      expect(code).not.toBe(EXIT_BUDGET_FAIL);
+      expect(stderr.join("")).toMatch(/browser\tmissing/);
+      const summary = summaryFrom(stdout);
+      expect(summary.exitCode).toBe(EXIT_INFRA);
+      expect(summary.jsonPath).toBe(null);
+      expect(summary.htmlPath).toBe(null);
+    });
+
+    it("exits 4 when the collector is incomplete, not a fake pass", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-ci-noise-"));
+      const { io, stdout } = capture();
+      const code = await runCli(
+        ["ci", "fixtures/web-threejs", "--out", join(tmp, "out")],
+        io,
+        scanDeps(tmp, frameCollect(16, false)),
+      );
+      expect(code).toBe(EXIT_INCONCLUSIVE);
+      expect(code).not.toBe(EXIT_OK);
+      expect(code).not.toBe(EXIT_BUDGET_FAIL);
+      const summary = summaryFrom(stdout);
+      expect(summary.exitCode).toBe(EXIT_INCONCLUSIVE);
+      expect(summary.jsonPath).toMatch(/report\.json$/);
+    });
   });
 
   describe("detect", () => {

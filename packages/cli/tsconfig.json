@@ -11,6 +11,7 @@
     { "path": "../analysis" },
     { "path": "../artifact-store" },
     { "path": "../core" },
+    { "path": "../report" },
     { "path": "../schemas" }
   ],
   "include": ["src/**/*.ts"],

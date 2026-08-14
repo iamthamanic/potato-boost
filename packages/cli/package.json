@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@potato-boost/analysis": "workspace:*",
+    "@potato-boost/report": "workspace:*",
     "@potato-boost/schemas": "workspace:*",
     "commander": "^14.0.0"
   },

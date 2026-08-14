@@ -298,7 +298,11 @@ export async function runQuickScan(
           },
         ],
       },
-      { metrics, evidenceIds: [], capabilities },
+      {
+        metrics,
+        evidenceIds: collection.samples.map((sample) => sample.sampleId),
+        capabilities,
+      },
     );
     const budgetFail = rules.evaluations.some(
       (item) => item.verdict === "fail",

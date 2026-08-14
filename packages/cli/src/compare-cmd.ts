@@ -13,18 +13,22 @@ import { type RunArtifact, runArtifactSchema } from "@potato-boost/schemas";
 import { CliExitError, EXIT_USAGE } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
 
-async function loadArtifact(path: string): Promise<RunArtifact> {
+export function parseArtifactJson(raw: unknown, label: string): RunArtifact {
+  const parsed = runArtifactSchema.safeParse(raw);
+  if (!parsed.success) {
+    throw new CliExitError(EXIT_USAGE, `invalid artifact ${label}`);
+  }
+  return parsed.data;
+}
+
+export async function loadArtifact(path: string): Promise<RunArtifact> {
   let raw: unknown;
   try {
-    raw = JSON.parse(await readFile(path, "utf8")) as unknown;
+    raw = JSON.parse(await readFile(path, "utf8"));
   } catch {
     throw new CliExitError(EXIT_USAGE, `cannot read artifact ${path}`);
   }
-  const parsed = runArtifactSchema.safeParse(raw);
-  if (!parsed.success) {
-    throw new CliExitError(EXIT_USAGE, `invalid artifact ${path}`);
-  }
-  return parsed.data;
+  return parseArtifactJson(raw, path);
 }
 
 function baselinesPath(root: string): string {

@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — potato ci exit codes
+
+`potato ci` returns 0 (pass), 1 (budget-fail), 2 (CLI), 3 (infra, including missing browser), or 4 (inconclusive / non-comparable). JSON and HTML report paths are printed on stdout/stderr.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Compare baseline
 
 Hard compare only when locks match. Otherwise `non-comparable`, not a budget-fail. Baseline only after confirm; the previous id stays in history.

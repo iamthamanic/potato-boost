@@ -47,6 +47,36 @@ describe("runQuickScan", () => {
     expect(artifact.lockedInputs.scenario.id).toBe("quick-scan");
   });
 
+  it("sets budgetFail when frame time p95 exceeds 33.33 ms", async () => {
+    const root = await mkdtemp(join(tmpdir(), "potato-scan-budget-"));
+    const store = createArtifactStore(root);
+    const result = await runQuickScan(root, {
+      store,
+      runId: "run-budget",
+      collect: async () => ({
+        samples: [
+          {
+            sampleId: "slow",
+            source: "cdp",
+            metric: "frame_time",
+            timestampNs: 1,
+            value: 80,
+            unit: "ms",
+          },
+        ],
+        capabilities: [
+          { id: "os", status: "ok", required: true, detail: "ok" },
+          { id: "cdp", status: "ok", required: true, detail: "ok" },
+        ],
+        processTree: [],
+        budgetEligible: true,
+        outcome: "ready",
+      }),
+    });
+    expect(result.status).toBe("completed");
+    expect(result.budgetFail).toBe(true);
+  });
+
   it("marks warmup crashes as failed, not a budget fail", async () => {
     const root = await mkdtemp(join(tmpdir(), "potato-scan-fail-"));
     const store = createArtifactStore(root);

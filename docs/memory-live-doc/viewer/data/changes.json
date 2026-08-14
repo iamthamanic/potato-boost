@@ -2,6 +2,78 @@
   "schema_version": 1,
   "changes": [
     {
+      "id": "2026-08-14-potato-ci-exit-codes",
+      "date": "2026-08-14",
+      "type": "feature",
+      "status": "recorded",
+      "title": {
+        "de": "potato ci: dokumentierte Exit-Codes 0/1/2/3/4",
+        "en": "potato ci: documented exit codes 0/1/2/3/4"
+      },
+      "summary": {
+        "de": "CI-Gate schreibt JSON/HTML-Reportpfade und unterscheidet Pass, Budget-Fail, CLI-Fehler, Infra und Inconclusive.",
+        "en": "The CI gate prints JSON/HTML report paths and distinguishes pass, budget-fail, CLI error, infra, and inconclusive."
+      },
+      "plain_language": {
+        "de": "Fehlender Browser ist Infra (3), nicht Budget-Fail (1). Rauschen oder unvergleichbare Runs sind 4, kein Fake-Pass.",
+        "en": "A missing browser is infra (3), not a budget-fail (1). Noise or non-comparable runs are 4, not a fake pass."
+      },
+      "why_it_matters": {
+        "de": "FR-023, CON-007, PRD §15 Exit-Codes.",
+        "en": "FR-023, CON-007, PRD §15 exit codes."
+      },
+      "user_impact": {
+        "de": [
+          "potato ci"
+        ],
+        "en": [
+          "potato ci"
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "packages/cli ci-cmd",
+          "Quick Scan evidenceIds"
+        ],
+        "en": [
+          "packages/cli ci-cmd",
+          "Quick Scan evidenceIds"
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Exit 0/1/2/3/4; stdout JSON mit jsonPath/htmlPath."
+        ],
+        "en": [
+          "Exit 0/1/2/3/4; stdout JSON with jsonPath/htmlPath."
+        ]
+      },
+      "git": {
+        "base": "5e9235c",
+        "head": "HEAD",
+        "branch": "issue/30-potato-ci-exit-codes",
+        "pull_request": null
+      },
+      "packages": [
+        "cli",
+        "core"
+      ],
+      "affected_features": [
+        "compare-ci"
+      ],
+      "affected_components": [
+        "packages/cli/src/ci-cmd.ts",
+        "packages/core/src/runner/quick-scan.ts"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": false,
+      "evidence": [],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-14-compare-baseline",
       "date": "2026-08-14",
       "type": "feature",
