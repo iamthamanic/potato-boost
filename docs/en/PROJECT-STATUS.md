@@ -1,13 +1,14 @@
 # Project status
 
-As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
+As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Discovery, scenario engine, fixture, report, adapter SDK, and VisoDev schema are in; next are doctor and dashboard.
+- Fixture e2e is in; next are web CLI doctor, collector, and quick-scan runner (#14, #16, #18).
 
 ## Recently completed
 
+- Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`).
 - VisoDev import schema without VisoDev dependency (issue #35).
 - Adapter SDK with capability manifest and contract tests (issue #32).
 - Report export with validated JSON and static HTML (issue #29).
@@ -20,7 +21,7 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Doctor, dashboard, and Three.js fixture runner are still missing.
+- Doctor, collector, quick-scan runner, local API, and dashboard are still missing.
 
 ## Risks
 
@@ -30,4 +31,4 @@ As of 2026-08-13 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #15 (CLI follow-on) or #17 (fixture).
+GitHub issues #14 (doctor), #16 (collector), or #18 (quick-scan runner).

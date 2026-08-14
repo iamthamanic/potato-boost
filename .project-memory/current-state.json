@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Discovery, Scenario Engine, Fixture, Report, Adapter SDK und VisoDev-Schema stehen; als Nächstes Doctor und Dashboard.",
-      "en": "Discovery, scenario engine, fixture, report, adapter SDK, and VisoDev schema are in; next are doctor and dashboard."
+      "de": "Fixture-E2E steht; als Nächstes Web-CLI Doctor, Collector und Quick-Scan-Runner (#14, #16, #18).",
+      "en": "Fixture e2e is in; next are web CLI doctor, collector, and quick-scan runner (#14, #16, #18)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Playwright-E2E-Smoke für fixtures/web-threejs (pnpm test:e2e).",
+      "en": "Playwright e2e smoke for fixtures/web-threejs (pnpm test:e2e)."
+    },
     {
       "de": "VisoDev-Importschema ohne VisoDev-Abhängigkeit (issue #35).",
       "en": "VisoDev import schema without VisoDev dependency (issue #35)."
@@ -22,8 +26,8 @@
   ],
   "incomplete": [
     {
-      "de": "Doctor, Dashboard und Three.js-Fixture-Runner fehlen noch.",
-      "en": "Doctor, dashboard, and Three.js fixture runner are still missing."
+      "de": "Doctor, Collector, Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
+      "en": "Doctor, collector, quick-scan runner, local API, and dashboard are still missing."
     }
   ],
   "risks": [
@@ -32,5 +36,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T13:45:00Z"
+  "updated_at": "2026-08-14T06:30:00Z"
 }

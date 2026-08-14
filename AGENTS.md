@@ -94,13 +94,13 @@ Handoff-Reihenfolge aus dem PRD: zuerst `schemas`, `artifact-store`, `adapter-sd
 
 - **Checks:** `pnpm checks` (Root; `scripts/run-checks.sh` → lint, typecheck, test, audit)
 - **Dev (geplant):** `pnpm --filter dashboard dev` → http://localhost:5173
-- **E2E:** `pnpm test:e2e` (Playwright via `@verify-ui` when ready)
+- **E2E:** `pnpm test:e2e` (Playwright Chromium; starts `fixtures/web-threejs` on 127.0.0.1:5199)
 
 Run checks before push. Do not bypass hooks.
 
 Quality tools am Workspace-Root ausführen. Vor Push `pnpm checks`.
 
-Root-Commands: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`. Geplant: `pnpm test:contract`, `pnpm test:e2e`, `pnpm test:security`, `pnpm test:performance`.
+Root-Commands: `pnpm build`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`. Geplant: `pnpm test:contract`, `pnpm test:security`, `pnpm test:performance`.
 
 ---
 

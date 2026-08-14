@@ -4,9 +4,13 @@ import * as THREE from "three";
 const PROBLEMS = ["none", "drawcalls", "longtask", "alloc"] as const;
 type Problem = (typeof PROBLEMS)[number];
 
+function isProblem(value: string | null): value is Problem {
+  return PROBLEMS.some((entry) => entry === value);
+}
+
 function parseProblem(): Problem {
   const param = new URLSearchParams(window.location.search).get("problem");
-  return PROBLEMS.includes(param as Problem) ? (param as Problem) : "none";
+  return isProblem(param) ? param : "none";
 }
 
 function App(): null {
@@ -20,16 +24,18 @@ if (rootElement === null) {
 
 const problem = parseProblem();
 const overlay = document.createElement("div");
+overlay.dataset.testid = "problem-overlay";
 overlay.style.cssText =
   "position:absolute;top:8px;left:8px;color:#fff;font:12px monospace;background:#000a;padding:4px 8px;";
 overlay.textContent = `problem: ${problem}`;
-rootElement.appendChild(overlay);
+// React owns #root; keep overlay/canvas as siblings or createRoot wipes them.
+document.body.appendChild(overlay);
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: false });
 renderer.setSize(320, 240);
-rootElement.appendChild(renderer.domElement);
+document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });

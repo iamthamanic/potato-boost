@@ -1,0 +1,79 @@
+{
+  "id": "2026-08-14-fixture-e2e",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Playwright-E2E-Smoke für die Three.js-Fixture",
+    "en": "Playwright e2e smoke for the Three.js fixture"
+  },
+  "summary": {
+    "de": "`pnpm test:e2e` startet fixtures/web-threejs auf 127.0.0.1:5199 und prüft Overlay, Canvas, Problem-Toggles und keine externen Requests.",
+    "en": "`pnpm test:e2e` starts fixtures/web-threejs on 127.0.0.1:5199 and checks overlay, canvas, problem toggles, and no external requests."
+  },
+  "plain_language": {
+    "de": "Der Browser-MCP kommt nicht an localhost. Playwright läuft im selben Prozess-Netz und belegt, dass die Fixture wirklich startet.",
+    "en": "Browser MCP cannot reach localhost. Playwright runs in the same process network and proves the fixture actually starts."
+  },
+  "why_it_matters": {
+    "de": "Ohne e2e blieb T-001/T-004 nur Unit-belegt; MCP-Loopback-Blockade machte verify-ui PARTIAL.",
+    "en": "Without e2e, T-001/T-004 were unit-only; MCP loopback blockade left verify-ui PARTIAL."
+  },
+  "user_impact": {
+    "de": [
+      "Lokal: pnpm test:e2e nach playwright install chromium.",
+      "CI führt e2e als eigenen Job aus, nicht in pnpm checks."
+    ],
+    "en": [
+      "Local: pnpm test:e2e after playwright install chromium.",
+      "CI runs e2e as its own job, not inside pnpm checks."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Fixture ist Workspace-Paket mit gepinnten Versionen.",
+      "Nur Chromium; Dashboard-E2E kommt mit Epic 3."
+    ],
+    "en": [
+      "Fixture is a workspace package with pinned versions.",
+      "Chromium only; dashboard e2e comes with Epic 3."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "CI braucht Playwright-Chromium + OS-Deps im e2e-Job."
+    ],
+    "en": [
+      "CI needs Playwright Chromium + OS deps in the e2e job."
+    ]
+  },
+  "git": {
+    "base": "9a65c0a",
+    "head": "HEAD",
+    "branch": "feat/fixture-e2e",
+    "pull_request": null
+  },
+  "packages": [],
+  "affected_features": [
+    "artifact-spine"
+  ],
+  "affected_components": [
+    "e2e/",
+    "playwright.config.ts",
+    "fixtures/web-threejs/",
+    ".github/workflows/checks.yml"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "e2e/fixture-web-threejs.spec.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/e2e/fixture-web-threejs.spec.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

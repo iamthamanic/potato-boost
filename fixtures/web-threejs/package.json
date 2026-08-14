@@ -4,13 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 5199 --strictPort --host 127.0.0.1",
     "build": "vite build"
   },
   "dependencies": {
-    "react": "latest",
-    "react-dom": "latest",
-    "three": "latest",
-    "vite": "latest"
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "0.185.1",
+    "vite": "8.2.1"
   }
 }
