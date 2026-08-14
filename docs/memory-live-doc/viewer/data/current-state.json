@@ -2,11 +2,19 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Run-Detail steht; als Nächstes Fake-Adapter (#33) oder Compare.",
-      "en": "Run detail is in; next is the fake adapter (#33) or Compare."
+      "de": "Dashboard-A11y steht; als Nächstes Compare (#28) oder Fake-Adapter (#33).",
+      "en": "Dashboard a11y is in; next is Compare (#28) or the fake adapter (#33)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Dashboard-A11y: Skip-Link, Reduced Motion, Axe auf Kernreisen (issue #26).",
+      "en": "Dashboard a11y: skip link, reduced motion, Axe on core journeys (issue #26)."
+    },
+    {
+      "de": "Timeline + Evidence Panel (issue #25).",
+      "en": "Timeline + evidence panel (issue #25)."
+    },
     {
       "de": "Run-Detail: Overview ohne Score, sechs Finding-Blöcke (issue #24).",
       "en": "Run detail: overview without a score, six finding blocks (issue #24)."

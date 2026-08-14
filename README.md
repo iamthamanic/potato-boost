@@ -36,6 +36,13 @@ node packages/cli --help
 
 `pnpm --filter dashboard dev` serves the shell at [http://127.0.0.1:5173](http://127.0.0.1:5173). Pass `?token=` and `?api=` on the query string; the run token stays in memory (not localStorage). The local API binds loopback only.
 
+Keyboard path (core journeys, Tab then Enter; skip link is first):
+
+1. **Setup confirm** — `/setup/detect`: select a target radio, then Confirm (writes config). Cancel does not write.
+2. **Run start** — `/runs/new`: Start Quick Scan.
+3. **Abort** — `/runs/:id/live`: Abort run. Status becomes `cancelled`; the run is not a baseline.
+4. **Finding** — `/runs/:id?tab=findings`: finding radio opens the six-block detail.
+
 ## Checks (quality gate)
 
 ```bash
@@ -48,7 +55,7 @@ Runs `scripts/run-checks.sh`. Until packages exist this is a documented placehol
 
 ```bash
 pnpm test              # Vitest
-pnpm test:e2e          # Playwright Chromium — fixture smoke on 127.0.0.1:5199
+pnpm test:e2e          # Playwright Chromium — fixture :5199 plus dashboard Axe on :5173
 pnpm test:security     # T-009 origin/path/argv + T-013 offline fetch guard
 ```
 
@@ -97,6 +104,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Dashboard a11y: skip link, reduced motion, Axe on core routes (`issue/26-dashboard-a11y`).
 - **2026-08-14** — Timeline + Evidence Panel: markers, selected sample range, keyboard zoom presets (`issue/25-timeline-evidence`).
 - **2026-08-14** — Run detail: overview (quality + budget categories, no score) and six finding blocks including ruleId and confidence (`issue/24-run-detail-findings`).
 - **2026-08-14** — Live run UI: named phases, expandable logs, abort to cancelled (not baseline) (`issue/23-live-run-ui`).

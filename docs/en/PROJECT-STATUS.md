@@ -4,10 +4,12 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Run detail is in; next is the fake adapter (#33) or Compare.
+- Dashboard a11y is in; next is Compare (#28) or the fake adapter (#33).
 
 ## Recently completed
 
+- Dashboard a11y: skip link, reduced motion, Axe on core journeys (issue #26).
+- Timeline + evidence panel (issue #25).
 - Run detail: overview without a score, six finding blocks (issue #24).
 - Live run UI: phases, logs, abort (issue #23).
 - Setup UI: DetectionCard, command override, doctor, confirm/cancel (issue #22).

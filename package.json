@@ -21,10 +21,11 @@
     "test:contract": "echo 'Add adapter contract tests after packages/adapter-sdk'",
     "test:security": "vitest run tests/security",
     "test:performance": "echo 'Add fixture benchmarks after fixtures/web-threejs'",
-    "test:e2e": "playwright test",
+    "test:e2e": "pnpm --filter @potato-boost/local-api exec tsc -b --pretty false && playwright test",
     "checks": "bash scripts/run-checks.sh"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@biomejs/biome": "^2.2.4",
     "@playwright/test": "^1.62.1",
     "@types/node": "^24.13.3",
