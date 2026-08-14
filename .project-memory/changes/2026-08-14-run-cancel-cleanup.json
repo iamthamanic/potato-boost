@@ -1,0 +1,76 @@
+{
+  "id": "2026-08-14-run-cancel-cleanup",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Abbruch räumt Child-Prozesse auf",
+    "en": "Abort cleans up child processes"
+  },
+  "summary": {
+    "de": "Nach Stop sind innerhalb von 10 s keine vom Runner gestarteten Prozesse mehr da. Cancelled/failed sind keine Baselines (NFR-007, T-005).",
+    "en": "After stop, no runner-started processes remain within 10 s. Cancelled/failed runs are not baselines (NFR-007, T-005)."
+  },
+  "plain_language": {
+    "de": "Wenn du einen Lauf abbrichst, bleiben keine Geisterprozesse zurück.",
+    "en": "If you abort a run, no ghost processes are left behind."
+  },
+  "why_it_matters": {
+    "de": "Verwaiste Browser/Dev-Server verfälschen den nächsten Lauf.",
+    "en": "Orphan browsers/dev servers poison the next run."
+  },
+  "user_impact": {
+    "de": [
+      "SIGINT bricht den Lauf als cancelled ab.",
+      "Warm-up-Crash ist failed, kein Budget-Fail."
+    ],
+    "en": [
+      "SIGINT cancels the run.",
+      "A warm-up crash is failed, not a budget fail."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Prozessgruppe (detached + kill -pid).",
+      "AbortSignal in runScenario."
+    ],
+    "en": [
+      "Process group (detached + kill -pid).",
+      "AbortSignal in runScenario."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "T-005 läuft in pnpm checks / CI."
+    ],
+    "en": [
+      "T-005 runs in pnpm checks / CI."
+    ]
+  },
+  "git": {
+    "base": "863b02a",
+    "head": "HEAD",
+    "branch": "issue/40-run-cancel-cleanup",
+    "pull_request": null
+  },
+  "packages": ["core", "scenario-engine", "cli"],
+  "affected_features": ["web-cli"],
+  "affected_components": [
+    "packages/core/src/runner/launch.ts",
+    "packages/core/src/runner/quick-scan.ts",
+    "packages/scenario-engine/src/engine.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/core/src/runner/launch.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/core/src/runner/launch.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}

@@ -1,6 +1,6 @@
 export type { ScenarioDriver } from "./driver.js";
 export { isTimeoutError } from "./driver.js";
-export { runScenario } from "./engine.js";
+export { runScenario, SCENARIO_ABORTED } from "./engine.js";
 export { createFakeDriver } from "./fake-driver.js";
 export {
   REDACTED,

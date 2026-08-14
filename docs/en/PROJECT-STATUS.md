@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Secret redaction is in; next are the noise gate (#40) and dashboard (#20).
+- Abort cleanup is in; next is the dashboard (#20).
 
 ## Recently completed
 
+- Abort cleans up child processes (issue #40).
 - Secret redaction in recorder and artifacts (issue #38).
 - Quick Scan runner with visible phases and an artifact (issue #18).
 - CDP+OS collectors on a shared timeline (issue #16).
@@ -36,4 +37,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #40 (noise gate) or #20 (dashboard).
+GitHub issue #20 (dashboard).
