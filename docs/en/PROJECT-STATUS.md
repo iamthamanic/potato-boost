@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Offline e2e is in; next is the fake adapter or dashboard UI.
+- Dashboard shell is in; next is the fake adapter or further dashboard tickets.
 
 ## Recently completed
 
+- Dashboard shell with PRD routes and no score number (issue #21).
 - Offline e2e: 0 product requests on a blocked network (issue #39).
 - Security e2e origin/path/shell fail-closed (issue #37).
 - Local API: loopback, run token, Origin/Host, REST+SSE (issue #20).
@@ -30,7 +31,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Dashboard UI is still missing.
+- Dashboard screens are still empty states, not a full analysis UI.
 
 ## Risks
 

@@ -13,7 +13,7 @@
     "potato": "./packages/cli/dist/bin.js"
   },
   "scripts": {
-    "dev": "echo 'apps/dashboard is not scaffolded yet — see AGENTS.md'",
+    "dev": "pnpm --filter dashboard dev",
     "build": "tsc -b",
     "lint": "biome check .",
     "typecheck": "tsc -b --pretty false",
