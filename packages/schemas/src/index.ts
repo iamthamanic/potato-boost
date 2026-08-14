@@ -3,6 +3,10 @@ export {
   parseSample,
   safeParseRunArtifact,
 } from "./parse.js";
+export {
+  type PotatoConfig,
+  potatoConfigSchema,
+} from "./potato-config.js";
 export type {
   ErrorEnvelope,
   Evidence,

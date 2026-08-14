@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Fixture-E2E steht; als Nächstes Web-CLI Doctor, Collector und Quick-Scan-Runner (#14, #16, #18).
+- Fixture-E2E und `potato init --confirm` stehen; als Nächstes Doctor (#14).
 
 ## Zuletzt erledigt
 
+- `potato init` schreibt Config erst nach `--confirm` (issue #13).
 - Playwright-E2E-Smoke für `fixtures/web-threejs` (`pnpm test:e2e`).
 - VisoDev-Importschema ohne VisoDev-Abhängigkeit (issue #35).
 - Adapter SDK mit Capability-Manifest und Contract-Tests (issue #32).

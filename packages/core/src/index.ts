@@ -5,4 +5,5 @@ export function workspaceReady(): true {
   return true;
 }
 
+export * from "./config/index.js";
 export * from "./discovery/index.js";

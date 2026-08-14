@@ -63,7 +63,11 @@ importers:
         specifier: workspace:*
         version: link:../core
 
-  packages/core: {}
+  packages/core:
+    dependencies:
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
 
   packages/evidence:
     dependencies:

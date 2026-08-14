@@ -1,0 +1,76 @@
+{
+  "id": "2026-08-14-config-write-confirm",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Init schreibt potato.config.yaml erst nach Bestätigung",
+    "en": "Init writes potato.config.yaml only after confirmation"
+  },
+  "summary": {
+    "de": "potato init zeigt geplante Pfade und YAML; schreibt Config, .gitignore und Audit-Log nur mit --confirm.",
+    "en": "potato init prints planned paths and YAML; writes config, .gitignore, and audit log only with --confirm."
+  },
+  "plain_language": {
+    "de": "Ohne Confirm bleibt das Repo unberührt. Mit --confirm gibt es eine versionierbare Config.",
+    "en": "Without confirm the repo stays untouched. With --confirm you get a versioned config."
+  },
+  "why_it_matters": {
+    "de": "Reproduzierbarkeit braucht Config; Sicherheit braucht Consent (SCN-011, BR-001).",
+    "en": "Reproducibility needs config; security needs consent (SCN-011, BR-001)."
+  },
+  "user_impact": {
+    "de": [
+      "potato init listet geplante Dateien.",
+      "potato init --confirm schreibt potato.config.yaml."
+    ],
+    "en": [
+      "potato init lists planned files.",
+      "potato init --confirm writes potato.config.yaml."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Zod-Schema .strict(); commands.start ist argv-Array.",
+      "Writes nur unter canonical root."
+    ],
+    "en": [
+      "Zod schema .strict(); commands.start is an argv array.",
+      "Writes only under the canonical root."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Lokales Audit-Log unter .potato/logs/config-change.log."
+    ],
+    "en": [
+      "Local audit log at .potato/logs/config-change.log."
+    ]
+  },
+  "git": {
+    "base": "80ff6f9",
+    "head": "HEAD",
+    "branch": "issue/13-config-write-confirm",
+    "pull_request": null
+  },
+  "packages": ["cli", "core", "schemas"],
+  "affected_features": ["artifact-spine"],
+  "affected_components": [
+    "packages/cli/",
+    "packages/core/src/config/",
+    "packages/schemas/src/potato-config.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/core/src/config/write.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/core/src/config/write.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

@@ -19,7 +19,7 @@ Repository: [iamthamanic/potato-boost](https://github.com/iamthamanic/potato-boo
 pnpm install
 ```
 
-This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `init`/`doctor`/`run`/`ci` are stubs; `detect` runs read-only discovery). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
+This is a pnpm workspace. `packages/core` is a TypeScript smoke package. `packages/schemas` holds the canonical Zod + JSON Schema contracts. `packages/artifact-store` writes completed runs atomically under `.potato/`. `packages/analysis` computes quantiles, hitches, and data quality (never mean-only). `packages/rule-engine` evaluates versioned rule packs (no AI). `packages/evidence` binds provenance and ordered source candidates (never a confirmed cause). `packages/scenario-engine` runs phase-based scenarios (setup/warm-up/measure/cleanup) against an injected driver. `packages/cli` is the `potato-boost` / `potato` npx entrypoint (Commander; `doctor`/`run`/`ci` are stubs; `detect` is read-only discovery; `init` previews then writes `potato.config.yaml` only with `--confirm`). `packages/schemas/fixtures/golden-v1.0.0.json` is the Slice-1 golden run artifact. Remaining `apps/` and `packages/` from the PRD are still unscaffolded.
 
 There is no `.env` for the MVP. The tool is local-only and offline-capable.
 
@@ -94,6 +94,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — `potato init` previews planned paths and writes `potato.config.yaml` only with `--confirm` (`issue/13-config-write-confirm`).
 - **2026-08-14** — Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`); fixture is a workspace package on 127.0.0.1:5199.
 - **2026-08-13** — CLI entrypoint `potato-boost` / `potato` with help and exit code 2 (`issue/11-cli-entrypoint`).
 - **2026-08-13** — Golden v1.0.0 run artifact + schema compatibility tests (`issue/9-golden-artifact-tests`).
