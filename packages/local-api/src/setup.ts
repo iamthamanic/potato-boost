@@ -1,5 +1,11 @@
 import { join } from "node:path";
 import {
+  createNodeGodotEnv,
+  detectGodot,
+  mergeGodotCandidates,
+  runGodotDoctor,
+} from "@potato-boost/adapter-godot";
+import {
   createNodeDoctorEnv,
   type DoctorEnv,
   runWebDoctor,
@@ -18,7 +24,14 @@ import {
 import type { FastifyInstance, FastifyReply } from "fastify";
 import { z } from "zod";
 
-const candidateKind = z.enum(["web", "vite", "react", "threejs", "unknown"]);
+const candidateKind = z.enum([
+  "web",
+  "vite",
+  "react",
+  "threejs",
+  "unknown",
+  "godot",
+]);
 
 const configBody = z
   .object({
@@ -33,6 +46,38 @@ const doctorBody = z
     start: z.array(z.string().min(1)).optional(),
   })
   .strict();
+
+function webKindsFromAdapter(
+  adapterId: z.infer<typeof candidateKind> | undefined,
+  detected: readonly CandidateKind[],
+): CandidateKind[] {
+  if (adapterId === undefined) {
+    return [...detected];
+  }
+  if (adapterId === "godot") {
+    return ["unknown"];
+  }
+  return [adapterId];
+}
+
+function inferredStartFor(kind: string): string[] {
+  if (kind === "vite") {
+    return startArgv(["vite"]);
+  }
+  if (kind === "web") {
+    return startArgv(["web"]);
+  }
+  if (kind === "react") {
+    return startArgv(["react"]);
+  }
+  if (kind === "threejs") {
+    return startArgv(["threejs"]);
+  }
+  if (kind === "unknown") {
+    return startArgv(["unknown"]);
+  }
+  return [];
+}
 
 export type SetupOptions = {
   projectRoot: string;
@@ -55,24 +100,28 @@ export function registerSetupRoutes(
   const configFs = createNodeConfigFs();
   const doctorEnv = options.doctorEnv ?? createNodeDoctorEnv();
 
+  const godotEnv = createNodeGodotEnv();
+
   async function detect() {
     return detectProject(fs, options.projectRoot, webDetectors);
   }
 
   app.get("/api/v1/detect", async (_request, reply) => {
     const result = await detect();
-    const supported = result.candidates.filter(
+    const godot = await detectGodot(fs, result.root);
+    const candidates = mergeGodotCandidates(result.candidates, godot.candidate);
+    const supported = candidates.filter(
       (candidate) => candidate.kind !== "unknown" && candidate.confidence > 0,
     );
     return reply.status(200).send({
       root: result.root,
       wrote: false,
       ambiguous: supported.length >= 2,
-      candidates: result.candidates.map((candidate) => ({
+      candidates: candidates.map((candidate) => ({
         kind: candidate.kind,
         confidence: candidate.confidence,
         evidence: candidate.evidence,
-        inferredStart: startArgv([candidate.kind]),
+        inferredStart: inferredStartFor(candidate.kind),
       })),
     });
   });
@@ -136,17 +185,28 @@ export function registerSetupRoutes(
       );
     }
     const detection = await detect();
-    const kinds: CandidateKind[] =
-      parsed.data.adapterId === undefined
-        ? detection.candidates.map((candidate) => candidate.kind)
-        : [parsed.data.adapterId];
+    const godot = await detectGodot(fs, detection.root);
+    const kinds = webKindsFromAdapter(
+      parsed.data.adapterId,
+      detection.candidates.map((candidate) => candidate.kind),
+    );
     const start =
       parsed.data.start ??
       (await resolveRunStart(configFs, detection.root, kinds));
     const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
       start,
     });
-    return reply.status(200).send(report);
+    const includeGodot =
+      godot.candidate !== null || parsed.data.adapterId === "godot";
+    if (!includeGodot) {
+      return reply.status(200).send(report);
+    }
+    const godotReport = await runGodotDoctor(detection.root, godotEnv);
+    return reply.status(200).send({
+      root: detection.root,
+      checks: [...godotReport.checks, ...report.checks],
+      ok: godotReport.ok && report.ok,
+    });
   });
 
   async function makePreview(body: z.infer<typeof configBody>) {
@@ -155,7 +215,7 @@ export function registerSetupRoutes(
     const gitignorePath = join(detection.root, ".gitignore");
     return buildInitPreview({
       canonicalRoot: detection.root,
-      kinds: [body.adapterId],
+      kinds: body.adapterId === "godot" ? ["unknown"] : [body.adapterId],
       adapterId: body.adapterId,
       start: body.start,
       configExists: await configFs.exists(configPath),

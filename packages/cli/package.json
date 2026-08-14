@@ -25,6 +25,7 @@
     "commander": "^14.0.0"
   },
   "devDependencies": {
+    "@potato-boost/adapter-godot": "workspace:*",
     "@potato-boost/adapter-web": "workspace:*",
     "@potato-boost/artifact-store": "workspace:*",
     "@potato-boost/core": "workspace:*"

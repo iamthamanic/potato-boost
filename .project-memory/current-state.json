@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Generic Process/Static Mode steht; als Nächstes Godot Detect/Doctor (#42).",
-      "en": "Generic process/static mode is in; next is Godot detect/doctor (#42)."
+      "de": "Godot Detect/Doctor steht; als Nächstes Tauri Detect/Doctor (#46).",
+      "en": "Godot detect/doctor is in; next is Tauri detect/doctor (#46)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Godot Detect/Doctor: project.godot-Evidence, fehlende Binary blockt Exit 3 (issue #42).",
+      "en": "Godot detect/doctor: project.godot evidence; missing binary blocks with exit 3 (issue #42)."
+    },
     {
       "de": "Generic/unsupported für unbekannte Repos; Start-Argv nur als Override nach Confirm (issue #34).",
       "en": "Generic/unsupported for unknown repos; start argv only as an override after confirm (issue #34)."

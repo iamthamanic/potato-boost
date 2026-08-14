@@ -6,15 +6,7 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "references": [
-    { "path": "../adapter-godot" },
-    { "path": "../adapter-web" },
-    { "path": "../analysis" },
-    { "path": "../artifact-store" },
-    { "path": "../core" },
-    { "path": "../report" },
-    { "path": "../schemas" }
-  ],
+  "references": [{ "path": "../adapter-sdk" }],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

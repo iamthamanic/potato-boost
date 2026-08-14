@@ -1,25 +1,24 @@
 import { join } from "node:path";
 import {
-  createNodeDoctorEnv,
-  type DoctorEnv,
-  formatDoctorReport,
-  runWebDoctor,
-} from "@potato-boost/adapter-web";
+  createNodeGodotEnv,
+  type GodotDoctorEnv,
+} from "@potato-boost/adapter-godot";
+import { createNodeDoctorEnv, type DoctorEnv } from "@potato-boost/adapter-web";
 import {
   applyInit,
   buildInitPreview,
   createArgvLauncher,
   createNodeConfigFs,
-  detectProject,
   type InitPreview,
   parseArgvLine,
   type QuickScanDeps,
-  resolveRunStart,
   runQuickScan,
 } from "@potato-boost/core";
 import { Command } from "commander";
 import { runCi } from "./ci-cmd.js";
 import { runFileCompare, runSetBaseline } from "./compare-cmd.js";
+import { detectCombined } from "./detect-combined.js";
+import { runCombinedDoctor } from "./doctor-gate.js";
 import {
   CliExitError,
   EXIT_BUDGET_FAIL,
@@ -28,11 +27,10 @@ import {
   EXIT_USAGE,
 } from "./exit-codes.js";
 import type { CliIo } from "./io.js";
-import { nodeDiscoveryFs } from "./node-fs.js";
-import { webDetectors } from "./web-detectors.js";
 
 export type ProgramDeps = {
   doctorEnv?: DoctorEnv;
+  godotEnv?: GodotDoctorEnv;
   quickScan?: QuickScanDeps;
 };
 
@@ -57,6 +55,7 @@ function formatPreview(preview: InitPreview, wrote: boolean): string {
 
 export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
   const doctorEnv = deps.doctorEnv ?? createNodeDoctorEnv();
+  const godotEnv = deps.godotEnv ?? createNodeGodotEnv();
   const program = new Command();
   program
     .name("potato-boost")
@@ -78,8 +77,19 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .argument("[path]", "project root", ".")
     .description("Scan markers and return candidates (read-only)")
     .action(async (path: string) => {
-      const result = await detectProject(nodeDiscoveryFs, path, webDetectors);
-      io.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
+      const result = await detectCombined(path);
+      io.stdout.write(
+        `${JSON.stringify(
+          {
+            root: result.root,
+            wrote: result.wrote,
+            candidates: result.candidates,
+            filesTouched: result.filesTouched,
+          },
+          null,
+          2,
+        )}\n`,
+      );
     });
 
   program
@@ -90,19 +100,16 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .description("Preview, then write potato.config.yaml after confirmation")
     .action(
       async (path: string, options: { confirm: boolean; start?: string }) => {
-        const detection = await detectProject(
-          nodeDiscoveryFs,
-          path,
-          webDetectors,
-        );
+        const detection = await detectCombined(path);
         const fs = createNodeConfigFs();
         const configPath = join(detection.root, "potato.config.yaml");
         const gitignorePath = join(detection.root, ".gitignore");
         const preview = buildInitPreview({
           canonicalRoot: detection.root,
-          kinds: detection.candidates.map((candidate) => candidate.kind),
+          kinds: detection.web.candidates.map((candidate) => candidate.kind),
           configExists: await fs.exists(configPath),
           gitignoreExists: await fs.exists(gitignorePath),
+          ...(detection.godot.candidate === null ? {} : { adapterId: "godot" }),
           ...(options.start === undefined
             ? {}
             : { start: parseArgvLine(options.start) }),
@@ -117,21 +124,8 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .argument("[path]", "project root", ".")
     .description("Check Node, browser, port, and start command")
     .action(async (path: string) => {
-      const detection = await detectProject(
-        nodeDiscoveryFs,
-        path,
-        webDetectors,
-      );
-      const kinds = detection.candidates.map((candidate) => candidate.kind);
-      const start = await resolveRunStart(
-        createNodeConfigFs(),
-        detection.root,
-        kinds,
-      );
-      const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
-        start,
-      });
-      io.stdout.write(formatDoctorReport(report));
+      const report = await runCombinedDoctor(path, doctorEnv, godotEnv);
+      io.stdout.write(report.text);
       if (!report.ok) {
         throw new Error("doctor blocked: required capability missing");
       }
@@ -142,22 +136,9 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .argument("[path]", "project root", ".")
     .description("Run a performance scenario")
     .action(async (path: string) => {
-      const detection = await detectProject(
-        nodeDiscoveryFs,
-        path,
-        webDetectors,
-      );
-      const kinds = detection.candidates.map((candidate) => candidate.kind);
-      const start = await resolveRunStart(
-        createNodeConfigFs(),
-        detection.root,
-        kinds,
-      );
-      const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
-        start,
-      });
+      const report = await runCombinedDoctor(path, doctorEnv, godotEnv);
       if (!report.ok) {
-        io.stderr.write(formatDoctorReport(report));
+        io.stderr.write(report.text);
         throw new Error("doctor blocked: required capability missing");
       }
       const controller = new AbortController();
@@ -169,10 +150,10 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
       let result: Awaited<ReturnType<typeof runQuickScan>>;
       try {
         result = await runQuickScan(
-          detection.root,
+          report.root,
           {
             launcher: createArgvLauncher(),
-            startArgv: start,
+            startArgv: report.start,
             ...deps.quickScan,
           },
           controller.signal,
@@ -241,6 +222,7 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
       async (path: string, options: { baseline?: string; out?: string }) => {
         await runCi(io, path, options, {
           doctorEnv,
+          godotEnv,
           ...(deps.quickScan === undefined
             ? {}
             : { quickScan: deps.quickScan }),

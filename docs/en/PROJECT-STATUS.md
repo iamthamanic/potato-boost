@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Generic process/static mode is in; next is Godot detect/doctor (#42).
+- Godot detect/doctor is in; next is Tauri detect/doctor (#46).
 
 ## Recently completed
 
+- Godot detect/doctor: project.godot evidence; missing binary blocks with exit 3 (issue #42).
 - Generic/unsupported for unknown repos; start argv only as an override after confirm (issue #34).
 - Fake adapter: Detect/Doctor/Launch/Collect without a browser (issue #33).
 - `potato ci` exit codes 0/1/2/3/4 with machine-readable report paths (issue #30).
@@ -50,4 +51,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issue #42 (Godot detect/doctor).
+GitHub issue #46 (Tauri detect/doctor).
