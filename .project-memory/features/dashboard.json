@@ -20,10 +20,10 @@
   "packages": ["dashboard", "local-api"],
   "paths": ["apps/dashboard/**", "packages/local-api/**"],
   "user_impact": {
-    "de": ["Setup, Live-Status und Finding-Detail im Browser — Compare noch leer."],
-    "en": ["Setup, live status, and finding detail in the browser — Compare still empty."]
+    "de": ["Setup, Live-Status und Finding-Detail im Browser; Kernreisen per Tastatur/Axe. Compare noch leer."],
+    "en": ["Setup, live status, and finding detail in the browser; core journeys via keyboard/Axe. Compare still empty."]
   },
-  "related_changes": ["2026-08-13-bootstrap", "2026-08-14-dashboard-shell", "2026-08-14-setup-detect-ui", "2026-08-14-live-run-ui", "2026-08-14-run-detail-findings"],
+  "related_changes": ["2026-08-13-bootstrap", "2026-08-14-dashboard-shell", "2026-08-14-setup-detect-ui", "2026-08-14-live-run-ui", "2026-08-14-run-detail-findings", "2026-08-14-timeline-evidence", "2026-08-14-dashboard-a11y"],
   "review_status": "needs-review",
   "confidence": 0.4,
   "locked": false

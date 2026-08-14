@@ -2,6 +2,82 @@
   "schema_version": 1,
   "changes": [
     {
+      "id": "2026-08-14-dashboard-a11y",
+      "date": "2026-08-14",
+      "type": "feature",
+      "status": "recorded",
+      "title": {
+        "de": "Dashboard-Barrierefreiheit (WCAG 2.2 AA Kernreisen)",
+        "en": "Dashboard accessibility (WCAG 2.2 AA core journeys)"
+      },
+      "summary": {
+        "de": "Skip-Link, Reduced Motion, 200%-Zoom und Playwright+Axe ohne critical/serious auf Detect, New Run, Live und Findings.",
+        "en": "Skip link, reduced motion, 200% zoom, and Playwright+Axe with no critical/serious on detect, new run, live, and findings."
+      },
+      "plain_language": {
+        "de": "Du erreichst Confirm, Start, Abort und Findings mit der Tastatur. Dekor-Animationen bleiben aus, wenn das System das so will.",
+        "en": "You can reach Confirm, Start, Abort, and findings with the keyboard. Decorative motion stays off when the system asks for that."
+      },
+      "why_it_matters": {
+        "de": "PRD verlangt WCAG 2.2 AA auf Kernreisen, nicht nur visuelles Layout.",
+        "en": "The PRD requires WCAG 2.2 AA on core journeys, not layout alone."
+      },
+      "user_impact": {
+        "de": [
+          "Skip to main content",
+          "Keyboard-Pfad in der README"
+        ],
+        "en": [
+          "Skip to main content",
+          "Keyboard path in the README"
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "@axe-core/playwright in pnpm test:e2e",
+          "GET /healthz ohne Token (Loopback)"
+        ],
+        "en": [
+          "@axe-core/playwright in pnpm test:e2e",
+          "GET /healthz without a token (loopback)"
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "E2E startet Dashboard :5173 und Local API :8787 zusätzlich zur Fixture."
+        ],
+        "en": [
+          "E2E starts the dashboard on :5173 and the local API on :8787 in addition to the fixture."
+        ]
+      },
+      "git": {
+        "base": "6e7aae9",
+        "head": "HEAD",
+        "branch": "issue/26-dashboard-a11y",
+        "pull_request": null
+      },
+      "packages": [
+        "dashboard",
+        "local-api"
+      ],
+      "affected_features": [
+        "dashboard"
+      ],
+      "affected_components": [
+        "apps/dashboard/src/app.tsx",
+        "apps/dashboard/src/styles.css",
+        "e2e/dashboard-a11y.spec.ts",
+        "packages/local-api/src/server.ts"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-13-analysis-engine",
       "date": "2026-08-13",
       "type": "contract",

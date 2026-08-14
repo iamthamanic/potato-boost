@@ -19,11 +19,27 @@ export default defineConfig({
     screenshot: "only-on-failure",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    command:
-      "pnpm --filter web-threejs-fixture exec vite --port 5199 --strictPort --host 127.0.0.1",
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: [
+    {
+      command:
+        "pnpm --filter web-threejs-fixture exec vite --port 5199 --strictPort --host 127.0.0.1",
+      url: baseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+    {
+      command:
+        "pnpm --filter @potato-boost/local-api exec tsc -b --pretty false && node scripts/e2e-local-api.mjs",
+      url: "http://127.0.0.1:8787/healthz",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+    {
+      command:
+        "pnpm --filter dashboard exec vite --host 127.0.0.1 --port 5173 --strictPort",
+      url: "http://127.0.0.1:5173",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 });

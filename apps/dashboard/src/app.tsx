@@ -1,3 +1,7 @@
+/**
+ * Dashboard shell — skip link, primary nav, and PRD routes.
+ * Location: apps/dashboard/src/app.tsx
+ */
 import { NavLink, Route, Routes } from "react-router-dom";
 import { LiveRun } from "./live-run.js";
 import { NewRun } from "./new-run.js";
@@ -25,6 +29,9 @@ const NAV = [
 export function App() {
   return (
     <div className="shell">
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
       <nav className="nav" aria-label="Primary">
         <h1>Potato Boost</h1>
         <ul>
@@ -37,7 +44,7 @@ export function App() {
           ))}
         </ul>
       </nav>
-      <main>
+      <main id="main" tabIndex={-1}>
         <Routes>
           <Route path="/" element={<ProjectHome />} />
           <Route path="/project" element={<ProjectHome />} />

@@ -94,7 +94,7 @@ Handoff-Reihenfolge aus dem PRD: zuerst `schemas`, `artifact-store`, `adapter-sd
 
 - **Checks:** `pnpm checks` (Root; `scripts/run-checks.sh` → lint, typecheck, test, audit)
 - **Dev (geplant):** `pnpm --filter dashboard dev` → http://localhost:5173
-- **E2E:** `pnpm test:e2e` (Playwright Chromium; starts `fixtures/web-threejs` on 127.0.0.1:5199)
+- **E2E:** `pnpm test:e2e` (Playwright Chromium; fixture on 127.0.0.1:5199, dashboard Axe on 127.0.0.1:5173)
 
 Run checks before push. Do not bypass hooks.
 

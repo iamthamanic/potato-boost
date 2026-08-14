@@ -207,6 +207,12 @@ export async function startLocalApi(
       }
       return sendEnvelope(reply, "FORBIDDEN", "cors preflight denied", 403);
     }
+    if (request.method === "GET") {
+      const path = request.url.split("?")[0];
+      if (path === "/healthz") {
+        return reply.status(200).send({ ok: true });
+      }
+    }
     const provided = readToken(request.headers.authorization);
     if (!tokenOk(provided, token)) {
       return sendEnvelope(reply, "UNAUTHORIZED", "run token required", 401);

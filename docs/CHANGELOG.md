@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Dashboard a11y
+
+Skip-Link, `prefers-reduced-motion` und 200%-Zoom für Kernreisen. Playwright+Axe auf Detect, New Run, Live und Findings; nur critical/serious fallen durch. Keyboard-Pfad in der README.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Timeline evidence
 
 Timeline zeigt Szenario-Marker und einen ausgewählten Sample-Bereich. Evidence Panel trennt Raw, Derived und Source. Schmale Breite fällt auf eine Tabelle zurück.

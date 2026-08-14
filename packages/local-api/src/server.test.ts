@@ -42,6 +42,10 @@ describe("local api loopback", () => {
     expect(api.host).toBe("127.0.0.1");
     expect(api.url).toMatch(/^http:\/\/127\.0\.0\.1:\d+$/);
 
+    const health = await fetch(`${api.url}/healthz`);
+    expect(health.status).toBe(200);
+    expect(((await health.json()) as { ok: boolean }).ok).toBe(true);
+
     const denied = await fetch(`${api.url}/api/v1/runs`, {
       method: "POST",
       headers: {

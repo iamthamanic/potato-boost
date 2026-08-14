@@ -278,7 +278,6 @@ function TabButton(props: {
       type="button"
       role="tab"
       aria-selected={selected}
-      aria-controls={`panel-${props.id}`}
       className={selected ? "tab is-active" : "tab"}
       onClick={() => {
         props.onSelect(props.id);

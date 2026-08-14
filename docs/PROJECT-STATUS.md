@@ -4,10 +4,12 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Run-Detail steht; als Nächstes Fake-Adapter (#33) oder Compare.
+- Dashboard-A11y steht; als Nächstes Compare (#28) oder Fake-Adapter (#33).
 
 ## Zuletzt erledigt
 
+- Dashboard-A11y: Skip-Link, Reduced Motion, Axe auf Kernreisen (issue #26).
+- Timeline + Evidence Panel (issue #25).
 - Run-Detail: Overview ohne Score, sechs Finding-Blöcke (issue #24).
 - Live-Run-UI: Phasen, Logs, Abort (issue #23).
 - Setup-UI: DetectionCard, Command-Override, Doctor, Confirm/Cancel (issue #22).
