@@ -1,3 +1,4 @@
+import { assertInsideRoot, resolveCanonicalRoot } from "./fs.js";
 import type {
   Candidate,
   CandidateKind,
@@ -27,9 +28,10 @@ export async function detectProject(
   detectors: readonly Detector[],
 ): Promise<DiscoveryResult> {
   const filesTouched: string[] = [];
+  const canonicalRoot = resolveCanonicalRoot(root);
 
   for (const name of MANIFEST_CANDIDATES) {
-    const path = `${root}/${name}`;
+    const path = assertInsideRoot(canonicalRoot, name);
     if (await fs.exists(path)) {
       filesTouched.push(name);
     }
@@ -37,7 +39,7 @@ export async function detectProject(
 
   const candidates: Candidate[] = [];
   for (const detector of detectors) {
-    const evidence = await detector.detect(fs, root);
+    const evidence = await detector.detect(fs, canonicalRoot);
     if (evidence.length > 0) {
       candidates.push({
         kind: detector.kind,
@@ -51,7 +53,7 @@ export async function detectProject(
     candidates.push({ kind: "unknown", confidence: 0, evidence: [] });
   }
 
-  return { root, candidates, filesTouched, wrote: false };
+  return { root: canonicalRoot, candidates, filesTouched, wrote: false };
 }
 
 export function hasWebCandidate(candidates: readonly Candidate[]): boolean {
