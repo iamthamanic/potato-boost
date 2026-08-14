@@ -2,24 +2,32 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "CLI-Entrypoint steht; als Nächstes Detection/Doctor und Three.js-Fixture.",
-      "en": "CLI entrypoint is in; next are detect/doctor and the Three.js fixture."
+      "de": "Web-Doctor steht; als Nächstes Secret-Redaction (#38) und Collector (#16).",
+      "en": "Web doctor is in; next are secret redaction (#38) and collector (#16)."
     }
   ],
   "recently_completed": [
     {
-      "de": "packages/cli: npx-Entrypoint, Hilfe, Exit-Code 2 (issue #11).",
-      "en": "packages/cli: npx entrypoint, help, exit code 2 (issue #11)."
+      "de": "Web-Doctor: Node, Browser, Port, Startbefehl mit Exit 3 (issue #14).",
+      "en": "Web doctor: Node, browser, port, start command with exit 3 (issue #14)."
     },
     {
-      "de": "Golden-Artifact-Tests v1.0.0 inkl. Schema-Kompatibilität (issue #9).",
-      "en": "Golden v1.0.0 artifact tests and schema compatibility (issue #9)."
+      "de": "potato init schreibt Config erst nach --confirm (issue #13).",
+      "en": "potato init writes config only after --confirm (issue #13)."
+    },
+    {
+      "de": "VisoDev-Importschema ohne VisoDev-Abhängigkeit (issue #35).",
+      "en": "VisoDev import schema without VisoDev dependency (issue #35)."
+    },
+    {
+      "de": "Adapter SDK mit Capability-Manifest und Contract-Tests (issue #32).",
+      "en": "Adapter SDK with capability manifest and contract tests (issue #32)."
     }
   ],
   "incomplete": [
     {
-      "de": "Detection/Doctor, Dashboard und Three.js-Fixture fehlen noch.",
-      "en": "Detect/doctor, dashboard, and Three.js fixture are still missing."
+      "de": "Collector, Quick-Scan-Runner, Local API und Dashboard fehlen noch.",
+      "en": "Collector, quick-scan runner, local API, and dashboard are still missing."
     }
   ],
   "risks": [
@@ -28,5 +36,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001–Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-13T11:15:00Z"
+  "updated_at": "2026-08-14T06:50:00Z"
 }

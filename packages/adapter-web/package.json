@@ -1,0 +1,22 @@
+{
+  "name": "@potato-boost/adapter-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.62.1",
+    "@potato-boost/core": "workspace:*"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts"
+}

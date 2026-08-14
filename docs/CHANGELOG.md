@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Web doctor
+
+`potato doctor` prüft Node, Playwright-Chromium, Start-Argv und Port 5199. Checks erscheinen als `ok`/`missing` mit Pfad. Fehlende Pflicht-Capability blockt `potato run` mit Exit 3. Startbefehle werden nicht ausgeführt (FR-005, FR-006).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Init writes config after confirm
 
 `potato init` zeigt geplante Pfade und YAML; schreibt `potato.config.yaml`, `.gitignore` (`.potato/`) und ein lokales Audit-Log nur mit `--confirm`. Ohne Confirm bleibt das Repo unberührt (FR-007, SCN-011).

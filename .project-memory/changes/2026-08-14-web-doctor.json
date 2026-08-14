@@ -1,0 +1,101 @@
+{
+  "id": "2026-08-14-web-doctor",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Web-Doctor prüft Node, Browser, Port und Startbefehl",
+    "en": "Web doctor checks Node, browser, port, and start command"
+  },
+  "summary": {
+    "de": "potato doctor listet Capabilities als ok/missing mit Pfaden. Fehlende Pflicht-Capability blockt potato run mit Exit 3. Start-Argv wird nie ausgeführt.",
+    "en": "potato doctor lists capabilities as ok/missing with paths. A missing required capability blocks potato run with exit 3. Start argv is never executed."
+  },
+  "plain_language": {
+    "de": "Vor dem Messen sagt Doctor klar, was fehlt — Chrome, Startbefehl, Port — statt nach acht Minuten Build zu sterben.",
+    "en": "Before measuring, doctor states what is missing — Chrome, start command, port — instead of dying after an eight-minute build."
+  },
+  "why_it_matters": {
+    "de": "Konkrete Fehler und Exit 3 statt generischem Fail (FR-005, FR-006).",
+    "en": "Concrete errors and exit 3 instead of a generic fail (FR-005, FR-006)."
+  },
+  "user_impact": {
+    "de": [
+      "potato doctor zeigt Checks mit Status und Pfad.",
+      "potato run endet mit 3, wenn Browser oder Startbefehl fehlen."
+    ],
+    "en": [
+      "potato doctor prints checks with status and path.",
+      "potato run exits 3 when the browser or start command is missing."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Neues Paket packages/adapter-web; DoctorEnv ist injizierbar.",
+      "Unit-Tests brauchen kein playwright install."
+    ],
+    "en": [
+      "New package packages/adapter-web; DoctorEnv is injectable.",
+      "Unit tests do not need playwright install."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Belegter Port 5199 wird gemeldet, blockt Doctor nicht."
+    ],
+    "en": [
+      "Busy port 5199 is reported and does not block doctor."
+    ]
+  },
+  "git": {
+    "base": "872e239",
+    "head": "HEAD",
+    "branch": "issue/14-web-doctor",
+    "pull_request": null
+  },
+  "packages": [
+    "cli",
+    "adapter-web"
+  ],
+  "affected_features": [
+    "web-cli"
+  ],
+  "affected_components": [
+    "packages/adapter-web/",
+    "packages/cli/src/program.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "compare",
+      "path": "872e239...HEAD",
+      "url": "https://github.com/iamthamanic/potato-boost/compare/872e239...HEAD"
+    },
+    {
+      "kind": "commit",
+      "path": "HEAD",
+      "sha": "HEAD",
+      "url": "https://github.com/iamthamanic/potato-boost/commit/HEAD"
+    },
+    {
+      "kind": "file",
+      "path": "packages/adapter-web/",
+      "url": "https://github.com/iamthamanic/potato-boost/tree/HEAD/packages/adapter-web"
+    },
+    {
+      "kind": "file",
+      "path": "packages/cli/src/program.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/HEAD/packages/cli/src/program.ts"
+    },
+    {
+      "kind": "file",
+      "path": "packages/adapter-web/src/doctor.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/adapter-web/src/doctor.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}
