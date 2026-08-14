@@ -48,11 +48,12 @@ Document project primitives (not every third-party widget). Planned from PRD:
 
 | Component | Location | Notes |
 |-----------|----------|-------|
-| DetectionCard | `apps/dashboard` (planned) | confirmed / ambiguous / unsupported; radio semantics |
-| RunPhaseStepper | planned | queued → completed/failed; `aria-live` sparingly |
-| MetricBudgetCard | planned | pass / fail / inconclusive / unsupported |
+| DetectionCard | `apps/dashboard/src/detection-card.tsx` | confirmed / ambiguous / unsupported; radio semantics |
+| RunPhaseStepper | `apps/dashboard/src/run-phase-stepper.tsx` | queued → completed/failed; named operation text |
+| MetricBudgetCard | `apps/dashboard/src/run-overview.tsx` | pass / fail / inconclusive / unsupported; icon+text |
 | Timeline | planned | zoom, markers, selected range; keyboard + data table fallback |
-| FindingRow | planned | severity, confidence, suppressed; semantic table |
+| FindingRow | `apps/dashboard/src/run-detail.tsx` | severity, confidence; semantic table |
+| FindingDetail | `apps/dashboard/src/finding-detail.tsx` | six PRD §10 blocks; ruleId + confidence |
 | EvidencePanel | planned | raw / derived / source; heading structure |
 | CompareTable | planned | improved / regressed / neutral / incomparable |
 

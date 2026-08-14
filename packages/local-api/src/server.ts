@@ -4,6 +4,7 @@ import type { DoctorEnv } from "@potato-boost/adapter-web";
 import { errorEnvelopeSchema } from "@potato-boost/schemas";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { z } from "zod";
+import { GOLDEN_RUN_ID, loadGoldenArtifact } from "./golden.js";
 import { registerSetupRoutes } from "./setup.js";
 
 const startRunBody = z.object({
@@ -281,6 +282,14 @@ export async function startLocalApi(
       return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
     }
     const run = runs.get(parsed.data.id);
+    if (run === undefined && parsed.data.id === GOLDEN_RUN_ID) {
+      const golden = await loadGoldenArtifact();
+      return reply.status(200).send({
+        runId: golden.run.runId,
+        status: golden.run.status,
+        baselineEligible: golden.run.status === "completed",
+      });
+    }
     if (run === undefined) {
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }
@@ -289,6 +298,17 @@ export async function startLocalApi(
       status: run.status,
       baselineEligible: run.baselineEligible,
     });
+  });
+
+  app.get("/api/v1/runs/:id/artifact", async (request, reply) => {
+    const parsed = z.object({ id: runIdParam }).safeParse(request.params);
+    if (!parsed.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
+    }
+    if (parsed.data.id === GOLDEN_RUN_ID) {
+      return reply.status(200).send(await loadGoldenArtifact());
+    }
+    return sendEnvelope(reply, "NOT_FOUND", "artifact not found", 404);
   });
 
   app.post("/api/v1/runs/:id/abort", async (request, reply) => {

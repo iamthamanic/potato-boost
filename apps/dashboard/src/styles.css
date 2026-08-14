@@ -278,3 +278,50 @@ main h2 {
   padding-left: var(--space-4);
   font-size: 12px;
 }
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.tab {
+  background: var(--color-bg);
+}
+
+.tab.is-active {
+  border-color: var(--color-accent);
+}
+
+.budget-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.budget-card {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--color-bg);
+}
+
+.budget-card h4 {
+  margin: 0 0 var(--space-2);
+  font-size: 13px;
+}
+
+.finding-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.finding-title {
+  font-size: 14px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin: 0;
+}

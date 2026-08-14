@@ -20,10 +20,10 @@
   "packages": ["dashboard", "local-api"],
   "paths": ["apps/dashboard/**", "packages/local-api/**"],
   "user_impact": {
-    "de": ["Setup, Live-Status, Timeline und Finding-Detail im Browser — sobald gebaut."],
-    "en": ["Setup, live status, timeline, and finding detail in the browser — once built."]
+    "de": ["Setup, Live-Status und Finding-Detail im Browser — Compare noch leer."],
+    "en": ["Setup, live status, and finding detail in the browser — Compare still empty."]
   },
-  "related_changes": ["2026-08-13-bootstrap", "2026-08-14-dashboard-shell", "2026-08-14-setup-detect-ui"],
+  "related_changes": ["2026-08-13-bootstrap", "2026-08-14-dashboard-shell", "2026-08-14-setup-detect-ui", "2026-08-14-live-run-ui", "2026-08-14-run-detail-findings"],
   "review_status": "needs-review",
   "confidence": 0.4,
   "locked": false
