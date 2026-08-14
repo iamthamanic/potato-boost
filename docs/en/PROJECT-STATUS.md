@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Local API is in; next is the dashboard UI.
+- T-009 security e2e is in; next is the fake adapter or dashboard UI.
 
 ## Recently completed
 
+- Security e2e origin/path/shell fail-closed (issue #37).
 - Local API: loopback, run token, Origin/Host, REST+SSE (issue #20).
 - Abort cleans up child processes (issue #40).
 - Secret redaction in recorder and artifacts (issue #38).

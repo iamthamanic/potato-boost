@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Local API steht; als Nächstes Dashboard-UI.
+- T-009-Security-E2E steht; als Nächstes Fake-Adapter oder Dashboard-UI.
 
 ## Zuletzt erledigt
 
+- Security-E2E Origin/Pfad/Shell fail-closed (issue #37).
 - Local API: Loopback, Run-Token, Origin/Host, REST+SSE (issue #20).
 - Abbruch räumt Child-Prozesse auf (issue #40).
 - Secret-Redaktion in Recorder und Artifacts (issue #38).

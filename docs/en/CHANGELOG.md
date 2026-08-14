@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Security E2E (T-009)
+
+Foreign origin, path-traversal run ids, and shell metacharacters in argv are tested fail-closed. `pnpm test:security` exits 0 (NFR-005, EDGE-011).
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Local API loopback
 
 Fastify binds `127.0.0.1` only, a random port, and a per-process run token. Foreign origins are 403; missing token is 401. `POST /api/v1/runs` is idempotent; SSE resumes via `Last-Event-ID` (EDGE-011, CON-004/006).

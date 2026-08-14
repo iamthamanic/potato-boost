@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Local API steht; als Nächstes Dashboard-UI (#33/#34) nach dem API-Vertrag.",
-      "en": "Local API is in; next is the dashboard UI (#33/#34) on that contract."
+      "de": "T-009-Security-E2E steht; als Nächstes Fake-Adapter oder Dashboard-UI.",
+      "en": "T-009 security e2e is in; next is the fake adapter or dashboard UI."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Security-E2E Origin/Pfad/Shell fail-closed (issue #37).",
+      "en": "Security e2e origin/path/shell fail-closed (issue #37)."
+    },
     {
       "de": "Local API: Loopback, Run-Token, Origin/Host, REST+SSE (issue #20).",
       "en": "Local API: loopback, run token, Origin/Host, REST+SSE (issue #20)."
