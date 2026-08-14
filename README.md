@@ -94,6 +94,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — T-009 security e2e: foreign Origin, path traversal, and shell metacharacters fail closed (`issue/37-security-e2e-local-api`).
 - **2026-08-14** — Local API: loopback Fastify, run token, Origin/Host checks, REST + SSE (`issue/20-local-api-loopback`).
 - **2026-08-14** — Abort/crash cleanup: process groups die within 10 s; cancelled/failed are not baselines (`issue/40-run-cancel-cleanup`).
 - **2026-08-14** — Secret redaction: Authorization, bodies, and canary tokens never land in artifacts (`issue/38-secret-redaction`).

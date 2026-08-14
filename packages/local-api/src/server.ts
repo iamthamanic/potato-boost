@@ -11,6 +11,11 @@ const startRunBody = z.object({
   rulePackIds: z.array(z.string().min(1)).optional(),
 });
 
+const runIdParam = z
+  .string()
+  .min(1)
+  .regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/);
+
 export type LocalApi = {
   url: string;
   host: "127.0.0.1";
@@ -202,8 +207,11 @@ export async function startLocalApi(
   });
 
   app.get("/api/v1/runs/:id", async (request, reply) => {
-    const params = z.object({ id: z.string().min(1) }).parse(request.params);
-    const run = runs.get(params.id);
+    const parsed = z.object({ id: runIdParam }).safeParse(request.params);
+    if (!parsed.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
+    }
+    const run = runs.get(parsed.data.id);
     if (run === undefined) {
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }
@@ -214,8 +222,11 @@ export async function startLocalApi(
   });
 
   app.get("/api/v1/runs/:id/events", async (request, reply) => {
-    const params = z.object({ id: z.string().min(1) }).parse(request.params);
-    const run = runs.get(params.id);
+    const parsed = z.object({ id: runIdParam }).safeParse(request.params);
+    if (!parsed.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
+    }
+    const run = runs.get(parsed.data.id);
     if (run === undefined) {
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }

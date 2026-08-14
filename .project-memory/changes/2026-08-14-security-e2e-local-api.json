@@ -1,0 +1,53 @@
+{
+  "id": "2026-08-14-security-e2e-local-api",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Security-E2E für Local API und Spawn",
+    "en": "Security e2e for local API and spawn"
+  },
+  "summary": {
+    "de": "T-009: fremder Origin, Path-Traversal und Shell-Strings werden blockiert.",
+    "en": "T-009: foreign origin, path traversal, and shell strings are blocked."
+  },
+  "plain_language": {
+    "de": "Angriffe aus dem Browser oder mit kaputten Pfaden/Befehlen laufen ins Leere.",
+    "en": "Attacks from a browser or with broken paths/commands go nowhere."
+  },
+  "why_it_matters": {
+    "de": "Untrusted Repo + Cross-Origin gegen localhost ist das Threat-Modell.",
+    "en": "Untrusted repo plus cross-origin against localhost is the threat model."
+  },
+  "user_impact": {
+    "de": ["pnpm test:security ist grün."],
+    "en": ["pnpm test:security is green."]
+  },
+  "developer_impact": {
+    "de": ["tests/security/t009.test.ts", "runId-Allowlist in local-api"],
+    "en": ["tests/security/t009.test.ts", "runId allowlist in local-api"]
+  },
+  "operational_impact": {
+    "de": ["CI führt die Suite über pnpm test mit aus."],
+    "en": ["CI runs the suite via pnpm test."]
+  },
+  "git": {
+    "base": "81bc7d6",
+    "head": "HEAD",
+    "branch": "issue/37-security-e2e-local-api",
+    "pull_request": null
+  },
+  "packages": ["local-api"],
+  "affected_features": ["web-cli"],
+  "affected_components": [
+    "packages/local-api/src/server.ts",
+    "tests/security/t009.test.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}
