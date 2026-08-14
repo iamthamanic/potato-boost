@@ -2,6 +2,8 @@ import { NavLink, Route, Routes } from "react-router-dom";
 import { LiveRun } from "./live-run.js";
 import { NewRun } from "./new-run.js";
 import { ProjectHome } from "./project-home.js";
+import { GOLDEN_RUN_ID } from "./run-artifact.js";
+import { RunDetail } from "./run-detail.js";
 import { Screen } from "./screen.js";
 import { SetupDetect } from "./setup-detect.js";
 import { SetupDoctor } from "./setup-doctor.js";
@@ -14,7 +16,7 @@ const NAV = [
   { to: "/profiles", label: "Profiles" },
   { to: "/runs/new", label: "New run" },
   { to: "/runs/demo/live", label: "Live run" },
-  { to: "/runs/demo", label: "Run detail" },
+  { to: `/runs/${GOLDEN_RUN_ID}`, label: "Run detail" },
   { to: "/compare", label: "Compare" },
   { to: "/rules", label: "Rules" },
   { to: "/settings", label: "Settings" },
@@ -61,15 +63,7 @@ export function App() {
           />
           <Route path="/runs/new" element={<NewRun />} />
           <Route path="/runs/:id/live" element={<LiveRun />} />
-          <Route
-            path="/runs/:id"
-            element={
-              <Screen
-                title="Run detail"
-                empty="No run loaded. Open a completed run to inspect findings and evidence."
-              />
-            }
-          />
+          <Route path="/runs/:id" element={<RunDetail />} />
           <Route
             path="/compare"
             element={

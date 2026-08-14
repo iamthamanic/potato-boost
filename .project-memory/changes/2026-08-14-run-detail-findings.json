@@ -1,0 +1,53 @@
+{
+  "id": "2026-08-14-run-detail-findings",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Run-Detail mit Overview und Finding-Blöcken",
+    "en": "Run detail with overview and finding blocks"
+  },
+  "summary": {
+    "de": "Qualität und Budget-Kategorien ohne Score. Sechs Finding-Blöcke inkl. ruleId und Confidence.",
+    "en": "Quality and budget categories without a score. Six finding blocks including ruleId and confidence."
+  },
+  "plain_language": {
+    "de": "Du öffnest einen abgeschlossenen Lauf und siehst Messwerte, Budgets und Findings — keine einzige Score-Zahl.",
+    "en": "You open a completed run and see measurements, budgets, and findings — no single score number."
+  },
+  "why_it_matters": {
+    "de": "PRD §10: Finding Detail hat sechs Blöcke. Kein Performance Score.",
+    "en": "PRD §10: finding detail has six blocks. No performance score."
+  },
+  "user_impact": {
+    "de": ["/runs/:id Overview, Findings, Raw-Stub"],
+    "en": ["/runs/:id Overview, Findings, Raw stub"]
+  },
+  "developer_impact": {
+    "de": ["GET /api/v1/runs/:id/artifact liefert das Golden-Artifact"],
+    "en": ["GET /api/v1/runs/:id/artifact serves the golden artifact"]
+  },
+  "operational_impact": {
+    "de": ["Golden-Run-ID 01J9GOLDENV100000000000000 ist ohne In-Memory-Run lesbar."],
+    "en": ["Golden run id 01J9GOLDENV100000000000000 is readable without an in-memory run."]
+  },
+  "git": {
+    "base": "c892119",
+    "head": "HEAD",
+    "branch": "issue/24-run-detail-findings",
+    "pull_request": null
+  },
+  "packages": ["dashboard", "local-api"],
+  "affected_features": ["dashboard"],
+  "affected_components": [
+    "apps/dashboard/src/run-detail.tsx",
+    "packages/local-api/src/golden.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

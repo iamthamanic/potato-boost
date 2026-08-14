@@ -4,10 +4,12 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Setup-UI (Detect/Doctor) steht; als Nächstes weitere Dashboard-Tickets oder Fake-Adapter.
+- Run-Detail steht; als Nächstes Fake-Adapter (#33) oder Compare.
 
 ## Zuletzt erledigt
 
+- Run-Detail: Overview ohne Score, sechs Finding-Blöcke (issue #24).
+- Live-Run-UI: Phasen, Logs, Abort (issue #23).
 - Setup-UI: DetectionCard, Command-Override, Doctor, Confirm/Cancel (issue #22).
 - Dashboard-Shell mit PRD-Routen ohne Score-Zahl (issue #21).
 - Offline-E2E: 0 Product-Requests bei blockiertem Netz (issue #39).
@@ -32,7 +34,7 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- Dashboard-Screens außer Setup sind noch Empty-States, keine volle Analyse-UI.
+- Compare, Rules und Settings im Dashboard sind noch Empty-States, keine volle Analyse-UI.
 
 ## Risiken
 

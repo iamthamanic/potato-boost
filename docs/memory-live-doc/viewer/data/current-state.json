@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Live-Run-UI steht; als N\u00e4chstes Fake-Adapter (#33) oder weitere Dashboard-Tickets.",
-      "en": "Live run UI is in; next is the fake adapter (#33) or further dashboard tickets."
+      "de": "Run-Detail steht; als Nächstes Fake-Adapter (#33) oder Compare.",
+      "en": "Run detail is in; next is the fake adapter (#33) or Compare."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Run-Detail: Overview ohne Score, sechs Finding-Blöcke (issue #24).",
+      "en": "Run detail: overview without a score, six finding blocks (issue #24)."
+    },
     {
       "de": "Live-Run-UI: Phasen, Logs, Abort (issue #23).",
       "en": "Live run UI: phases, logs, abort (issue #23)."
@@ -66,8 +70,8 @@
   ],
   "incomplete": [
     {
-      "de": "Dashboard-Screens au\u00dfer Setup und Live-Run sind noch Empty-States.",
-      "en": "Dashboard screens besides setup and live run are still empty states."
+      "de": "Compare, Rules und Settings im Dashboard sind noch Empty-States.",
+      "en": "Compare, Rules, and Settings in the dashboard are still empty states."
     }
   ],
   "risks": [
@@ -76,5 +80,5 @@
       "en": "Living-docs claims are needs-review. PRD items Q-001\u2013Q-007 remain open."
     }
   ],
-  "updated_at": "2026-08-14T06:50:00Z"
+  "updated_at": "2026-08-14T12:20:00Z"
 }
