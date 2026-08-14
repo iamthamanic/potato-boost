@@ -390,9 +390,12 @@ describe("runCli", () => {
       expect(stdout.join("")).toMatch(/doctor: ok/);
     });
 
-    it("blocks Godot doctor when the binary is missing", async () => {
+    it("blocks Godot doctor when the binary and snapshot are missing", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-godot-nobin-"));
+      await writeFile(join(tmp, "project.godot"), "config_version=5\n");
+      await writeFile(join(tmp, "main.gd"), "extends Node\n");
       const { io, stdout } = capture();
-      const code = await runCli(["doctor", "fixtures/godot-min"], io, {
+      const code = await runCli(["doctor", tmp], io, {
         ...healthy,
         godotEnv: {
           env: {},
@@ -405,6 +408,23 @@ describe("runCli", () => {
       expect(stdout.join("")).toMatch(/godot-binary\tmissing/);
       expect(stdout.join("")).toMatch(/Checked:/);
       expect(stdout.join("")).not.toMatch(/install godot somehow/i);
+    });
+
+    it("does not require a live Godot binary when the fixture snapshot is present", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["doctor", "fixtures/godot-min"], io, {
+        ...healthy,
+        godotEnv: {
+          env: {},
+          pathDirs: [],
+          wellKnownPaths: [],
+          exists: async () => false,
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/godot-binary\tunsupported/);
+      expect(stdout.join("")).toMatch(/snapshot present/);
+      expect(stdout.join("")).toMatch(/doctor: ok/);
     });
 
     it("blocks potato run with exit 3 when the browser is missing", async () => {
@@ -465,9 +485,12 @@ describe("runCli", () => {
       expect(spawned).toBe(0);
     });
 
-    it("blocks potato run on a Godot repo without a binary", async () => {
+    it("blocks potato run on a Godot repo without a binary or snapshot", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-godot-run-nobin-"));
+      await writeFile(join(tmp, "project.godot"), "config_version=5\n");
+      await writeFile(join(tmp, "main.gd"), "extends Node\n");
       const { io, stderr } = capture();
-      const code = await runCli(["run", "fixtures/godot-min"], io, {
+      const code = await runCli(["run", tmp], io, {
         ...healthy,
         godotEnv: {
           env: {},
@@ -478,6 +501,55 @@ describe("runCli", () => {
       });
       expect(code).toBe(EXIT_INFRA);
       expect(stderr.join("")).toMatch(/godot-binary\tmissing/);
+    });
+
+    it("records Godot Performance frame_time from the 2D fixture snapshot", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-godot-run-"));
+      let spawned = 0;
+      const store = createArtifactStore(tmp);
+      const { io, stdout } = capture();
+      const code = await runCli(["run", "fixtures/godot-min"], io, {
+        ...healthy,
+        godotEnv: {
+          env: {},
+          pathDirs: [],
+          wellKnownPaths: [],
+          exists: async () => false,
+        },
+        quickScan: {
+          store,
+          startArgv: [],
+          launcher: {
+            async start() {
+              spawned += 1;
+              return { pid: 0, async kill() {} };
+            },
+          },
+          runId: "run-godot",
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(spawned).toBe(0);
+      expect(stdout.join("")).toMatch(/run: completed/);
+      const packed = await store.readCompleted("run-godot");
+      const artifact = JSON.parse(new TextDecoder().decode(packed.bytes)) as {
+        metrics: { name: string }[];
+        collectorChecks: { id: string; status: string }[];
+        capabilities: string[];
+      };
+      expect(artifact.metrics.map((metric) => metric.name)).toEqual(
+        expect.arrayContaining(["frame_time_p95"]),
+      );
+      expect(artifact.collectorChecks).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: "godot.performance",
+            status: "ok",
+          }),
+        ]),
+      );
+      expect(artifact.capabilities).toContain("godot.performance");
+      expect(artifact.capabilities).not.toContain("web.cdp");
     });
   });
 

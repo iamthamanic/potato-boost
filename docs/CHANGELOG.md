@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-15 — Godot Collect/Scenario
+
+Godot-Fixture-Runs lesen `potato.godot-performance.json` (Performance-API) und schreiben `frame_time` ins CON-001-Artifact. Fehlender Collector ist `unsupported`; Addon nur nach Confirm. Keine Core-Schema-Änderung.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Godot Detect/Doctor
 
 `project.godot` wird mit Evidence erkannt. Fehlende Godot-Binary blockt Doctor und Run (Exit 3) und listet geprüfte Pfade. Keine Core-Schema-Änderung.

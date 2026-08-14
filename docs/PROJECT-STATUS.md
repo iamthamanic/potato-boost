@@ -1,13 +1,14 @@
 # Projektstatus
 
-Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
+Stand: 2026-08-15 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Godot Detect/Doctor steht; als Nächstes Tauri Detect/Doctor (#46).
+- Godot Collect/Scenario steht; als Nächstes Tauri Detect/Doctor (#46).
 
 ## Zuletzt erledigt
 
+- Godot Collect/Scenario: Performance-Snapshot → `frame_time` im Artifact; Addon nur nach Confirm (issue #43).
 - Godot Detect/Doctor: project.godot-Evidence, fehlende Binary blockt Exit 3 (issue #42).
 - Generic/unsupported für unbekannte Repos; Start-Argv nur als Override nach Confirm (issue #34).
 - Fake-Adapter: Detect/Doctor/Launch/Collect ohne Browser (issue #33).

@@ -72,6 +72,12 @@ importers:
       '@potato-boost/adapter-sdk':
         specifier: workspace:*
         version: link:../adapter-sdk
+      '@potato-boost/collector-hub':
+        specifier: workspace:*
+        version: link:../collector-hub
+      '@potato-boost/scenario-engine':
+        specifier: workspace:*
+        version: link:../scenario-engine
 
   packages/adapter-sdk:
     dependencies:

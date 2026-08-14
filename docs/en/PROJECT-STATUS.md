@@ -1,13 +1,14 @@
 # Project status
 
-As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
+As of 2026-08-15 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Godot detect/doctor is in; next is Tauri detect/doctor (#46).
+- Godot collect/scenario is in; next is Tauri detect/doctor (#46).
 
 ## Recently completed
 
+- Godot collect/scenario: Performance snapshot → `frame_time` in the artifact; addon only after confirm (issue #43).
 - Godot detect/doctor: project.godot evidence; missing binary blocks with exit 3 (issue #42).
 - Generic/unsupported for unknown repos; start argv only as an override after confirm (issue #34).
 - Fake adapter: Detect/Doctor/Launch/Collect without a browser (issue #33).

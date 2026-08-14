@@ -2,6 +2,7 @@ import { join } from "node:path";
 import {
   createNodeGodotEnv,
   type GodotDoctorEnv,
+  godotQuickScanDeps,
 } from "@potato-boost/adapter-godot";
 import { createNodeDoctorEnv, type DoctorEnv } from "@potato-boost/adapter-web";
 import {
@@ -154,6 +155,7 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
           {
             launcher: createArgvLauncher(),
             startArgv: report.start,
+            ...(report.hasGodot ? godotQuickScanDeps(report.root) : {}),
             ...deps.quickScan,
           },
           controller.signal,

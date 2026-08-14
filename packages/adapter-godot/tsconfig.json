@@ -6,7 +6,11 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "references": [{ "path": "../adapter-sdk" }],
+  "references": [
+    { "path": "../adapter-sdk" },
+    { "path": "../collector-hub" },
+    { "path": "../scenario-engine" }
+  ],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

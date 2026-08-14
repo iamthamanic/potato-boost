@@ -2,6 +2,7 @@ import { join } from "node:path";
 import {
   createNodeGodotEnv,
   type GodotDoctorEnv,
+  godotQuickScanDeps,
 } from "@potato-boost/adapter-godot";
 import { createNodeDoctorEnv, type DoctorEnv } from "@potato-boost/adapter-web";
 import {
@@ -92,6 +93,7 @@ export async function runCi(
   const result = await runQuickScan(doctor.root, {
     launcher: createArgvLauncher(),
     startArgv: doctor.start,
+    ...(doctor.hasGodot ? godotQuickScanDeps(doctor.root) : {}),
     ...deps.quickScan,
   });
 

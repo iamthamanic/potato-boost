@@ -42,7 +42,12 @@ describe("detectGodot", () => {
     expect(result.candidate?.evidence.map((entry) => entry.path)).toEqual(
       expect.arrayContaining(["project.godot", "main.gd"]),
     );
-    expect(GODOT_MANIFEST.capabilities).toEqual(["detect", "doctor"]);
+    expect(GODOT_MANIFEST.capabilities).toEqual([
+      "detect",
+      "doctor",
+      "collector",
+      "scenario-driver",
+    ]);
   });
 
   it("returns null when no Godot markers exist", async () => {

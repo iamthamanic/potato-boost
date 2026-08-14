@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Godot Detect/Doctor steht; als Nächstes Tauri Detect/Doctor (#46).",
-      "en": "Godot detect/doctor is in; next is Tauri detect/doctor (#46)."
+      "de": "Godot Collect/Scenario steht; als Nächstes Tauri Detect/Doctor (#46).",
+      "en": "Godot collect/scenario is in; next is Tauri detect/doctor (#46)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Godot Collect/Scenario: Performance-Snapshot → frame_time im Artifact; Addon nur nach Confirm (issue #43).",
+      "en": "Godot collect/scenario: Performance snapshot → frame_time in the artifact; addon only after confirm (issue #43)."
+    },
     {
       "de": "Godot Detect/Doctor: project.godot-Evidence, fehlende Binary blockt Exit 3 (issue #42).",
       "en": "Godot detect/doctor: project.godot evidence; missing binary blocks with exit 3 (issue #42)."
