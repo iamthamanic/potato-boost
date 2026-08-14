@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Quick Scan runner
+
+`potato run` orchestriert Setup, Warm-up, drei Measure-Wiederholungen und Cleanup. Erfolg schreibt ein schema-validiertes Artifact. Warm-up-Crash ist `failed` (kein Budget-Fail); Abbruch ist `cancelled` und beendet Child-Prozesse (FR-008, EDGE-006).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Collectors CDP + OS
 
 Collector-Hub nimmt Samples mit monotonem `timestampNs` auf und weist NaN/Infinity ab. OS-Collector liefert CPU/RSS und Prozessbaum. Fehlt CDP, ist die Capability `unsupported` — kein stiller Null-Wert, kein Budget-Fail (FR-014, EDGE-010).

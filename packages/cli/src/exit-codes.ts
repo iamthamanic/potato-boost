@@ -4,3 +4,13 @@ export const EXIT_BUDGET_FAIL = 1;
 export const EXIT_USAGE = 2;
 export const EXIT_INFRA = 3;
 export const EXIT_INCONCLUSIVE = 4;
+
+export class CliExitError extends Error {
+  readonly exitCode: number;
+
+  constructor(exitCode: number, message: string) {
+    super(message);
+    this.name = "CliExitError";
+    this.exitCode = exitCode;
+  }
+}

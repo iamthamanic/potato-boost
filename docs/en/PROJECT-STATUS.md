@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Collectors are in; next are secret redaction (#38) and quick scan (#18).
+- Quick Scan is in; next are secret redaction (#38) and the dashboard.
 
 ## Recently completed
 
+- Quick Scan runner with visible phases and an artifact (issue #18).
 - CDP+OS collectors on a shared timeline (issue #16).
 - Web doctor: Node, browser, port, start command; `potato run` exit 3 (issue #14).
 - `potato init` writes config only after `--confirm` (issue #13).
@@ -24,7 +25,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Quick-scan runner, local API, and dashboard are still missing.
+- Local API and dashboard are still missing.
 
 ## Risks
 
@@ -34,4 +35,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #38 (secret redaction) or #18 (quick-scan runner).
+GitHub issues #38 (secret redaction) or dashboard epics.

@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Collector stehen; als Nächstes Secret-Redaction (#38) und Quick Scan (#18).
+- Quick Scan steht; als Nächstes Secret-Redaction (#38) und Dashboard.
 
 ## Zuletzt erledigt
 
+- Quick-Scan-Runner mit sichtbaren Phasen und Artifact (issue #18).
 - Collector CDP+OS auf gemeinsamer Zeitachse (issue #16).
 - Web-Doctor: Node, Browser, Port, Startbefehl; `potato run` Exit 3 (issue #14).
 - `potato init` schreibt Config erst nach `--confirm` (issue #13).
@@ -24,7 +25,7 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Unvollständig
 
-- Quick-Scan-Runner, Local API und Dashboard fehlen noch.
+- Local API und Dashboard fehlen noch.
 
 ## Risiken
 
@@ -34,4 +35,4 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Nächster Schritt
 
-GitHub-Issues #38 (Secret-Redaction) oder #18 (Quick-Scan-Runner).
+GitHub-Issues #38 (Secret-Redaction) oder Dashboard-Epics.

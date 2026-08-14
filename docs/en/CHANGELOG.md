@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Quick Scan runner
+
+`potato run` orchestrates setup, warm-up, three measure repetitions, and cleanup. Success writes a schema-valid artifact. Warm-up crash is `failed` (not a budget fail); abort is `cancelled` and kills child processes (FR-008, EDGE-006).
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Collectors CDP + OS
 
 Collector hub ingests samples with monotonic `timestampNs` and rejects NaN/Infinity. OS collector emits CPU/RSS and a process tree. Missing CDP is `unsupported` — not a silent null, not a budget fail (FR-014, EDGE-010).

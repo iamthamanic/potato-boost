@@ -1,0 +1,75 @@
+{
+  "id": "2026-08-14-runner-quick-scan",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Quick Scan mit sichtbaren Phasen und Artifact",
+    "en": "Quick Scan with visible phases and an artifact"
+  },
+  "summary": {
+    "de": "potato run durchläuft Setup, Warm-up, drei Measure-Läufe und Cleanup und schreibt ein schema-validiertes Artifact.",
+    "en": "potato run walks setup, warm-up, three measure reps, and cleanup, then writes a schema-valid artifact."
+  },
+  "plain_language": {
+    "de": "Ein Lauf ist kein stilles Nichts mehr: Phasen sind sichtbar, das Ergebnis liegt als Datei vor.",
+    "en": "A run is no longer silent: phases are visible and the result is a file."
+  },
+  "why_it_matters": {
+    "de": "Time-to-first-finding (FR-008, SCN-004).",
+    "en": "Time to first finding (FR-008, SCN-004)."
+  },
+  "user_impact": {
+    "de": [
+      "potato run zeigt Phasen inklusive dreier Measure-Wiederholungen.",
+      "Erfolg schreibt ein Artifact unter .potato/runs/."
+    ],
+    "en": [
+      "potato run prints phases including three measure repetitions.",
+      "Success writes an artifact under .potato/runs/."
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Runner in packages/core/src/runner; Launch per argv ohne Shell.",
+      "Driver/Collector/Launcher sind injizierbar."
+    ],
+    "en": [
+      "Runner in packages/core/src/runner; launch via argv without a shell.",
+      "Driver/collector/launcher are injectable."
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Abbruch beendet Child-Prozesse (SIGTERM, 10 s)."
+    ],
+    "en": [
+      "Abort kills child processes (SIGTERM, 10 s)."
+    ]
+  },
+  "git": {
+    "base": "8edc676",
+    "head": "HEAD",
+    "branch": "issue/18-runner-quick-scan",
+    "pull_request": null
+  },
+  "packages": ["core", "cli"],
+  "affected_features": ["web-cli"],
+  "affected_components": [
+    "packages/core/src/runner/",
+    "packages/cli/src/program.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "kind": "file",
+      "path": "packages/core/src/runner/quick-scan.ts",
+      "url": "https://github.com/iamthamanic/potato-boost/blob/main/packages/core/src/runner/quick-scan.ts"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

@@ -6,7 +6,11 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "references": [{ "path": "../adapter-web" }, { "path": "../core" }],
+  "references": [
+    { "path": "../adapter-web" },
+    { "path": "../artifact-store" },
+    { "path": "../core" }
+  ],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

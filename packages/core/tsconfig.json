@@ -6,7 +6,14 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "references": [{ "path": "../schemas" }],
+  "references": [
+    { "path": "../analysis" },
+    { "path": "../artifact-store" },
+    { "path": "../collector-hub" },
+    { "path": "../rule-engine" },
+    { "path": "../scenario-engine" },
+    { "path": "../schemas" }
+  ],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
 }

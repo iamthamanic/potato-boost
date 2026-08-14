@@ -7,3 +7,4 @@ export function workspaceReady(): true {
 
 export * from "./config/index.js";
 export * from "./discovery/index.js";
+export * from "./runner/index.js";
