@@ -4,10 +4,11 @@ Stand: 2026-08-14 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- T-009-Security-E2E steht; als Nächstes Fake-Adapter oder Dashboard-UI.
+- Offline-E2E steht; als Nächstes Fake-Adapter oder Dashboard-UI.
 
 ## Zuletzt erledigt
 
+- Offline-E2E: 0 Product-Requests bei blockiertem Netz (issue #39).
 - Security-E2E Origin/Pfad/Shell fail-closed (issue #37).
 - Local API: Loopback, Run-Token, Origin/Host, REST+SSE (issue #20).
 - Abbruch räumt Child-Prozesse auf (issue #40).

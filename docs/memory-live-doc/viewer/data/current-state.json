@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "T-009-Security-E2E steht; als Nächstes Fake-Adapter oder Dashboard-UI.",
-      "en": "T-009 security e2e is in; next is the fake adapter or dashboard UI."
+      "de": "Offline-E2E steht; als Nächstes Fake-Adapter (#33) oder Dashboard-UI.",
+      "en": "Offline e2e is in; next is the fake adapter (#33) or dashboard UI."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Offline-E2E: 0 Product-Requests bei blockiertem Netz (issue #39).",
+      "en": "Offline e2e: 0 product requests on a blocked network (issue #39)."
+    },
     {
       "de": "Security-E2E Origin/Pfad/Shell fail-closed (issue #37).",
       "en": "Security e2e origin/path/shell fail-closed (issue #37)."

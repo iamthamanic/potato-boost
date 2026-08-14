@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Offline e2e (T-013)
+
+Mit blockiertem Netz lädt die Fixture nur Loopback. Quick Scan und Local API machen keine Product-Requests. Voraussetzung: Packages bereits lokal (erster npx-Download darf offline scheitern).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Security E2E (T-009)
 
 Fremder Origin, Path-Traversal in runId und Shell-Metazeichen in argv werden fail-closed getestet. `pnpm test:security` ist Exit 0 (NFR-005, EDGE-011).

@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- T-009 security e2e is in; next is the fake adapter or dashboard UI.
+- Offline e2e is in; next is the fake adapter or dashboard UI.
 
 ## Recently completed
 
+- Offline e2e: 0 product requests on a blocked network (issue #39).
 - Security e2e origin/path/shell fail-closed (issue #37).
 - Local API: loopback, run token, Origin/Host, REST+SSE (issue #20).
 - Abort cleans up child processes (issue #40).
