@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Fake-Adapter
+
+In-Memory-Fake für Detect, Doctor, Launch und Collect. Contract-Tests prüfen Sample-Ordnung und Schema; Überlauf senkt die Qualität.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — potato ci exit codes
 
 `potato ci` gibt 0 (Pass), 1 (Budget-Fail), 2 (CLI), 3 (Infra, fehlender Browser) oder 4 (Inconclusive / non-comparable) zurück. JSON- und HTML-Reportpfade stehen auf stdout/stderr.

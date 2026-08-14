@@ -72,6 +72,10 @@ importers:
       zod:
         specifier: ^4.1.0
         version: 4.4.3
+    devDependencies:
+      '@potato-boost/schemas':
+        specifier: workspace:*
+        version: link:../schemas
 
   packages/adapter-web:
     dependencies:

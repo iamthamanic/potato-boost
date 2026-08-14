@@ -16,6 +16,9 @@
   "dependencies": {
     "zod": "^4.1.0"
   },
+  "devDependencies": {
+    "@potato-boost/schemas": "workspace:*"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts"
 }

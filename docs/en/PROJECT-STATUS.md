@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Hard compare is in; next is the fake adapter (#33) or compare UI (#34).
+- Fake adapter contract is in; next is generic process/static mode (#34).
 
 ## Recently completed
 
+- Fake adapter: Detect/Doctor/Launch/Collect without a browser (issue #33).
 - `potato ci` exit codes 0/1/2/3/4 with machine-readable report paths (issue #30).
 - Hard compare: non-comparable instead of a false regression; baseline only with confirm (issue #28).
 - Dashboard a11y: skip link, reduced motion, Axe on core journeys (issue #26).
