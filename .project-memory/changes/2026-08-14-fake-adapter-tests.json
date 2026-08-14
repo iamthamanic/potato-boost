@@ -1,0 +1,52 @@
+{
+  "id": "2026-08-14-fake-adapter-tests",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Fake-Adapter als Contract-Fixture",
+    "en": "Fake adapter as a contract fixture"
+  },
+  "summary": {
+    "de": "In-Memory-Detect/Doctor/Launch/Collect mit geordneten, schema-validen Samples. Überlauf wird gedroppt und senkt die Qualität.",
+    "en": "In-memory Detect/Doctor/Launch/Collect with ordered, schema-valid samples. Overflow is dropped and degrades quality."
+  },
+  "plain_language": {
+    "de": "CI kann den Adapter-Vertrag ohne Browser und ohne Netz prüfen.",
+    "en": "CI can check the adapter contract without a browser or network."
+  },
+  "why_it_matters": {
+    "de": "T-006, SCN-012, FR-024.",
+    "en": "T-006, SCN-012, FR-024."
+  },
+  "user_impact": {
+    "de": ["CI-Contract-Tests"],
+    "en": ["CI contract tests"]
+  },
+  "developer_impact": {
+    "de": ["packages/adapter-sdk fake.ts"],
+    "en": ["packages/adapter-sdk fake.ts"]
+  },
+  "operational_impact": {
+    "de": ["Keine Browser-Abhängigkeit für T-006."],
+    "en": ["No browser dependency for T-006."]
+  },
+  "git": {
+    "base": "8c9c2cb",
+    "head": "HEAD",
+    "branch": "issue/33-fake-adapter-tests",
+    "pull_request": null
+  },
+  "packages": ["adapter-sdk"],
+  "affected_features": ["adapter-sdk"],
+  "affected_components": [
+    "packages/adapter-sdk/src/fake.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}
