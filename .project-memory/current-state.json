@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Fake-Adapter-Contract steht; als Nächstes Generic Process/Static Mode (#34).",
-      "en": "Fake adapter contract is in; next is generic process/static mode (#34)."
+      "de": "Generic Process/Static Mode steht; als Nächstes Godot Detect/Doctor (#42).",
+      "en": "Generic process/static mode is in; next is Godot detect/doctor (#42)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Generic/unsupported für unbekannte Repos; Start-Argv nur als Override nach Confirm (issue #34).",
+      "en": "Generic/unsupported for unknown repos; start argv only as an override after confirm (issue #34)."
+    },
     {
       "de": "Fake-Adapter: Detect/Doctor/Launch/Collect ohne Browser (issue #33).",
       "en": "Fake adapter: Detect/Doctor/Launch/Collect without a browser (issue #33)."

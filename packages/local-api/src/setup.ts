@@ -11,6 +11,7 @@ import {
   createNodeConfigFs,
   createNodeDiscoveryFs,
   detectProject,
+  resolveRunStart,
   startArgv,
   webDetectors,
 } from "@potato-boost/core";
@@ -139,12 +140,12 @@ export function registerSetupRoutes(
       parsed.data.adapterId === undefined
         ? detection.candidates.map((candidate) => candidate.kind)
         : [parsed.data.adapterId];
-    const report = await runWebDoctor(
-      detection.root,
-      kinds,
-      doctorEnv,
-      parsed.data.start === undefined ? {} : { start: parsed.data.start },
-    );
+    const start =
+      parsed.data.start ??
+      (await resolveRunStart(configFs, detection.root, kinds));
+    const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
+      start,
+    });
     return reply.status(200).send(report);
   });
 

@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Generic unknown mode
+
+Unbekannte Repos sind Generic/unsupported, kein Web-False-Positive. Start-Argv ist Override nach Confirm; ohne Override startet kein Prozess.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Fake-Adapter
 
 In-Memory-Fake für Detect, Doctor, Launch und Collect. Contract-Tests prüfen Sample-Ordnung und Schema; Überlauf senkt die Qualität.

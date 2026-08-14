@@ -12,9 +12,10 @@ import {
   createNodeConfigFs,
   detectProject,
   type InitPreview,
+  parseArgvLine,
   type QuickScanDeps,
+  resolveRunStart,
   runQuickScan,
-  startArgv,
 } from "@potato-boost/core";
 import { Command } from "commander";
 import { runCi } from "./ci-cmd.js";
@@ -85,25 +86,31 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .command("init")
     .argument("[path]", "project root", ".")
     .option("--confirm", "write previewed files", false)
+    .option("--start <argv>", "whitespace-separated start argv override")
     .description("Preview, then write potato.config.yaml after confirmation")
-    .action(async (path: string, options: { confirm: boolean }) => {
-      const detection = await detectProject(
-        nodeDiscoveryFs,
-        path,
-        webDetectors,
-      );
-      const fs = createNodeConfigFs();
-      const configPath = join(detection.root, "potato.config.yaml");
-      const gitignorePath = join(detection.root, ".gitignore");
-      const preview = buildInitPreview({
-        canonicalRoot: detection.root,
-        kinds: detection.candidates.map((candidate) => candidate.kind),
-        configExists: await fs.exists(configPath),
-        gitignoreExists: await fs.exists(gitignorePath),
-      });
-      const result = await applyInit(fs, preview, options.confirm);
-      io.stdout.write(formatPreview(preview, result.wrote));
-    });
+    .action(
+      async (path: string, options: { confirm: boolean; start?: string }) => {
+        const detection = await detectProject(
+          nodeDiscoveryFs,
+          path,
+          webDetectors,
+        );
+        const fs = createNodeConfigFs();
+        const configPath = join(detection.root, "potato.config.yaml");
+        const gitignorePath = join(detection.root, ".gitignore");
+        const preview = buildInitPreview({
+          canonicalRoot: detection.root,
+          kinds: detection.candidates.map((candidate) => candidate.kind),
+          configExists: await fs.exists(configPath),
+          gitignoreExists: await fs.exists(gitignorePath),
+          ...(options.start === undefined
+            ? {}
+            : { start: parseArgvLine(options.start) }),
+        });
+        const result = await applyInit(fs, preview, options.confirm);
+        io.stdout.write(formatPreview(preview, result.wrote));
+      },
+    );
 
   program
     .command("doctor")
@@ -115,11 +122,15 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         path,
         webDetectors,
       );
-      const report = await runWebDoctor(
+      const kinds = detection.candidates.map((candidate) => candidate.kind);
+      const start = await resolveRunStart(
+        createNodeConfigFs(),
         detection.root,
-        detection.candidates.map((candidate) => candidate.kind),
-        doctorEnv,
+        kinds,
       );
+      const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
+        start,
+      });
       io.stdout.write(formatDoctorReport(report));
       if (!report.ok) {
         throw new Error("doctor blocked: required capability missing");
@@ -136,16 +147,19 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         path,
         webDetectors,
       );
-      const report = await runWebDoctor(
+      const kinds = detection.candidates.map((candidate) => candidate.kind);
+      const start = await resolveRunStart(
+        createNodeConfigFs(),
         detection.root,
-        detection.candidates.map((candidate) => candidate.kind),
-        doctorEnv,
+        kinds,
       );
+      const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
+        start,
+      });
       if (!report.ok) {
         io.stderr.write(formatDoctorReport(report));
         throw new Error("doctor blocked: required capability missing");
       }
-      const kinds = detection.candidates.map((candidate) => candidate.kind);
       const controller = new AbortController();
       const onStop = (): void => {
         controller.abort();
@@ -158,7 +172,7 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
           detection.root,
           {
             launcher: createArgvLauncher(),
-            startArgv: startArgv(kinds),
+            startArgv: start,
             ...deps.quickScan,
           },
           controller.signal,

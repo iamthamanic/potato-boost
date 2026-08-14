@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Fake adapter contract is in; next is generic process/static mode (#34).
+- Generic process/static mode is in; next is Godot detect/doctor (#42).
 
 ## Recently completed
 
+- Generic/unsupported for unknown repos; start argv only as an override after confirm (issue #34).
 - Fake adapter: Detect/Doctor/Launch/Collect without a browser (issue #33).
 - `potato ci` exit codes 0/1/2/3/4 with machine-readable report paths (issue #30).
 - Hard compare: non-comparable instead of a false regression; baseline only with confirm (issue #28).
@@ -49,4 +50,4 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issues #33/#34 (dashboard UI).
+GitHub issue #42 (Godot detect/doctor).

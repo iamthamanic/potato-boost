@@ -38,11 +38,22 @@ describe("runWebDoctor", () => {
     );
   });
 
-  it("does not execute start argv and reports unknown repos as missing start-command", async () => {
-    const report = await runWebDoctor("/tmp/empty", ["unknown"], env());
+  it("treats unknown repos as generic static mode without a required browser", async () => {
+    const report = await runWebDoctor(
+      "/tmp/empty",
+      ["unknown"],
+      env({
+        locateBrowser: async () => null,
+      }),
+    );
+    expect(report.ok).toBe(true);
+    expect(report.checks.find((check) => check.id === "browser")?.status).toBe(
+      "unsupported",
+    );
     const start = report.checks.find((check) => check.id === "start-command");
-    expect(start?.status).toBe("missing");
-    expect(start?.detail).toMatch(/does not execute/);
+    expect(start?.status).toBe("unsupported");
+    expect(start?.required).toBe(false);
+    expect(start?.detail).toMatch(/does not execute|not executed|static/);
   });
 
   it("uses an overridden start argv without executing it", async () => {

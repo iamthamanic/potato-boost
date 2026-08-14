@@ -8,18 +8,11 @@ export const webDetectors: readonly Detector[] = [
     weight: 0.4,
     detect: async (fs, root) => {
       const evidence: EvidenceEntry[] = [];
-      if (await fs.exists(`${root}/package.json`)) {
-        evidence.push({
-          kind: "manifest",
-          path: "package.json",
-          detail: "manifest present",
-        });
-      }
       if (await fs.exists(`${root}/index.html`)) {
         evidence.push({
           kind: "marker",
           path: "index.html",
-          detail: "vite entry",
+          detail: "web entry",
         });
       }
       return evidence;

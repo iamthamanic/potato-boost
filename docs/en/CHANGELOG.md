@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Generic unknown mode
+
+Unknown repos are generic/unsupported, not a web false-positive. Start argv is an override after confirm; without it no process starts.
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Fake adapter
 
 In-memory fake for Detect, Doctor, Launch, and Collect. Contract tests check sample order and schema; overflow degrades quality.

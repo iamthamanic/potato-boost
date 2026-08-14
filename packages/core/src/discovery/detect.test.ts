@@ -41,6 +41,17 @@ describe("detectProject", () => {
     expect(result.candidates[0]?.evidence).toEqual([]);
   });
 
+  it("does not treat a package.json-only repo as web", async () => {
+    const root = await tempRoot();
+    await writeFile(join(root, "package.json"), '{"name":"cli"}');
+    const fs = createNodeDiscoveryFs();
+    const result = await detectProject(fs, root, webDetectors);
+    expect(result.candidates).toHaveLength(1);
+    expect(result.candidates[0]?.kind).toBe("unknown");
+    expect(result.candidates.map((c) => c.kind)).not.toContain("web");
+    expect(result.candidates.map((c) => c.kind)).not.toContain("threejs");
+  });
+
   it("returns multiple candidates when two targets are present", async () => {
     const root = await tempRoot();
     await writeFile(

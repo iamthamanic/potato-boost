@@ -10,6 +10,7 @@ describe("potatoConfigSchema", () => {
       commands: { start: ["npx", "vite"] },
     });
     expect(parsed.commands.start).toEqual(["npx", "vite"]);
+    expect(parsed.commands.startSource).toBe("inferred");
   });
 
   it("rejects unknown keys and shell-shaped extra fields", () => {
