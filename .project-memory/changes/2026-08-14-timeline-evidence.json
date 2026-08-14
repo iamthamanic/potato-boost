@@ -1,0 +1,53 @@
+{
+  "id": "2026-08-14-timeline-evidence",
+  "date": "2026-08-14",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Timeline und Evidence Panel",
+    "en": "Timeline and evidence panel"
+  },
+  "summary": {
+    "de": "Marker und Sample-Bereich auf einer Achse; Evidence als Raw/Derived/Source.",
+    "en": "Markers and sample range on one axis; evidence as raw/derived/source."
+  },
+  "plain_language": {
+    "de": "Du siehst, wann im Szenario gemessen wurde, und welche Rohdaten, Ableitungen und Quellen dazugehören.",
+    "en": "You see when in the scenario the measurement happened, and which raw data, derived signals, and sources belong to it."
+  },
+  "why_it_matters": {
+    "de": "PRD Timeline + Evidence Panel; Tastatur statt Hover-only.",
+    "en": "PRD timeline + evidence panel; keyboard instead of hover-only."
+  },
+  "user_impact": {
+    "de": ["/runs/:id Timeline-Tab"],
+    "en": ["/runs/:id Timeline tab"]
+  },
+  "developer_impact": {
+    "de": ["GET /api/v1/runs/:id/samples"],
+    "en": ["GET /api/v1/runs/:id/samples"]
+  },
+  "operational_impact": {
+    "de": ["Golden-Samples sind synthetisch (40 × 40ms)."],
+    "en": ["Golden samples are synthetic (40 × 40ms)."]
+  },
+  "git": {
+    "base": "74c826d",
+    "head": "HEAD",
+    "branch": "issue/25-timeline-evidence",
+    "pull_request": null
+  },
+  "packages": ["dashboard", "local-api"],
+  "affected_features": ["dashboard"],
+  "affected_components": [
+    "apps/dashboard/src/run-timeline.tsx",
+    "packages/local-api/src/golden.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.8,
+  "review_status": "needs-review"
+}

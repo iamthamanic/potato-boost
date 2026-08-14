@@ -4,7 +4,7 @@ import type { DoctorEnv } from "@potato-boost/adapter-web";
 import { errorEnvelopeSchema } from "@potato-boost/schemas";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { z } from "zod";
-import { GOLDEN_RUN_ID, loadGoldenArtifact } from "./golden.js";
+import { GOLDEN_RUN_ID, goldenSamples, loadGoldenArtifact } from "./golden.js";
 import { registerSetupRoutes } from "./setup.js";
 
 const startRunBody = z.object({
@@ -309,6 +309,17 @@ export async function startLocalApi(
       return reply.status(200).send(await loadGoldenArtifact());
     }
     return sendEnvelope(reply, "NOT_FOUND", "artifact not found", 404);
+  });
+
+  app.get("/api/v1/runs/:id/samples", async (request, reply) => {
+    const parsed = z.object({ id: runIdParam }).safeParse(request.params);
+    if (!parsed.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid run id", 400);
+    }
+    if (parsed.data.id === GOLDEN_RUN_ID) {
+      return reply.status(200).send({ samples: goldenSamples() });
+    }
+    return sendEnvelope(reply, "NOT_FOUND", "samples not found", 404);
   });
 
   app.post("/api/v1/runs/:id/abort", async (request, reply) => {

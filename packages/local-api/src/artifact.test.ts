@@ -55,5 +55,17 @@ describe("run artifact GET", () => {
       headers,
     });
     expect(missing.status).toBe(404);
+
+    const samplesRes = await fetch(
+      `${api.url}/api/v1/runs/${GOLDEN_RUN_ID}/samples`,
+      { headers },
+    );
+    expect(samplesRes.status).toBe(200);
+    const samplesBody = (await samplesRes.json()) as {
+      samples: { sampleId: string; timestampNs: number; value: number }[];
+    };
+    expect(samplesBody.samples).toHaveLength(40);
+    expect(samplesBody.samples[20]?.timestampNs).toBe(20);
+    expect(samplesBody.samples[20]?.value).toBe(40);
   });
 });
