@@ -11,11 +11,9 @@ This fixture is a deterministic benchmark for potato-boost detection and quick s
 ```bash
 # From repo root
 pnpm --filter web-threejs-fixture dev
-# or
-cd fixtures/web-threejs && npx vite
 ```
 
-Open http://localhost:5173 (or the port Vite prints).
+Open http://127.0.0.1:5199 (or the port Vite prints). Playwright e2e uses this same bind (`pnpm test:e2e`).
 
 ## Toggleable problems
 
@@ -28,7 +26,7 @@ Append `?problem=<name>` to the URL:
 | `longtask` | 50 ms busy loop every frame |
 | `alloc` | Large array allocation every frame |
 
-Example: `http://localhost:5173/?problem=longtask`
+Example: `http://127.0.0.1:5199/?problem=longtask`
 
 The active problem is shown in a small overlay at the top-left.
 

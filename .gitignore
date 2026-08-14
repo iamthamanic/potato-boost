@@ -9,6 +9,8 @@ dist/
 .qa/test-results/
 coverage/
 playwright-report/
+playwright/.cache/
+blob-report/
 test-results/
 .DS_Store
 runs/

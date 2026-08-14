@@ -21,11 +21,12 @@
     "test:contract": "echo 'Add adapter contract tests after packages/adapter-sdk'",
     "test:security": "echo 'Add security tests after local-api'",
     "test:performance": "echo 'Add fixture benchmarks after fixtures/web-threejs'",
-    "test:e2e": "echo 'Add Playwright — see verify-ui skill'",
+    "test:e2e": "playwright test",
     "checks": "bash scripts/run-checks.sh"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^24.13.3",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"

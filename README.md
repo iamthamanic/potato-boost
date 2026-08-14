@@ -47,9 +47,11 @@ Runs `scripts/run-checks.sh`. Until packages exist this is a documented placehol
 ## Tests
 
 ```bash
-pnpm test              # Vitest — when packages exist
-pnpm test:e2e          # Playwright — bootstrap via @verify-ui skill
+pnpm test              # Vitest
+pnpm test:e2e          # Playwright Chromium — fixture smoke on 127.0.0.1:5199
 ```
+
+First e2e run needs a browser: `pnpm exec playwright install chromium`. CI installs Chromium with OS deps automatically.
 
 Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test:performance`.
 
@@ -59,7 +61,7 @@ Planned additional gates: `pnpm test:contract`, `pnpm test:security`, `pnpm test
 potato-boost/
 ├── apps/dashboard/       # planned React + Vite UI
 ├── packages/             # core, schemas, artifact-store, analysis, rule-engine, rules-web, evidence, cli
-├── fixtures/             # planned benchmark fixtures
+├── fixtures/             # web-threejs benchmark fixture (in workspace)
 ├── docs/
 │   ├── PRD.md
 │   ├── UI_STYLEGUIDE.md
@@ -92,6 +94,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`); fixture is a workspace package on 127.0.0.1:5199.
 - **2026-08-13** — CLI entrypoint `potato-boost` / `potato` with help and exit code 2 (`issue/11-cli-entrypoint`).
 - **2026-08-13** — Golden v1.0.0 run artifact + schema compatibility tests (`issue/9-golden-artifact-tests`).
 - **2026-08-13** — Evidence graph: provenance and ordered source candidates (`issue/8-evidence-graph`).

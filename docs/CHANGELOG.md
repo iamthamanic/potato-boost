@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Fixture Playwright e2e
+
+`pnpm test:e2e` startet `fixtures/web-threejs` auf 127.0.0.1:5199 (Chromium). Overlay, Canvas, `?problem=`-Toggles und fehlende externe Requests sind belegt. Fixture ist Workspace-Paket mit gepinnten Versionen. CI hat einen eigenen `e2e`-Job.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-13 — VisoDev import schema
 
 `docs/artifact-schema.md` und `packages/schemas/visodev-export.schema.json` beschreiben den Import. IDs sind identisch zu Run/Evidence; kein VisoDev-Code im Core (FR-026).
