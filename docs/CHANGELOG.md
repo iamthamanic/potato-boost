@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Secret redaction
+
+Authorization-Header, Request-Bodies, Passwortfelder und Query-Tokens werden nicht gespeichert. Canary-Secrets erscheinen nicht im Artifact (NFR-006, T-011).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Quick Scan runner
 
 `potato run` orchestriert Setup, Warm-up, drei Measure-Wiederholungen und Cleanup. Erfolg schreibt ein schema-validiertes Artifact. Warm-up-Crash ist `failed` (kein Budget-Fail); Abbruch ist `cancelled` und beendet Child-Prozesse (FR-008, EDGE-006).

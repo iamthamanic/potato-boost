@@ -68,6 +68,11 @@ export function buildRunArtifact(input: BuildArtifactInput): RunArtifact {
       analysisVersion: "0.0.0",
     },
     capabilities,
+    collectorChecks: input.collection.capabilities.map((capability) => ({
+      id: capability.id,
+      status: capability.status,
+      detail: capability.detail,
+    })),
     phaseEvents: input.scenario.events,
     baselineEligible:
       input.scenario.baselineEligible && input.status === "completed",

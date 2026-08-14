@@ -11,6 +11,7 @@ import {
   type PhaseEvent,
   runScenario,
   type ScenarioDriver,
+  scrubJsonText,
 } from "@potato-boost/scenario-engine";
 import type { Sample } from "@potato-boost/schemas";
 import { type ArtifactStatus, buildRunArtifact } from "./artifact.js";
@@ -146,7 +147,9 @@ export async function runQuickScan(
       collection,
       metrics,
     });
-    const packed = new TextEncoder().encode(`${JSON.stringify(artifact)}\n`);
+    const packed = new TextEncoder().encode(
+      `${scrubJsonText(JSON.stringify(artifact))}\n`,
+    );
     const record = await store.writeCompleted(runId, packed);
     return {
       status,
