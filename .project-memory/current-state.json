@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Dashboard-A11y steht; als Nächstes Compare (#28) oder Fake-Adapter (#33).",
-      "en": "Dashboard a11y is in; next is Compare (#28) or the fake adapter (#33)."
+      "de": "Hard Compare steht; als Nächstes Fake-Adapter (#33) oder CI-Exit-Codes (#34).",
+      "en": "Hard compare is in; next is the fake adapter (#33) or CI exit codes (#34)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Hard Compare: non-comparable statt falscher Regression; Baseline nur mit Confirm (issue #28).",
+      "en": "Hard compare: non-comparable instead of a false regression; baseline only with confirm (issue #28)."
+    },
     {
       "de": "Dashboard-A11y: Skip-Link, Reduced Motion, Axe auf Kernreisen (issue #26).",
       "en": "Dashboard a11y: skip link, reduced motion, Axe on core journeys (issue #26)."
@@ -78,8 +82,8 @@
   ],
   "incomplete": [
     {
-      "de": "Compare, Rules und Settings im Dashboard sind noch Empty-States.",
-      "en": "Compare, Rules, and Settings in the dashboard are still empty states."
+      "de": "Rules und Settings im Dashboard sind noch Empty-States. potato ci ist Stub.",
+      "en": "Rules and Settings in the dashboard are still empty states. potato ci is a stub."
     }
   ],
   "risks": [

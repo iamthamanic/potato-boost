@@ -8,8 +8,10 @@
   },
   "references": [
     { "path": "../adapter-web" },
+    { "path": "../analysis" },
     { "path": "../artifact-store" },
-    { "path": "../core" }
+    { "path": "../core" },
+    { "path": "../schemas" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]

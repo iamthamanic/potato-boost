@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Dashboard a11y is in; next is Compare (#28) or the fake adapter (#33).
+- Hard compare is in; next is the fake adapter (#33) or CI exit codes (#34).
 
 ## Recently completed
 
+- Hard compare: non-comparable instead of a false regression; baseline only with confirm (issue #28).
 - Dashboard a11y: skip link, reduced motion, Axe on core journeys (issue #26).
 - Timeline + evidence panel (issue #25).
 - Run detail: overview without a score, six finding blocks (issue #24).
@@ -36,7 +37,7 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Incomplete
 
-- Compare, Rules, and Settings in the dashboard are still empty states, not a full analysis UI.
+- Rules and Settings in the dashboard are still empty states. CI compare (`potato ci`) is a stub.
 
 ## Risks
 

@@ -16,14 +16,14 @@
     "de": "G-002 (reproduzierbare Vorher/Nachher-Aussage) und CI-Regression.",
     "en": "G-002 (reproducible before/after) and CI regression."
   },
-  "status": "planned",
-  "packages": ["cli", "analysis", "profiles", "rules-web"],
-  "paths": ["packages/analysis/**", "packages/cli/**"],
+  "status": "in-progress",
+  "packages": ["cli", "analysis", "dashboard", "local-api"],
+  "paths": ["packages/analysis/**", "packages/cli/**", "apps/dashboard/src/compare.tsx"],
   "user_impact": {
-    "de": ["Fix verifizieren und CI-Gates — sobald gebaut."],
-    "en": ["Verify a fix and CI gates — once built."]
+    "de": ["Hard Compare im Dashboard und CLI. CI-Gate bleibt Stub."],
+    "en": ["Hard compare in the dashboard and CLI. The CI gate is still a stub."]
   },
-  "related_changes": ["2026-08-13-bootstrap"],
+  "related_changes": ["2026-08-13-bootstrap", "2026-08-14-compare-baseline"],
   "review_status": "needs-review",
   "confidence": 0.4,
   "locked": false

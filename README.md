@@ -36,12 +36,14 @@ node packages/cli --help
 
 `pnpm --filter dashboard dev` serves the shell at [http://127.0.0.1:5173](http://127.0.0.1:5173). Pass `?token=` and `?api=` on the query string; the run token stays in memory (not localStorage). The local API binds loopback only.
 
+`potato compare --baseline a.json --candidate b.json` hard-compares two artifacts (exit 4 if non-comparable, exit 1 only on a compatible regression). `potato compare --set-baseline a.json --confirm` writes `.potato/baselines.json`; without `--confirm` it writes nothing.
+
 Keyboard path (core journeys, Tab then Enter; skip link is first):
 
 1. **Setup confirm** — `/setup/detect`: select a target radio, then Confirm (writes config). Cancel does not write.
 2. **Run start** — `/runs/new`: Start Quick Scan.
 3. **Abort** — `/runs/:id/live`: Abort run. Status becomes `cancelled`; the run is not a baseline.
-4. **Finding** — `/runs/:id?tab=findings`: finding radio opens the six-block detail.
+5. **Compare** — `/compare`: Compare, then Confirm baseline (writes only after Confirm).
 
 ## Checks (quality gate)
 
@@ -104,6 +106,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Compare: hard compare only when locks match; baseline only with confirm (`issue/28-compare-baseline`).
 - **2026-08-14** — Dashboard a11y: skip link, reduced motion, Axe on core routes (`issue/26-dashboard-a11y`).
 - **2026-08-14** — Timeline + Evidence Panel: markers, selected sample range, keyboard zoom presets (`issue/25-timeline-evidence`).
 - **2026-08-14** — Run detail: overview (quality + budget categories, no score) and six finding blocks including ruleId and confidence (`issue/24-run-detail-findings`).
