@@ -2,14 +2,14 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Fixture-E2E steht; als Nächstes Web-CLI Doctor, Collector und Quick-Scan-Runner (#14, #16, #18).",
-      "en": "Fixture e2e is in; next are web CLI doctor, collector, and quick-scan runner (#14, #16, #18)."
+      "de": "Fixture-E2E und potato init --confirm stehen; als Nächstes Doctor (#14).",
+      "en": "Fixture e2e and potato init --confirm are in; next is doctor (#14)."
     }
   ],
   "recently_completed": [
     {
-      "de": "Playwright-E2E-Smoke für fixtures/web-threejs (pnpm test:e2e).",
-      "en": "Playwright e2e smoke for fixtures/web-threejs (pnpm test:e2e)."
+      "de": "potato init schreibt Config erst nach --confirm (issue #13).",
+      "en": "potato init writes config only after --confirm (issue #13)."
     },
     {
       "de": "VisoDev-Importschema ohne VisoDev-Abhängigkeit (issue #35).",

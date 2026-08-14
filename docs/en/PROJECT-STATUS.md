@@ -4,10 +4,11 @@ As of 2026-08-14 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Fixture e2e is in; next are web CLI doctor, collector, and quick-scan runner (#14, #16, #18).
+- Fixture e2e and `potato init --confirm` are in; next is doctor (#14).
 
 ## Recently completed
 
+- `potato init` writes config only after `--confirm` (issue #13).
 - Playwright e2e smoke for `fixtures/web-threejs` (`pnpm test:e2e`).
 - VisoDev import schema without VisoDev dependency (issue #35).
 - Adapter SDK with capability manifest and contract tests (issue #32).

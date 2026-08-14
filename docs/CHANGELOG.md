@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Init writes config after confirm
+
+`potato init` zeigt geplante Pfade und YAML; schreibt `potato.config.yaml`, `.gitignore` (`.potato/`) und ein lokales Audit-Log nur mit `--confirm`. Ohne Confirm bleibt das Repo unberührt (FR-007, SCN-011).
+
+Review-Status: **needs-review**.
+
 ## 2026-08-14 — Fixture Playwright e2e
 
 `pnpm test:e2e` startet `fixtures/web-threejs` auf 127.0.0.1:5199 (Chromium). Overlay, Canvas, `?problem=`-Toggles und fehlende externe Requests sind belegt. Fixture ist Workspace-Paket mit gepinnten Versionen. CI hat einen eigenen `e2e`-Job.

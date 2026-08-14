@@ -1,4 +1,4 @@
-import { mkdtemp } from "node:fs/promises";
+import { mkdtemp, readdir, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -59,7 +59,7 @@ describe("runCli", () => {
 
   it("runs a stub command without touching the network", async () => {
     const { io, stdout } = capture();
-    const code = await runCli(["init"], io);
+    const code = await runCli(["doctor"], io);
     expect(code).toBe(EXIT_OK);
     expect(stdout.join("")).toMatch(/not implemented yet/);
   });
@@ -85,6 +85,33 @@ describe("runCli", () => {
       const parsed = JSON.parse(stdout.join(""));
       expect(parsed.candidates).toHaveLength(1);
       expect(parsed.candidates[0].kind).toBe("unknown");
+    });
+  });
+
+  describe("init", () => {
+    it("previews paths and writes nothing without --confirm", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-init-cli-"));
+      const { io, stdout } = capture();
+      const code = await runCli(["init", tmp], io);
+      expect(code).toBe(EXIT_OK);
+      const out = stdout.join("");
+      expect(out).toMatch(/potato\.config\.yaml/);
+      expect(out).toMatch(/No files written/);
+      expect(await readdir(tmp)).toEqual([]);
+    });
+
+    it("writes schema fields after --confirm", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-init-ok-"));
+      const { io, stdout } = capture();
+      const code = await runCli(["init", tmp, "--confirm"], io);
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/Wrote files/);
+      const yaml = await readFile(join(tmp, "potato.config.yaml"), "utf8");
+      expect(yaml).toMatch(/adapterId:/);
+      expect(yaml).toMatch(/root: "\."/);
+      expect(yaml).toMatch(/commands:/);
+      const gitignore = await readFile(join(tmp, ".gitignore"), "utf8");
+      expect(gitignore).toMatch(/\.potato\//);
     });
   });
 });
