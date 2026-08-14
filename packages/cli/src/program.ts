@@ -153,11 +153,27 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         throw new Error("doctor blocked: required capability missing");
       }
       const kinds = detection.candidates.map((candidate) => candidate.kind);
-      const result = await runQuickScan(detection.root, {
-        launcher: createArgvLauncher(),
-        startArgv: startArgv(kinds),
-        ...deps.quickScan,
-      });
+      const controller = new AbortController();
+      const onStop = (): void => {
+        controller.abort();
+      };
+      process.once("SIGINT", onStop);
+      process.once("SIGTERM", onStop);
+      let result: Awaited<ReturnType<typeof runQuickScan>>;
+      try {
+        result = await runQuickScan(
+          detection.root,
+          {
+            launcher: createArgvLauncher(),
+            startArgv: startArgv(kinds),
+            ...deps.quickScan,
+          },
+          controller.signal,
+        );
+      } finally {
+        process.off("SIGINT", onStop);
+        process.off("SIGTERM", onStop);
+      }
       for (const event of result.phases) {
         io.stdout.write(`${event.phase}\t${event.detail ?? ""}\n`);
       }

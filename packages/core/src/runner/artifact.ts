@@ -39,6 +39,9 @@ export function buildRunArtifact(input: BuildArtifactInput): RunArtifact {
       status: input.status,
       startedAt: input.startedAt,
       git: { commit: null, dirty: true },
+      ...(input.scenario.error !== undefined
+        ? { error: input.scenario.error }
+        : {}),
     },
     lockedInputs: {
       target: { id: "web-threejs", version: "1.0.0" },

@@ -1,9 +1,11 @@
 export { type ArtifactStatus, buildRunArtifact } from "./artifact.js";
 export {
+  CLEANUP_MS,
   createArgvLauncher,
   createNoopLauncher,
   type LaunchedProcess,
   type ProcessLauncher,
+  processAlive,
 } from "./launch.js";
 export {
   type QuickScanDeps,

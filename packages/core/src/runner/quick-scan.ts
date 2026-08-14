@@ -22,6 +22,8 @@ import {
 } from "./launch.js";
 import { QUICK_SCAN } from "./scenario.js";
 
+const RUN_ABORTED = "aborted";
+
 export type QuickScanDeps = {
   driver?: ScenarioDriver;
   collectors?: readonly Collector[];
@@ -124,8 +126,18 @@ export async function runQuickScan(
     collection: CollectionReport,
     budgetFail: boolean,
   ): Promise<QuickScanResult> => {
+    if (signal?.aborted === true) {
+      status = "cancelled";
+      scenario = {
+        ...scenario,
+        baselineEligible: false,
+        error: RUN_ABORTED,
+      };
+      budgetFail = false;
+    }
     if (launched !== undefined) {
       await launched.kill();
+      launched = undefined;
     }
     let metrics: { name: string; value: number; unit: string }[] = [];
     if (collection.samples.some((sample) => sample.metric === "frame_time")) {
@@ -150,112 +162,151 @@ export async function runQuickScan(
     const packed = new TextEncoder().encode(
       `${scrubJsonText(JSON.stringify(artifact))}\n`,
     );
-    const record = await store.writeCompleted(runId, packed);
-    return {
-      status,
-      runId,
-      phases: scenario.events,
-      artifactPath: record.path,
-      budgetFail,
-      baselineEligible: status === "completed" && scenario.baselineEligible,
-      ...(scenario.error !== undefined ? { error: scenario.error } : {}),
-    };
+    try {
+      const record = await store.writeCompleted(runId, packed);
+      return {
+        status,
+        runId,
+        phases: scenario.events,
+        artifactPath: record.path,
+        budgetFail,
+        baselineEligible: status === "completed" && scenario.baselineEligible,
+        ...(scenario.error !== undefined ? { error: scenario.error } : {}),
+      };
+    } catch (cause) {
+      const writeError =
+        cause instanceof Error ? cause.message : "artifact write failed";
+      const failedStatus: ArtifactStatus =
+        status === "cancelled" ? "cancelled" : "failed";
+      return {
+        status: failedStatus,
+        runId,
+        phases: scenario.events,
+        artifactPath: null,
+        budgetFail: false,
+        baselineEligible: false,
+        error: writeError,
+      };
+    }
   };
 
-  if (signal?.aborted === true) {
-    return finish(
-      "cancelled",
-      {
-        scenarioId: QUICK_SCAN.id,
-        scenarioVersion: QUICK_SCAN.version,
-        events: [],
-        baselineEligible: false,
-        error: "aborted",
-      },
-      smokeCollection([]),
-      false,
-    );
-  }
-
-  const scenario = await runScenario(driver, QUICK_SCAN);
-  const measureCount = scenario.events.filter(
-    (event) => event.phase === "measure",
-  ).length;
-
-  let collection: CollectionReport;
-  if (deps.collect !== undefined) {
-    collection = await deps.collect();
-  } else if (deps.collectors !== undefined) {
-    collection = await collectRun(deps.collectors);
-  } else {
-    const smokeSamples =
-      "samples" in driver
-        ? (driver as ScenarioDriver & { samples: Sample[] }).samples
-        : [];
-    collection = smokeCollection(smokeSamples);
-  }
-
-  if (scenario.error !== undefined) {
-    return finish(
-      "failed",
-      { ...scenario, baselineEligible: false },
-      collection,
-      false,
-    );
-  }
-
-  if (measureCount < 3) {
-    return finish(
-      "failed",
-      {
-        ...scenario,
-        baselineEligible: false,
-        error: "quick scan did not complete three measure repetitions",
-      },
-      collection,
-      false,
-    );
-  }
-
-  if (!collection.budgetEligible) {
-    return finish("inconclusive", scenario, collection, false);
-  }
-
-  const capabilities = collection.capabilities
-    .filter((capability) => capability.status === "ok")
-    .map((capability) => (capability.id === "cdp" ? "web.cdp" : capability.id));
-  let metrics: { name: string; value: number; unit: string }[] = [];
-  if (collection.samples.some((sample) => sample.metric === "frame_time")) {
-    const analysis = analyzeSamples(collection.samples, {
-      metric: "frame_time",
-      hitchThreshold: 33.33,
-      minSampleCount: 1,
-    });
-    metrics = [
-      { name: "frame_time_p95", value: analysis.p95, unit: "ms" },
-      { name: "frame_time_p99", value: analysis.p99, unit: "ms" },
-    ];
-  }
-  const rules = evaluate(
-    {
-      id: "rules-web",
-      version: "1.0.0",
-      rules: [
+  try {
+    if (signal?.aborted === true) {
+      return finish(
+        "cancelled",
         {
-          id: "web.frame_time.p95",
-          version: "1.0.0",
-          severity: "warning",
-          preconditions: {
-            metric: "frame_time_p95",
-            capability: "web.cdp",
-            requireEvidence: true,
-          },
-          budget: { metric: "frame_time_p95", op: "gt", value: 33.33 },
+          scenarioId: QUICK_SCAN.id,
+          scenarioVersion: QUICK_SCAN.version,
+          events: [],
+          baselineEligible: false,
+          error: RUN_ABORTED,
         },
-      ],
-    },
-    { metrics, evidenceIds: [], capabilities },
-  );
-  const budgetFail = rules.evaluations.some((item) => item.verdict === "fail");
-  return finish("completed", scenario, collection, budgetFail);
+        smokeCollection([]),
+        false,
+      );
+    }
+
+    const scenario = await runScenario(driver, QUICK_SCAN, signal);
+    if (scenario.error === RUN_ABORTED) {
+      return finish(
+        "cancelled",
+        {
+          ...scenario,
+          baselineEligible: false,
+          error: RUN_ABORTED,
+        },
+        smokeCollection([]),
+        false,
+      );
+    }
+
+    const measureCount = scenario.events.filter(
+      (event) => event.phase === "measure",
+    ).length;
+
+    let collection: CollectionReport;
+    if (deps.collect !== undefined) {
+      collection = await deps.collect();
+    } else if (deps.collectors !== undefined) {
+      collection = await collectRun(deps.collectors);
+    } else {
+      const smokeSamples =
+        "samples" in driver
+          ? (driver as ScenarioDriver & { samples: Sample[] }).samples
+          : [];
+      collection = smokeCollection(smokeSamples);
+    }
+
+    if (scenario.error !== undefined) {
+      return finish(
+        "failed",
+        { ...scenario, baselineEligible: false },
+        collection,
+        false,
+      );
+    }
+
+    if (measureCount < 3) {
+      return finish(
+        "failed",
+        {
+          ...scenario,
+          baselineEligible: false,
+          error: "quick scan did not complete three measure repetitions",
+        },
+        collection,
+        false,
+      );
+    }
+
+    if (!collection.budgetEligible) {
+      return finish("inconclusive", scenario, collection, false);
+    }
+
+    const capabilities = collection.capabilities
+      .filter((capability) => capability.status === "ok")
+      .map((capability) =>
+        capability.id === "cdp" ? "web.cdp" : capability.id,
+      );
+    let metrics: { name: string; value: number; unit: string }[] = [];
+    if (collection.samples.some((sample) => sample.metric === "frame_time")) {
+      const analysis = analyzeSamples(collection.samples, {
+        metric: "frame_time",
+        hitchThreshold: 33.33,
+        minSampleCount: 1,
+      });
+      metrics = [
+        { name: "frame_time_p95", value: analysis.p95, unit: "ms" },
+        { name: "frame_time_p99", value: analysis.p99, unit: "ms" },
+      ];
+    }
+    const rules = evaluate(
+      {
+        id: "rules-web",
+        version: "1.0.0",
+        rules: [
+          {
+            id: "web.frame_time.p95",
+            version: "1.0.0",
+            severity: "warning",
+            preconditions: {
+              metric: "frame_time_p95",
+              capability: "web.cdp",
+              requireEvidence: true,
+            },
+            budget: { metric: "frame_time_p95", op: "gt", value: 33.33 },
+          },
+        ],
+      },
+      { metrics, evidenceIds: [], capabilities },
+    );
+    const budgetFail = rules.evaluations.some(
+      (item) => item.verdict === "fail",
+    );
+    return finish("completed", scenario, collection, budgetFail);
+  } finally {
+    if (launched !== undefined) {
+      await launched.kill();
+    }
+  }
 }

@@ -94,6 +94,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-14** — Abort/crash cleanup: process groups die within 10 s; cancelled/failed are not baselines (`issue/40-run-cancel-cleanup`).
 - **2026-08-14** — Secret redaction: Authorization, bodies, and canary tokens never land in artifacts (`issue/38-secret-redaction`).
 - **2026-08-14** — `potato run` Quick Scan walks setup/warmup/measure×3/cleanup and writes a schema-valid artifact (`issue/18-runner-quick-scan`).
 - **2026-08-14** — CDP and OS collectors share one timeline; missing CDP is `unsupported` (`issue/16-collectors-web-os`).

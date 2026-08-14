@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Secret-Redaction steht; als Nächstes Noise-Gate (#40) und Dashboard (#20).",
-      "en": "Secret redaction is in; next are the noise gate (#40) and dashboard (#20)."
+      "de": "Abort-Cleanup steht; als Nächstes Dashboard (#20).",
+      "en": "Abort cleanup is in; next is the dashboard (#20)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Abbruch räumt Child-Prozesse auf (issue #40).",
+      "en": "Abort cleans up child processes (issue #40)."
+    },
     {
       "de": "Secret-Redaktion in Recorder und Artifacts (issue #38).",
       "en": "Secret redaction in recorder and artifacts (issue #38)."

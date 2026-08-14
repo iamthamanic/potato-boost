@@ -60,6 +60,27 @@ describe("runScenario", () => {
     expect(result.error).toMatch(/timeout/);
   });
 
+  it("stops on abort during measure and is not baseline eligible", async () => {
+    const controller = new AbortController();
+    let measures = 0;
+    const driver = {
+      ...createFakeDriver(),
+      execute: async (step: { action: string }) => {
+        if (step.action === "sample-frame-time") {
+          measures += 1;
+          if (measures === 1) {
+            controller.abort();
+            await new Promise((resolve) => setTimeout(resolve, 20));
+          }
+        }
+      },
+    };
+    const result = await runScenario(driver, quickScan, controller.signal);
+    expect(result.error).toBe("aborted");
+    expect(result.baselineEligible).toBe(false);
+    expect(measures).toBeLessThan(3);
+  });
+
   it("secretRef stays a name, not a value", () => {
     const step = { action: "login", secretRef: "GITHUB_TOKEN" };
     expect(step.secretRef).toBe("GITHUB_TOKEN");

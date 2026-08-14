@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-14 — Abort cleanup
+
+After stop, no runner-started child processes remain within 10 s. Cancelled/failed runs are not baselines. A warm-up crash stays `failed` (not a budget fail). SIGINT aborts `potato run` (NFR-007, T-005).
+
+Review status: **needs-review**.
+
 ## 2026-08-14 — Secret redaction
 
 Authorization headers, request bodies, password fields, and query tokens are not stored. Canary secrets do not appear in the artifact (NFR-006, T-011).

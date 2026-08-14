@@ -1,11 +1,15 @@
-import { mkdtemp } from "node:fs/promises";
+import { mkdtemp, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createArtifactStore } from "@potato-boost/artifact-store";
 import type { ScenarioDriver } from "@potato-boost/scenario-engine";
 import { parseRunArtifact } from "@potato-boost/schemas";
 import { describe, expect, it } from "vitest";
-import type { ProcessLauncher } from "./launch.js";
+import {
+  createArgvLauncher,
+  type ProcessLauncher,
+  processAlive,
+} from "./launch.js";
 import { runQuickScan } from "./quick-scan.js";
 
 describe("runQuickScan", () => {
@@ -63,6 +67,15 @@ describe("runQuickScan", () => {
     expect(result.budgetFail).toBe(false);
     expect(result.error).toMatch(/warmup crashed/);
     expect(result.baselineEligible).toBe(false);
+    const stored = await store.readCompleted("run-warmup");
+    const artifact = parseRunArtifact(
+      JSON.parse(new TextDecoder().decode(stored.bytes)),
+    );
+    expect(artifact.run.status).toBe("failed");
+    expect(artifact.baselineEligible).toBe(false);
+    expect("error" in artifact.run ? artifact.run.error : undefined).toMatch(
+      /warmup crashed/,
+    );
   });
 
   it("cancels and kills launched children on abort", async () => {
@@ -95,6 +108,93 @@ describe("runQuickScan", () => {
     expect(result.baselineEligible).toBe(false);
     expect(killed).toBe(true);
   });
+
+  it("abort during measure kills the process group within 10s", async () => {
+    const root = await mkdtemp(join(tmpdir(), "potato-scan-group-"));
+    await writeFile(
+      join(root, "hang.mjs"),
+      `import { spawn } from "node:child_process";
+import { writeFileSync } from "node:fs";
+const child = spawn(process.execPath, ["-e", "setInterval(() => {}, 1000)"], {
+  stdio: "ignore",
+});
+writeFileSync("grandchild.pid", \`\${process.pid}\\n\${child.pid}\\n\`);
+setInterval(() => {}, 1000);
+`,
+    );
+    const inner = createArgvLauncher();
+    let pid = 0;
+    const launcher: ProcessLauncher = {
+      async start(argv, cwd) {
+        const launched = await inner.start(argv, cwd);
+        pid = launched.pid;
+        return launched;
+      },
+    };
+    const driver: ScenarioDriver = {
+      now: () => "2026-08-14T00:00:00.000Z",
+      execute: async (step) => {
+        if (step.action === "measure") {
+          await new Promise((resolve) => setTimeout(resolve, 8_000));
+        }
+      },
+    };
+    const controller = new AbortController();
+    const running = runQuickScan(
+      root,
+      {
+        store: createArtifactStore(root),
+        launcher,
+        startArgv: [process.execPath, join(root, "hang.mjs")],
+        driver,
+        runId: "run-measure-abort",
+      },
+      controller.signal,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    controller.abort();
+    const result = await running;
+    expect(result.status).toBe("cancelled");
+    expect(result.baselineEligible).toBe(false);
+    expect(processAlive(pid)).toBe(false);
+    const pids = (await readFile(join(root, "grandchild.pid"), "utf8"))
+      .trim()
+      .split("\n")
+      .map((line) => Number(line));
+    for (const childPid of pids) {
+      expect(processAlive(childPid)).toBe(false);
+    }
+  }, 15_000);
+
+  it("kills children when artifact write crashes and is not a budget fail", async () => {
+    const root = await mkdtemp(join(tmpdir(), "potato-scan-write-"));
+    const inner = createArgvLauncher();
+    let pid = 0;
+    const launcher: ProcessLauncher = {
+      async start(argv, cwd) {
+        const launched = await inner.start(argv, cwd);
+        pid = launched.pid;
+        return launched;
+      },
+    };
+    const store = createArtifactStore(root);
+    const result = await runQuickScan(root, {
+      store: {
+        ...store,
+        writeCompleted: async () => {
+          throw new Error("write aborted before atomic rename");
+        },
+      },
+      launcher,
+      startArgv: [process.execPath, "-e", "setInterval(() => {}, 1000)"],
+      runId: "run-write-crash",
+    });
+    expect(result.status).toBe("failed");
+    expect(result.budgetFail).toBe(false);
+    expect(result.baselineEligible).toBe(false);
+    expect(result.artifactPath).toBeNull();
+    expect(processAlive(pid)).toBe(false);
+  }, 15_000);
 
   it("does not persist a canary Bearer token in the written artifact", async () => {
     const root = await mkdtemp(join(tmpdir(), "potato-scan-canary-"));
