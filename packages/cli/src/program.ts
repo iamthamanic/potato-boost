@@ -1,6 +1,9 @@
 import { join } from "node:path";
 import {
+  applyGodotAddon,
+  createNodeAddonFs,
   createNodeGodotEnv,
+  formatGodotAddonPreview,
   type GodotDoctorEnv,
   godotQuickScanDeps,
 } from "@potato-boost/adapter-godot";
@@ -97,10 +100,14 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .command("init")
     .argument("[path]", "project root", ".")
     .option("--confirm", "write previewed files", false)
+    .option("--godot", "preview the optional Godot addon", false)
     .option("--start <argv>", "whitespace-separated start argv override")
     .description("Preview, then write potato.config.yaml after confirmation")
     .action(
-      async (path: string, options: { confirm: boolean; start?: string }) => {
+      async (
+        path: string,
+        options: { confirm: boolean; godot: boolean; start?: string },
+      ) => {
         const detection = await detectCombined(path);
         const fs = createNodeConfigFs();
         const configPath = join(detection.root, "potato.config.yaml");
@@ -117,6 +124,14 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         });
         const result = await applyInit(fs, preview, options.confirm);
         io.stdout.write(formatPreview(preview, result.wrote));
+        if (options.godot) {
+          const addon = await applyGodotAddon(
+            detection.root,
+            options.confirm,
+            createNodeAddonFs(),
+          );
+          io.stdout.write(formatGodotAddonPreview(addon));
+        }
       },
     );
 

@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-15 — Godot addon confirm
+
+`potato init --godot` lists `addons/potato_boost`. Writes only with `--confirm`. An existing addon is left unchanged. No core change.
+
+Review status: **needs-review**.
+
 ## 2026-08-15 — Godot collect/scenario
 
 Godot fixture runs read `potato.godot-performance.json` (Performance API) and write `frame_time` into the CON-001 artifact. A missing collector is `unsupported`; the addon is confirm-only. No core schema change.

@@ -1,4 +1,4 @@
-import { mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, readFile, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createArtifactStore } from "@potato-boost/artifact-store";
@@ -327,6 +327,47 @@ describe("runCli", () => {
       expect(yaml).toMatch(/startSource: "inferred"/);
       const gitignore = await readFile(join(tmp, ".gitignore"), "utf8");
       expect(gitignore).toMatch(/\.potato\//);
+      expect(await readdir(tmp)).not.toContain("addons");
+    });
+
+    it("previews the Godot addon and writes nothing without --confirm", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-init-godot-"));
+      const { io, stdout } = capture();
+      const code = await runCli(["init", tmp, "--godot"], io);
+      expect(code).toBe(EXIT_OK);
+      const out = stdout.join("");
+      expect(out).toMatch(/addons\/potato_boost\/performance_dump\.gd/);
+      expect(out).toMatch(/Cleanup: delete addons\/potato_boost/);
+      expect(out).toMatch(/No addon written/);
+      expect(await readdir(tmp)).toEqual([]);
+    });
+
+    it("writes the Godot addon only after --godot --confirm", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-init-godot-ok-"));
+      const { io, stdout } = capture();
+      const code = await runCli(["init", tmp, "--godot", "--confirm"], io);
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/Wrote addon/);
+      const script = await readFile(
+        join(tmp, "addons/potato_boost/performance_dump.gd"),
+        "utf8",
+      );
+      expect(script).toMatch(/Performance.get_monitor/);
+    });
+
+    it("does not overwrite an existing Godot addon", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-init-godot-keep-"));
+      await writeFile(join(tmp, "project.godot"), "config_version=5\n");
+      const addonDir = join(tmp, "addons/potato_boost");
+      await mkdir(addonDir, { recursive: true });
+      await writeFile(join(addonDir, "performance_dump.gd"), "old\n");
+      const { io, stdout } = capture();
+      const code = await runCli(["init", tmp, "--godot", "--confirm"], io);
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/Existing addon left unchanged/);
+      expect(
+        await readFile(join(addonDir, "performance_dump.gd"), "utf8"),
+      ).toBe("old\n");
     });
 
     it("stores --start as an override only after --confirm", async () => {
