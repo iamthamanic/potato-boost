@@ -4,10 +4,11 @@ As of 2026-08-15 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Godot addon confirm is in; next is Tauri detect/doctor (#46).
+- Tauri detect spike is in; next is #47.
 
 ## Recently completed
 
+- Tauri detect spike: src-tauri evidence; frontend vs native labels (issue #46).
 - Godot addon confirm: `init --godot` preview; write only after `--confirm` (issue #44).
 - Godot collect/scenario: Performance snapshot → `frame_time` in the artifact; addon only after confirm (issue #43).
 - Godot detect/doctor: project.godot evidence; missing binary blocks with exit 3 (issue #42).
@@ -53,4 +54,4 @@ As of 2026-08-15 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Next step
 
-GitHub issue #46 (Tauri detect/doctor).
+GitHub issue #47.

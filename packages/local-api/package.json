@@ -16,6 +16,7 @@
   "dependencies": {
     "@potato-boost/analysis": "workspace:*",
     "@potato-boost/adapter-godot": "workspace:*",
+    "@potato-boost/adapter-tauri": "workspace:*",
     "@potato-boost/adapter-web": "workspace:*",
     "@potato-boost/core": "workspace:*",
     "@potato-boost/schemas": "workspace:*",

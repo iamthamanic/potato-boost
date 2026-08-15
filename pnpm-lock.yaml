@@ -89,6 +89,12 @@ importers:
         specifier: workspace:*
         version: link:../schemas
 
+  packages/adapter-tauri:
+    dependencies:
+      '@potato-boost/adapter-sdk':
+        specifier: workspace:*
+        version: link:../adapter-sdk
+
   packages/adapter-web:
     dependencies:
       '@playwright/test':
@@ -127,6 +133,9 @@ importers:
       '@potato-boost/adapter-godot':
         specifier: workspace:*
         version: link:../adapter-godot
+      '@potato-boost/adapter-tauri':
+        specifier: workspace:*
+        version: link:../adapter-tauri
       '@potato-boost/adapter-web':
         specifier: workspace:*
         version: link:../adapter-web
@@ -181,6 +190,9 @@ importers:
       '@potato-boost/adapter-godot':
         specifier: workspace:*
         version: link:../adapter-godot
+      '@potato-boost/adapter-tauri':
+        specifier: workspace:*
+        version: link:../adapter-tauri
       '@potato-boost/adapter-web':
         specifier: workspace:*
         version: link:../adapter-web

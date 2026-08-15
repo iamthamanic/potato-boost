@@ -5,6 +5,10 @@ import {
   runGodotDoctor,
 } from "@potato-boost/adapter-godot";
 import {
+  formatTauriDoctorReport,
+  runTauriDoctor,
+} from "@potato-boost/adapter-tauri";
+import {
   type DoctorEnv,
   formatDoctorReport,
   runWebDoctor,
@@ -41,6 +45,12 @@ export async function runCombinedDoctor(
     const godot = await runGodotDoctor(combined.root, godotEnv);
     chunks.push(formatGodotDoctorReport(godot).trimEnd());
     ok = ok && godot.ok;
+  }
+  if (combined.tauri.candidate !== null) {
+    const hasFrontend = kinds.some((kind) => kind !== "unknown");
+    const tauri = await runTauriDoctor(combined.root, hasFrontend);
+    chunks.push(formatTauriDoctorReport(tauri).trimEnd());
+    ok = ok && tauri.ok;
   }
   const web = await runWebDoctor(combined.root, kinds, doctorEnv, { start });
   chunks.push(formatDoctorReport(web).trimEnd());

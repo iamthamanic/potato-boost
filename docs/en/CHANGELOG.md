@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-15 — Tauri detect spike
+
+`src-tauri/tauri.conf.*` is detected with evidence. Frontend and native modes are separate labels. The native collector is `unsupported`, not a silent 0.
+
+Review status: **needs-review**.
+
 ## 2026-08-15 — Godot addon confirm
 
 `potato init --godot` lists `addons/potato_boost`. Writes only with `--confirm`. An existing addon is left unchanged. No core change.

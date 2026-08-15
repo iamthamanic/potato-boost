@@ -118,6 +118,7 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
           configExists: await fs.exists(configPath),
           gitignoreExists: await fs.exists(gitignorePath),
           ...(detection.godot.candidate === null ? {} : { adapterId: "godot" }),
+          ...(detection.tauri.candidate === null ? {} : { adapterId: "tauri" }),
           ...(options.start === undefined
             ? {}
             : { start: parseArgvLine(options.start) }),

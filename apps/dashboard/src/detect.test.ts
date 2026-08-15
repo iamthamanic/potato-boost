@@ -40,6 +40,7 @@ describe("detection confidence", () => {
     ).toBe("unsupported");
     expect(kindLabel("unknown")).toBe("Generic (unsupported)");
     expect(kindLabel("godot")).toBe("Godot");
+    expect(kindLabel("tauri")).toBe("Tauri");
     expect(kindLabel("vite")).toBe("vite");
     expect(
       pickInitialTarget(
