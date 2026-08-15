@@ -1,3 +1,4 @@
+import { hasValidGodotSnapshot } from "./collector.js";
 import type { GodotDoctorEnv } from "./env.js";
 import { EXPECTED_GODOT, locateGodotBinary } from "./env.js";
 
@@ -29,15 +30,24 @@ export async function runGodotDoctor(
   env: GodotDoctorEnv,
 ): Promise<GodotDoctorReport> {
   const located = await locateGodotBinary(env);
+  const snapshot = await hasValidGodotSnapshot(root);
   const binary: GodotDoctorCheck =
     located.path === null
-      ? {
-          id: "godot-binary",
-          status: "missing",
-          required: true,
-          path: "",
-          detail: `expected ${EXPECTED_GODOT}; not found. Checked: ${formatChecked(located.checked)}`,
-        }
+      ? snapshot
+        ? {
+            id: "godot-binary",
+            status: "unsupported",
+            required: false,
+            path: "",
+            detail: "fixture snapshot present; live binary not required",
+          }
+        : {
+            id: "godot-binary",
+            status: "missing",
+            required: true,
+            path: "",
+            detail: `expected ${EXPECTED_GODOT}; not found. Checked: ${formatChecked(located.checked)}`,
+          }
       : {
           id: "godot-binary",
           status: "ok",

@@ -9,7 +9,7 @@ import type {
 export const GODOT_MANIFEST = adapterManifestSchema.parse({
   id: "godot",
   version: "0.0.1",
-  capabilities: ["detect", "doctor"],
+  capabilities: ["detect", "doctor", "collector", "scenario-driver"],
   detectors: ["project.godot", ".gd", ".csproj"],
   schemaVersion: "1.0.0",
 });

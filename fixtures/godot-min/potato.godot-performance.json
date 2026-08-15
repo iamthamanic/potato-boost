@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "1.0.0",
+  "source": "godot.performance",
+  "samples": [
+    {
+      "timestampNs": 1000000,
+      "timeProcessS": 0.016,
+      "fps": 60,
+      "drawCalls": 8,
+      "memoryStatic": 2048000
+    },
+    {
+      "timestampNs": 1016666,
+      "timeProcessS": 0.017,
+      "fps": 58,
+      "drawCalls": 8,
+      "memoryStatic": 2048000
+    },
+    {
+      "timestampNs": 1033333,
+      "timeProcessS": 0.0165,
+      "fps": 59,
+      "drawCalls": 9,
+      "memoryStatic": 2050000
+    }
+  ]
+}

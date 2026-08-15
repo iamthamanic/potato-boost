@@ -1,3 +1,6 @@
+import { mkdtemp, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { formatGodotDoctorReport, runGodotDoctor } from "./doctor.js";
 import type { GodotDoctorEnv } from "./env.js";
@@ -22,6 +25,24 @@ describe("runGodotDoctor", () => {
     expect(binary?.detail).toMatch(/Checked:/);
     expect(binary?.detail).not.toMatch(/install godot somehow/i);
     expect(formatGodotDoctorReport(report)).toMatch(/doctor: blocked/);
+  });
+
+  it("is ok without a binary when a fixture snapshot is present", async () => {
+    const root = await mkdtemp(join(tmpdir(), "potato-godot-snap-"));
+    await writeFile(
+      join(root, "potato.godot-performance.json"),
+      JSON.stringify({
+        schemaVersion: "1.0.0",
+        source: "godot.performance",
+        samples: [{ timestampNs: 1, fps: 60 }],
+      }),
+    );
+    const report = await runGodotDoctor(root, env(new Set()));
+    expect(report.ok).toBe(true);
+    const binary = report.checks.find((check) => check.id === "godot-binary");
+    expect(binary?.status).toBe("unsupported");
+    expect(binary?.required).toBe(false);
+    expect(binary?.detail).toMatch(/snapshot present/);
   });
 
   it("is ok when an env path exists and does not copy an addon", async () => {

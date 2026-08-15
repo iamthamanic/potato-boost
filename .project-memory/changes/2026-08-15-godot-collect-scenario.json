@@ -1,0 +1,55 @@
+{
+  "id": "2026-08-15-godot-collect-scenario",
+  "date": "2026-08-15",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Godot Collect und Scenario",
+    "en": "Godot collect and scenario"
+  },
+  "summary": {
+    "de": "Godot-Fixture-Runs lesen potato.godot-performance.json und schreiben frame_time ins CON-001-Artifact. Fehlender Collector ist unsupported; Addon nur nach Confirm.",
+    "en": "Godot fixture runs read potato.godot-performance.json and write frame_time into the CON-001 artifact. A missing collector is unsupported; the addon is confirm-only."
+  },
+  "plain_language": {
+    "de": "Ein Godot-2D-Fixture kann ohne live Engine gemessen werden, wenn ein Performance-Snapshot liegt.",
+    "en": "A Godot 2D fixture can be measured without a live engine when a Performance snapshot is present."
+  },
+  "why_it_matters": {
+    "de": "S-009, CON-001, SCN-003.",
+    "en": "S-009, CON-001, SCN-003."
+  },
+  "user_impact": {
+    "de": ["potato run auf fixtures/godot-min schreibt frame_time", "Doctor ohne Binary ok wenn Snapshot da"],
+    "en": ["potato run on fixtures/godot-min writes frame_time", "Doctor without a binary is ok when a snapshot is present"]
+  },
+  "developer_impact": {
+    "de": ["packages/adapter-godot collector/driver/addon", "keine Core-Schema-Änderung"],
+    "en": ["packages/adapter-godot collector/driver/addon", "no core schema change"]
+  },
+  "operational_impact": {
+    "de": ["Kein Web-CDP an Godot-Runs. Addon nicht ohne Confirm."],
+    "en": ["No Web CDP on Godot runs. Addon not copied without confirm."]
+  },
+  "git": {
+    "base": "333516d",
+    "head": "HEAD",
+    "branch": "issue/43-godot-collect-scenario",
+    "pull_request": null
+  },
+  "packages": ["adapter-godot", "cli"],
+  "affected_features": ["adapter-sdk"],
+  "affected_components": [
+    "packages/adapter-godot",
+    "packages/cli/src/program.ts",
+    "packages/cli/src/ci-cmd.ts",
+    "fixtures/godot-min"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}

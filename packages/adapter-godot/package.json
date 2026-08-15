@@ -14,7 +14,9 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@potato-boost/adapter-sdk": "workspace:*"
+    "@potato-boost/adapter-sdk": "workspace:*",
+    "@potato-boost/collector-hub": "workspace:*",
+    "@potato-boost/scenario-engine": "workspace:*"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts"
