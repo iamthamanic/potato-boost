@@ -1,5 +1,10 @@
 import { join } from "node:path";
 import {
+  createNodeDotnetEnv,
+  type DotnetEnv,
+  dotnetQuickScanDeps,
+} from "@potato-boost/adapter-dotnet";
+import {
   applyGodotAddon,
   createNodeAddonFs,
   createNodeGodotEnv,
@@ -35,6 +40,7 @@ import type { CliIo } from "./io.js";
 export type ProgramDeps = {
   doctorEnv?: DoctorEnv;
   godotEnv?: GodotDoctorEnv;
+  dotnetEnv?: DotnetEnv;
   quickScan?: QuickScanDeps;
 };
 
@@ -60,6 +66,7 @@ function formatPreview(preview: InitPreview, wrote: boolean): string {
 export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
   const doctorEnv = deps.doctorEnv ?? createNodeDoctorEnv();
   const godotEnv = deps.godotEnv ?? createNodeGodotEnv();
+  const dotnetEnv = deps.dotnetEnv ?? createNodeDotnetEnv();
   const program = new Command();
   program
     .name("potato-boost")
@@ -119,6 +126,9 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
           gitignoreExists: await fs.exists(gitignorePath),
           ...(detection.godot.candidate === null ? {} : { adapterId: "godot" }),
           ...(detection.tauri.candidate === null ? {} : { adapterId: "tauri" }),
+          ...(detection.dotnet.candidate === null
+            ? {}
+            : { adapterId: "dotnet" }),
           ...(options.start === undefined
             ? {}
             : { start: parseArgvLine(options.start) }),
@@ -141,7 +151,12 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .argument("[path]", "project root", ".")
     .description("Check Node, browser, port, and start command")
     .action(async (path: string) => {
-      const report = await runCombinedDoctor(path, doctorEnv, godotEnv);
+      const report = await runCombinedDoctor(
+        path,
+        doctorEnv,
+        godotEnv,
+        dotnetEnv,
+      );
       io.stdout.write(report.text);
       if (!report.ok) {
         throw new Error("doctor blocked: required capability missing");
@@ -153,7 +168,12 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
     .argument("[path]", "project root", ".")
     .description("Run a performance scenario")
     .action(async (path: string) => {
-      const report = await runCombinedDoctor(path, doctorEnv, godotEnv);
+      const report = await runCombinedDoctor(
+        path,
+        doctorEnv,
+        godotEnv,
+        dotnetEnv,
+      );
       if (!report.ok) {
         io.stderr.write(report.text);
         throw new Error("doctor blocked: required capability missing");
@@ -172,6 +192,7 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
             launcher: createArgvLauncher(),
             startArgv: report.start,
             ...(report.hasGodot ? godotQuickScanDeps(report.root) : {}),
+            ...(report.hasDotnet ? dotnetQuickScanDeps(report.root) : {}),
             ...deps.quickScan,
           },
           controller.signal,
@@ -241,6 +262,7 @@ export function createProgram(io: CliIo, deps: ProgramDeps = {}): Command {
         await runCi(io, path, options, {
           doctorEnv,
           godotEnv,
+          dotnetEnv,
           ...(deps.quickScan === undefined
             ? {}
             : { quickScan: deps.quickScan }),

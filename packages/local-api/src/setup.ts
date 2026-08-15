@@ -1,5 +1,11 @@
 import { join } from "node:path";
 import {
+  createNodeDotnetEnv,
+  detectDotnet,
+  mergeDotnetCandidates,
+  runDotnetDoctor,
+} from "@potato-boost/adapter-dotnet";
+import {
   createNodeGodotEnv,
   detectGodot,
   mergeGodotCandidates,
@@ -37,6 +43,7 @@ const candidateKind = z.enum([
   "unknown",
   "godot",
   "tauri",
+  "dotnet",
 ]);
 
 const configBody = z
@@ -60,7 +67,11 @@ function webKindsFromAdapter(
   if (adapterId === undefined) {
     return [...detected];
   }
-  if (adapterId === "godot" || adapterId === "tauri") {
+  if (
+    adapterId === "godot" ||
+    adapterId === "tauri" ||
+    adapterId === "dotnet"
+  ) {
     return ["unknown"];
   }
   return [adapterId];
@@ -107,6 +118,7 @@ export function registerSetupRoutes(
   const doctorEnv = options.doctorEnv ?? createNodeDoctorEnv();
 
   const godotEnv = createNodeGodotEnv();
+  const dotnetEnv = createNodeDotnetEnv();
 
   async function detect() {
     return detectProject(fs, options.projectRoot, webDetectors);
@@ -116,9 +128,13 @@ export function registerSetupRoutes(
     const result = await detect();
     const godot = await detectGodot(fs, result.root);
     const tauri = await detectTauri(fs, result.root);
-    const candidates = mergeTauriCandidates(
-      mergeGodotCandidates(result.candidates, godot.candidate),
-      tauri.candidate,
+    const dotnet = await detectDotnet(fs, result.root);
+    const candidates = mergeDotnetCandidates(
+      mergeTauriCandidates(
+        mergeGodotCandidates(result.candidates, godot.candidate),
+        tauri.candidate,
+      ),
+      dotnet.candidate,
     );
     const supported = candidates.filter(
       (candidate) => candidate.kind !== "unknown" && candidate.confidence > 0,
@@ -197,6 +213,7 @@ export function registerSetupRoutes(
     const detection = await detect();
     const godot = await detectGodot(fs, detection.root);
     const tauri = await detectTauri(fs, detection.root);
+    const dotnet = await detectDotnet(fs, detection.root);
     const kinds = webKindsFromAdapter(
       parsed.data.adapterId,
       detection.candidates.map((candidate) => candidate.kind),
@@ -230,6 +247,13 @@ export function registerSetupRoutes(
       extra.push(...tauriReport.checks);
       ok = ok && tauriReport.ok;
     }
+    const includeDotnet =
+      dotnet.candidate !== null || parsed.data.adapterId === "dotnet";
+    if (includeDotnet) {
+      const dotnetReport = await runDotnetDoctor(detection.root, dotnetEnv);
+      extra.push(...dotnetReport.checks);
+      ok = ok && dotnetReport.ok;
+    }
     if (extra.length === 0) {
       return reply.status(200).send(report);
     }
@@ -247,7 +271,9 @@ export function registerSetupRoutes(
     return buildInitPreview({
       canonicalRoot: detection.root,
       kinds:
-        body.adapterId === "godot" || body.adapterId === "tauri"
+        body.adapterId === "godot" ||
+        body.adapterId === "tauri" ||
+        body.adapterId === "dotnet"
           ? ["unknown"]
           : [body.adapterId],
       adapterId: body.adapterId,

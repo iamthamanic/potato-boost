@@ -1,5 +1,10 @@
 import { join } from "node:path";
 import {
+  createNodeDotnetEnv,
+  type DotnetEnv,
+  dotnetQuickScanDeps,
+} from "@potato-boost/adapter-dotnet";
+import {
   createNodeGodotEnv,
   type GodotDoctorEnv,
   godotQuickScanDeps,
@@ -69,12 +74,19 @@ export async function runCi(
   deps: {
     doctorEnv?: DoctorEnv;
     godotEnv?: GodotDoctorEnv;
+    dotnetEnv?: DotnetEnv;
     quickScan?: QuickScanDeps;
   } = {},
 ): Promise<void> {
   const doctorEnv = deps.doctorEnv ?? createNodeDoctorEnv();
   const godotEnv = deps.godotEnv ?? createNodeGodotEnv();
-  const doctor = await runCombinedDoctor(projectPath, doctorEnv, godotEnv);
+  const dotnetEnv = deps.dotnetEnv ?? createNodeDotnetEnv();
+  const doctor = await runCombinedDoctor(
+    projectPath,
+    doctorEnv,
+    godotEnv,
+    dotnetEnv,
+  );
   if (!doctor.ok) {
     io.stderr.write(doctor.text);
     finishCi(
@@ -94,6 +106,7 @@ export async function runCi(
     launcher: createArgvLauncher(),
     startArgv: doctor.start,
     ...(doctor.hasGodot ? godotQuickScanDeps(doctor.root) : {}),
+    ...(doctor.hasDotnet ? dotnetQuickScanDeps(doctor.root) : {}),
     ...deps.quickScan,
   });
 

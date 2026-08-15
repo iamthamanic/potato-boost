@@ -7,6 +7,7 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "references": [
+    { "path": "../adapter-dotnet" },
     { "path": "../adapter-godot" },
     { "path": "../adapter-tauri" },
     { "path": "../adapter-web" },

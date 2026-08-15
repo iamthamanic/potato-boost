@@ -2,6 +2,88 @@
   "schema_version": 1,
   "changes": [
     {
+      "id": "2026-08-15-dotnet-adapter-spike",
+      "date": "2026-08-15",
+      "type": "feature",
+      "status": "recorded",
+      "title": {
+        "de": ".NET-Adapter-Spike",
+        "en": ".NET adapter spike"
+      },
+      "summary": {
+        "de": ".csproj/.sln werden erkannt. Fehlendes SDK blockt Exit 3. Collector liest potato.dotnet-counters.json oder ist unsupported.",
+        "en": ".csproj/.sln are detected. A missing SDK blocks with exit 3. The collector reads potato.dotnet-counters.json or is unsupported."
+      },
+      "plain_language": {
+        "de": "Ein .NET-Projekt wird erkannt. Ohne SDK startet kein Run. Ohne Counters-Snapshot gibt es keine erfundenen Werte.",
+        "en": "A .NET project is recognized. Without the SDK, a run does not start. Without a counters snapshot, no values are invented."
+      },
+      "why_it_matters": {
+        "de": "FR-003, NFR-006, Epic 7.",
+        "en": "FR-003, NFR-006, Epic 7."
+      },
+      "user_impact": {
+        "de": [
+          "potato detect auf .NET-Repos",
+          "Doctor blockt ohne SDK",
+          "Run mit Fixture-Snapshot"
+        ],
+        "en": [
+          "potato detect on .NET repos",
+          "Doctor blocks without SDK",
+          "Run with fixture snapshot"
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "packages/adapter-dotnet",
+          "keine Core-Schema-Änderung"
+        ],
+        "en": [
+          "packages/adapter-dotnet",
+          "no core schema change"
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Kein EventPipe-Dump mit Secrets.",
+          "Kein hardware-validated Claim."
+        ],
+        "en": [
+          "No EventPipe dump with secrets.",
+          "No hardware-validated claim."
+        ]
+      },
+      "git": {
+        "base": "487c3b2",
+        "head": "HEAD",
+        "branch": "issue/47-dotnet-adapter-spike",
+        "pull_request": null
+      },
+      "packages": [
+        "adapter-dotnet",
+        "cli",
+        "local-api",
+        "dashboard",
+        "adapter-godot"
+      ],
+      "affected_features": [
+        "adapter-sdk"
+      ],
+      "affected_components": [
+        "packages/adapter-dotnet",
+        "packages/cli/src/detect-combined.ts",
+        "packages/local-api/src/setup.ts"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-15-tauri-adapter-spike",
       "date": "2026-08-15",
       "type": "feature",

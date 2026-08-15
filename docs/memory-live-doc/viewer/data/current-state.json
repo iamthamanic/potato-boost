@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Tauri Detect-Spike steht; als Nächstes #47.",
-      "en": "Tauri detect spike is in; next is #47."
+      "de": ".NET-Adapter-Spike steht; Epic 7 Desktop-Runtimes ist für den MVP-Schnitt geschlossen.",
+      "en": ".NET adapter spike is in; Epic 7 desktop runtimes is closed for the MVP cut."
     }
   ],
   "recently_completed": [
+    {
+      "de": ".NET-Adapter-Spike: csproj/sln Evidence, fehlendes SDK blockt Exit 3, Counters-Snapshot oder unsupported (issue #47).",
+      "en": ".NET adapter spike: csproj/sln evidence; missing SDK blocks with exit 3; counters snapshot or unsupported (issue #47)."
+    },
     {
       "de": "Tauri Detect-Spike: src-tauri Evidence, Frontend vs Native getrennt (issue #46).",
       "en": "Tauri detect spike: src-tauri evidence; frontend vs native labels (issue #46)."

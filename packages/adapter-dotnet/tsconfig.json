@@ -7,13 +7,9 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "references": [
-    { "path": "../adapter-dotnet" },
-    { "path": "../adapter-godot" },
-    { "path": "../adapter-tauri" },
-    { "path": "../adapter-web" },
-    { "path": "../analysis" },
-    { "path": "../core" },
-    { "path": "../schemas" }
+    { "path": "../adapter-sdk" },
+    { "path": "../collector-hub" },
+    { "path": "../scenario-engine" }
   ],
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]

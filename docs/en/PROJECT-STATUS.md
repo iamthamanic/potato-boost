@@ -4,10 +4,11 @@ As of 2026-08-15 · source: `.project-memory/` · all claims **needs-review**.
 
 ## Focus
 
-- Tauri detect spike is in; next is #47.
+- .NET adapter spike is in; Epic 7 desktop runtimes is closed for the MVP cut.
 
 ## Recently completed
 
+- .NET adapter spike: csproj/sln evidence; missing SDK blocks with exit 3; counters snapshot or unsupported (issue #47).
 - Tauri detect spike: src-tauri evidence; frontend vs native labels (issue #46).
 - Godot addon confirm: `init --godot` preview; write only after `--confirm` (issue #44).
 - Godot collect/scenario: Performance snapshot → `frame_time` in the artifact; addon only after confirm (issue #43).
