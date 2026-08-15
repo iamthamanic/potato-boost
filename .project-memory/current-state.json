@@ -2,11 +2,15 @@
   "schema_version": 1,
   "focus": [
     {
-      "de": "Godot Collect/Scenario steht; als Nächstes Tauri Detect/Doctor (#46).",
-      "en": "Godot collect/scenario is in; next is Tauri detect/doctor (#46)."
+      "de": "Godot-Addon Confirm steht; als Nächstes Tauri Detect/Doctor (#46).",
+      "en": "Godot addon confirm is in; next is Tauri detect/doctor (#46)."
     }
   ],
   "recently_completed": [
+    {
+      "de": "Godot-Addon Confirm: init --godot Vorschau, Schreiben nur nach --confirm (issue #44).",
+      "en": "Godot addon confirm: init --godot preview; write only after --confirm (issue #44)."
+    },
     {
       "de": "Godot Collect/Scenario: Performance-Snapshot → frame_time im Artifact; Addon nur nach Confirm (issue #43).",
       "en": "Godot collect/scenario: Performance snapshot → frame_time in the artifact; addon only after confirm (issue #43)."

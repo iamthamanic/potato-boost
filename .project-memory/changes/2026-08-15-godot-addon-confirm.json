@@ -1,0 +1,53 @@
+{
+  "id": "2026-08-15-godot-addon-confirm",
+  "date": "2026-08-15",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Godot-Addon nur nach Confirm",
+    "en": "Godot addon only after confirm"
+  },
+  "summary": {
+    "de": "potato init --godot listet addons/potato_boost. Schreiben nur mit --confirm. Bestehendes Addon wird nicht überschrieben.",
+    "en": "potato init --godot lists addons/potato_boost. Writes only with --confirm. An existing addon is not overwritten."
+  },
+  "plain_language": {
+    "de": "Das Godot-Addon landet nicht still in fremden Repos.",
+    "en": "The Godot addon is not copied silently into other repos."
+  },
+  "why_it_matters": {
+    "de": "BR-001, PRD Nutzerdateien.",
+    "en": "BR-001, PRD user files."
+  },
+  "user_impact": {
+    "de": ["init --godot zeigt Dateien", "Abort schreibt kein Addon"],
+    "en": ["init --godot lists files", "Abort writes no addon"]
+  },
+  "developer_impact": {
+    "de": ["packages/adapter-godot addon preview", "keine Core-Änderung"],
+    "en": ["packages/adapter-godot addon preview", "no core change"]
+  },
+  "operational_impact": {
+    "de": ["Cleanup: addons/potato_boost löschen"],
+    "en": ["Cleanup: delete addons/potato_boost"]
+  },
+  "git": {
+    "base": "7577274",
+    "head": "HEAD",
+    "branch": "issue/44-godot-addon-confirm",
+    "pull_request": null
+  },
+  "packages": ["adapter-godot", "cli"],
+  "affected_features": ["adapter-sdk"],
+  "affected_components": [
+    "packages/adapter-godot/src/addon.ts",
+    "packages/cli/src/program.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [],
+  "screenshots": [],
+  "confidence": 0.85,
+  "review_status": "needs-review"
+}

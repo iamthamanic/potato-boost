@@ -4,10 +4,11 @@ Stand: 2026-08-15 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Godot Collect/Scenario steht; als Nächstes Tauri Detect/Doctor (#46).
+- Godot-Addon Confirm steht; als Nächstes Tauri Detect/Doctor (#46).
 
 ## Zuletzt erledigt
 
+- Godot-Addon Confirm: `init --godot` Vorschau, Schreiben nur nach `--confirm` (issue #44).
 - Godot Collect/Scenario: Performance-Snapshot → `frame_time` im Artifact; Addon nur nach Confirm (issue #43).
 - Godot Detect/Doctor: project.godot-Evidence, fehlende Binary blockt Exit 3 (issue #42).
 - Generic/unsupported für unbekannte Repos; Start-Argv nur als Override nach Confirm (issue #34).

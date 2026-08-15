@@ -1,7 +1,12 @@
 export {
   type AddonFs,
+  applyGodotAddon,
   createNodeAddonFs,
+  formatGodotAddonPreview,
+  GODOT_ADDON_CLEANUP,
+  type GodotAddonPreview,
   installGodotAddon,
+  previewGodotAddon,
   readProjectFile,
   removeGodotAddon,
 } from "./addon.js";
@@ -33,6 +38,9 @@ export {
   locateGodotBinary,
 } from "./env.js";
 export {
+  GODOT_ADDON_DIR,
+  GODOT_ADDON_FILES,
+  GODOT_ADDON_PLUGIN_REL,
   GODOT_ADDON_REL,
   GODOT_PERFORMANCE_SNAPSHOT,
   type GodotPerformanceRow,
