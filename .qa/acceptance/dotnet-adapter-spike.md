@@ -56,7 +56,7 @@ A small console `.csproj` fixture is detected. Doctor checks the `dotnet` SDK an
 
 ## Composition Gate
 - Verdict: CLEAR
-- HEAD_SHA: WORKTREE
+- HEAD_SHA: fdf3017
 - Event: detect csproj/sln → doctor locates dotnet SDK → collector snapshot or unsupported.
 - N-actors: one repo → one dotnet candidate; Godot no longer claims a standalone csproj.
 - Invalid: missing SDK blocks; missing/invalid snapshot is unsupported/incomplete, never NaN means or invented zeros.
