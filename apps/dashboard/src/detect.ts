@@ -41,6 +41,9 @@ export function kindLabel(kind: string): string {
   if (kind === "godot") {
     return "Godot";
   }
+  if (kind === "tauri") {
+    return "Tauri";
+  }
   return kind;
 }
 

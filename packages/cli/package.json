@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@potato-boost/adapter-godot": "workspace:*",
+    "@potato-boost/adapter-tauri": "workspace:*",
     "@potato-boost/adapter-web": "workspace:*",
     "@potato-boost/artifact-store": "workspace:*",
     "@potato-boost/core": "workspace:*"

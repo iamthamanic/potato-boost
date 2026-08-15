@@ -4,10 +4,11 @@ Stand: 2026-08-15 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Fokus
 
-- Godot-Addon Confirm steht; als Nächstes Tauri Detect/Doctor (#46).
+- Tauri Detect-Spike steht; als Nächstes #47.
 
 ## Zuletzt erledigt
 
+- Tauri Detect-Spike: src-tauri Evidence, Frontend vs Native getrennt (issue #46).
 - Godot-Addon Confirm: `init --godot` Vorschau, Schreiben nur nach `--confirm` (issue #44).
 - Godot Collect/Scenario: Performance-Snapshot → `frame_time` im Artifact; Addon nur nach Confirm (issue #43).
 - Godot Detect/Doctor: project.godot-Evidence, fehlende Binary blockt Exit 3 (issue #42).
@@ -53,4 +54,4 @@ Stand: 2026-08-15 · Quelle: `.project-memory/` · Alle Claims **needs-review**.
 
 ## Nächster Schritt
 
-GitHub-Issue #46 (Tauri Detect/Doctor).
+GitHub-Issue #47.

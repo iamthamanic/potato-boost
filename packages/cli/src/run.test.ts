@@ -285,6 +285,21 @@ describe("runCli", () => {
       expect(parsed.candidates.map((c) => c.kind)).toEqual(["unknown"]);
     });
 
+    it("detects the tauri-min fixture with evidence", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["detect", "fixtures/tauri-min"], io);
+      expect(code).toBe(EXIT_OK);
+      const parsed = JSON.parse(stdout.join("")) as {
+        wrote: boolean;
+        candidates: { kind: string; evidence: { path: string }[] }[];
+      };
+      expect(parsed.wrote).toBe(false);
+      expect(parsed.candidates.map((c) => c.kind)).toEqual(["tauri"]);
+      expect(parsed.candidates[0]?.evidence.map((entry) => entry.path)).toEqual(
+        expect.arrayContaining(["src-tauri/tauri.conf.json", "src-tauri"]),
+      );
+    });
+
     it("detects the godot-min fixture with evidence", async () => {
       const { io, stdout } = capture();
       const code = await runCli(["detect", "fixtures/godot-min"], io);
@@ -449,6 +464,18 @@ describe("runCli", () => {
       expect(stdout.join("")).toMatch(/godot-binary\tmissing/);
       expect(stdout.join("")).toMatch(/Checked:/);
       expect(stdout.join("")).not.toMatch(/install godot somehow/i);
+    });
+
+    it("labels Tauri frontend and native separately without a hardware claim", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["doctor", "fixtures/tauri-min"], io, healthy);
+      expect(code).toBe(EXIT_OK);
+      const out = stdout.join("");
+      expect(out).toMatch(/tauri-frontend\tunsupported/);
+      expect(out).toMatch(/tauri-native\tunsupported/);
+      expect(out).toMatch(/not a native measurement/);
+      expect(out).not.toMatch(/hardware-validated native/i);
+      expect(out).not.toMatch(/läuft auf Potato Laptop/i);
     });
 
     it("does not require a live Godot binary when the fixture snapshot is present", async () => {

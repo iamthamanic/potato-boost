@@ -6,6 +6,11 @@ import {
   runGodotDoctor,
 } from "@potato-boost/adapter-godot";
 import {
+  detectTauri,
+  mergeTauriCandidates,
+  runTauriDoctor,
+} from "@potato-boost/adapter-tauri";
+import {
   createNodeDoctorEnv,
   type DoctorEnv,
   runWebDoctor,
@@ -31,6 +36,7 @@ const candidateKind = z.enum([
   "threejs",
   "unknown",
   "godot",
+  "tauri",
 ]);
 
 const configBody = z
@@ -54,7 +60,7 @@ function webKindsFromAdapter(
   if (adapterId === undefined) {
     return [...detected];
   }
-  if (adapterId === "godot") {
+  if (adapterId === "godot" || adapterId === "tauri") {
     return ["unknown"];
   }
   return [adapterId];
@@ -109,7 +115,11 @@ export function registerSetupRoutes(
   app.get("/api/v1/detect", async (_request, reply) => {
     const result = await detect();
     const godot = await detectGodot(fs, result.root);
-    const candidates = mergeGodotCandidates(result.candidates, godot.candidate);
+    const tauri = await detectTauri(fs, result.root);
+    const candidates = mergeTauriCandidates(
+      mergeGodotCandidates(result.candidates, godot.candidate),
+      tauri.candidate,
+    );
     const supported = candidates.filter(
       (candidate) => candidate.kind !== "unknown" && candidate.confidence > 0,
     );
@@ -186,6 +196,7 @@ export function registerSetupRoutes(
     }
     const detection = await detect();
     const godot = await detectGodot(fs, detection.root);
+    const tauri = await detectTauri(fs, detection.root);
     const kinds = webKindsFromAdapter(
       parsed.data.adapterId,
       detection.candidates.map((candidate) => candidate.kind),
@@ -196,16 +207,36 @@ export function registerSetupRoutes(
     const report = await runWebDoctor(detection.root, kinds, doctorEnv, {
       start,
     });
+    const extra: Array<{
+      id: string;
+      status: string;
+      required: boolean;
+      path: string;
+      detail: string;
+    }> = [];
+    let ok = report.ok;
     const includeGodot =
       godot.candidate !== null || parsed.data.adapterId === "godot";
-    if (!includeGodot) {
+    if (includeGodot) {
+      const godotReport = await runGodotDoctor(detection.root, godotEnv);
+      extra.push(...godotReport.checks);
+      ok = ok && godotReport.ok;
+    }
+    const includeTauri =
+      tauri.candidate !== null || parsed.data.adapterId === "tauri";
+    if (includeTauri) {
+      const hasFrontend = kinds.some((kind) => kind !== "unknown");
+      const tauriReport = await runTauriDoctor(detection.root, hasFrontend);
+      extra.push(...tauriReport.checks);
+      ok = ok && tauriReport.ok;
+    }
+    if (extra.length === 0) {
       return reply.status(200).send(report);
     }
-    const godotReport = await runGodotDoctor(detection.root, godotEnv);
     return reply.status(200).send({
       root: detection.root,
-      checks: [...godotReport.checks, ...report.checks],
-      ok: godotReport.ok && report.ok,
+      checks: [...extra, ...report.checks],
+      ok,
     });
   });
 
@@ -215,7 +246,10 @@ export function registerSetupRoutes(
     const gitignorePath = join(detection.root, ".gitignore");
     return buildInitPreview({
       canonicalRoot: detection.root,
-      kinds: body.adapterId === "godot" ? ["unknown"] : [body.adapterId],
+      kinds:
+        body.adapterId === "godot" || body.adapterId === "tauri"
+          ? ["unknown"]
+          : [body.adapterId],
       adapterId: body.adapterId,
       start: body.start,
       configExists: await configFs.exists(configPath),

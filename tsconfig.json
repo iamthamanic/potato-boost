@@ -12,6 +12,7 @@
     { "path": "./packages/report" },
     { "path": "./packages/adapter-sdk" },
     { "path": "./packages/adapter-godot" },
+    { "path": "./packages/adapter-tauri" },
     { "path": "./packages/adapter-web" },
     { "path": "./packages/collector-hub" },
     { "path": "./packages/collector-os" },

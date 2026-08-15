@@ -2,6 +2,83 @@
   "schema_version": 1,
   "changes": [
     {
+      "id": "2026-08-15-tauri-adapter-spike",
+      "date": "2026-08-15",
+      "type": "feature",
+      "status": "recorded",
+      "title": {
+        "de": "Tauri Detect-Spike",
+        "en": "Tauri detect spike"
+      },
+      "summary": {
+        "de": "src-tauri/tauri.conf.* wird erkannt. Frontend- und Native-Modus sind getrennte Labels. Native-Collector ist unsupported.",
+        "en": "src-tauri/tauri.conf.* is detected. Frontend and native modes are separate labels. The native collector is unsupported."
+      },
+      "plain_language": {
+        "de": "Ein Tauri-Projekt wird erkannt, ohne Native-Messung vorzutäuschen.",
+        "en": "A Tauri project is recognized without pretending native measurement exists."
+      },
+      "why_it_matters": {
+        "de": "S-011, FR-011.",
+        "en": "S-011, FR-011."
+      },
+      "user_impact": {
+        "de": [
+          "potato detect auf Tauri-Repos",
+          "Doctor trennt Frontend und Native"
+        ],
+        "en": [
+          "potato detect on Tauri repos",
+          "Doctor separates frontend and native"
+        ]
+      },
+      "developer_impact": {
+        "de": [
+          "packages/adapter-tauri",
+          "keine Core-Schema-Änderung"
+        ],
+        "en": [
+          "packages/adapter-tauri",
+          "no core schema change"
+        ]
+      },
+      "operational_impact": {
+        "de": [
+          "Kein hardware-validated Native-Claim."
+        ],
+        "en": [
+          "No hardware-validated native claim."
+        ]
+      },
+      "git": {
+        "base": "a3b7b3b",
+        "head": "HEAD",
+        "branch": "issue/46-tauri-adapter-spike",
+        "pull_request": null
+      },
+      "packages": [
+        "adapter-tauri",
+        "cli",
+        "local-api",
+        "dashboard"
+      ],
+      "affected_features": [
+        "adapter-sdk"
+      ],
+      "affected_components": [
+        "packages/adapter-tauri",
+        "packages/cli/src/detect-combined.ts",
+        "packages/local-api/src/setup.ts"
+      ],
+      "breaking_changes": [],
+      "migration_required": false,
+      "security_relevant": true,
+      "evidence": [],
+      "screenshots": [],
+      "confidence": 0.85,
+      "review_status": "needs-review"
+    },
+    {
       "id": "2026-08-15-godot-addon-confirm",
       "date": "2026-08-15",
       "type": "feature",
