@@ -44,6 +44,9 @@ export function kindLabel(kind: string): string {
   if (kind === "tauri") {
     return "Tauri";
   }
+  if (kind === "dotnet") {
+    return ".NET";
+  }
   return kind;
 }
 

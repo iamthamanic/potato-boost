@@ -67,6 +67,18 @@ importers:
         specifier: 8.2.1
         version: 8.2.1(@types/node@24.13.3)(esbuild@0.28.2)
 
+  packages/adapter-dotnet:
+    dependencies:
+      '@potato-boost/adapter-sdk':
+        specifier: workspace:*
+        version: link:../adapter-sdk
+      '@potato-boost/collector-hub':
+        specifier: workspace:*
+        version: link:../collector-hub
+      '@potato-boost/scenario-engine':
+        specifier: workspace:*
+        version: link:../scenario-engine
+
   packages/adapter-godot:
     dependencies:
       '@potato-boost/adapter-sdk':
@@ -130,6 +142,9 @@ importers:
         specifier: ^14.0.0
         version: 14.0.3
     devDependencies:
+      '@potato-boost/adapter-dotnet':
+        specifier: workspace:*
+        version: link:../adapter-dotnet
       '@potato-boost/adapter-godot':
         specifier: workspace:*
         version: link:../adapter-godot
@@ -187,6 +202,9 @@ importers:
 
   packages/local-api:
     dependencies:
+      '@potato-boost/adapter-dotnet':
+        specifier: workspace:*
+        version: link:../adapter-dotnet
       '@potato-boost/adapter-godot':
         specifier: workspace:*
         version: link:../adapter-godot

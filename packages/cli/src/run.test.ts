@@ -285,6 +285,21 @@ describe("runCli", () => {
       expect(parsed.candidates.map((c) => c.kind)).toEqual(["unknown"]);
     });
 
+    it("detects the dotnet-min fixture with evidence", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["detect", "fixtures/dotnet-min"], io);
+      expect(code).toBe(EXIT_OK);
+      const parsed = JSON.parse(stdout.join("")) as {
+        wrote: boolean;
+        candidates: { kind: string; evidence: { path: string }[] }[];
+      };
+      expect(parsed.wrote).toBe(false);
+      expect(parsed.candidates.map((c) => c.kind)).toEqual(["dotnet"]);
+      expect(parsed.candidates[0]?.evidence.map((entry) => entry.path)).toEqual(
+        expect.arrayContaining(["App.csproj"]),
+      );
+    });
+
     it("detects the tauri-min fixture with evidence", async () => {
       const { io, stdout } = capture();
       const code = await runCli(["detect", "fixtures/tauri-min"], io);
@@ -466,6 +481,37 @@ describe("runCli", () => {
       expect(stdout.join("")).not.toMatch(/install godot somehow/i);
     });
 
+    it("blocks .NET doctor when the SDK is missing", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["doctor", "fixtures/dotnet-min"], io, {
+        ...healthy,
+        dotnetEnv: {
+          env: {},
+          platform: "darwin",
+          exists: async () => false,
+        },
+      });
+      expect(code).toBe(EXIT_INFRA);
+      expect(stdout.join("")).toMatch(/dotnet-sdk\tmissing/);
+      expect(stdout.join("")).toMatch(/Checked:/);
+    });
+
+    it("passes .NET doctor when an injected SDK path exists", async () => {
+      const { io, stdout } = capture();
+      const code = await runCli(["doctor", "fixtures/dotnet-min"], io, {
+        ...healthy,
+        dotnetEnv: {
+          env: { DOTNET: "/opt/dotnet/dotnet" },
+          platform: "darwin",
+          exists: async (path) => path === "/opt/dotnet/dotnet",
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(stdout.join("")).toMatch(/dotnet-sdk\tok/);
+      expect(stdout.join("")).toMatch(/dotnet-wpf\tunsupported/);
+      expect(stdout.join("")).toMatch(/doctor: ok/);
+    });
+
     it("labels Tauri frontend and native separately without a hardware claim", async () => {
       const { io, stdout } = capture();
       const code = await runCli(["doctor", "fixtures/tauri-min"], io, healthy);
@@ -551,6 +597,61 @@ describe("runCli", () => {
       });
       expect(code).toBe(EXIT_OK);
       expect(spawned).toBe(0);
+    });
+
+    it("blocks potato run on a .NET repo without an SDK", async () => {
+      const { io, stderr } = capture();
+      const code = await runCli(["run", "fixtures/dotnet-min"], io, {
+        ...healthy,
+        dotnetEnv: {
+          env: {},
+          platform: "darwin",
+          exists: async () => false,
+        },
+      });
+      expect(code).toBe(EXIT_INFRA);
+      expect(stderr.join("")).toMatch(/dotnet-sdk\tmissing/);
+    });
+
+    it("records .NET counters from the fixture snapshot", async () => {
+      const tmp = await mkdtemp(join(tmpdir(), "potato-dotnet-run-"));
+      let spawned = 0;
+      const store = createArtifactStore(tmp);
+      const { io, stdout } = capture();
+      const code = await runCli(["run", "fixtures/dotnet-min"], io, {
+        ...healthy,
+        dotnetEnv: {
+          env: { DOTNET: "/opt/dotnet/dotnet" },
+          platform: "darwin",
+          exists: async (path) => path === "/opt/dotnet/dotnet",
+        },
+        quickScan: {
+          store,
+          startArgv: [],
+          launcher: {
+            async start() {
+              spawned += 1;
+              return { pid: 0, async kill() {} };
+            },
+          },
+          runId: "run-dotnet",
+        },
+      });
+      expect(code).toBe(EXIT_OK);
+      expect(spawned).toBe(0);
+      expect(stdout.join("")).toMatch(/run: completed/);
+      const packed = await store.readCompleted("run-dotnet");
+      const artifact = JSON.parse(new TextDecoder().decode(packed.bytes)) as {
+        collectorChecks: { id: string; status: string }[];
+      };
+      expect(artifact.collectorChecks).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: "dotnet.counters",
+            status: "ok",
+          }),
+        ]),
+      );
     });
 
     it("blocks potato run on a Godot repo without a binary or snapshot", async () => {

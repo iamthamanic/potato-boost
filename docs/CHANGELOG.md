@@ -2,6 +2,12 @@
 
 Human-readable chronicle. Canonical events live in `.project-memory/changes/`.
 
+## 2026-08-15 — .NET-Adapter-Spike
+
+`.csproj` / `.sln` werden mit Evidence erkannt. Fehlendes `dotnet` SDK blockt Doctor und Run (Exit 3) mit geprüften Pfaden. Collector liest `potato.dotnet-counters.json` oder ist `unsupported`; kein EventPipe-Dump, keine NaN-Means. WPF/WinUI bleibt Windows-only unsupported. Keine Core-Schema-Änderung.
+
+Review-Status: **needs-review**.
+
 ## 2026-08-15 — Tauri Detect Spike
 
 `src-tauri/tauri.conf.*` wird mit Evidence erkannt. Frontend- und Native-Modus sind getrennte Labels. Native-Collector ist `unsupported`, kein stilles 0.

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1.0.0",
+  "source": "dotnet.counters",
+  "samples": [
+    { "timestampNs": 1000, "cpuPercent": 12.5, "gcHeapBytes": 2048000 },
+    { "timestampNs": 2000, "cpuPercent": 14, "gcHeapBytes": 2100000 }
+  ]
+}

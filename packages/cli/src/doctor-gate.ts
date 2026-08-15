@@ -1,4 +1,10 @@
 import {
+  createNodeDotnetEnv,
+  type DotnetEnv,
+  formatDotnetDoctorReport,
+  runDotnetDoctor,
+} from "@potato-boost/adapter-dotnet";
+import {
   createNodeGodotEnv,
   formatGodotDoctorReport,
   type GodotDoctorEnv,
@@ -24,6 +30,7 @@ export async function runCombinedDoctor(
   path: string,
   doctorEnv: DoctorEnv,
   godotEnv: GodotDoctorEnv = createNodeGodotEnv(),
+  dotnetEnv: DotnetEnv = createNodeDotnetEnv(),
 ): Promise<{
   root: string;
   ok: boolean;
@@ -31,6 +38,7 @@ export async function runCombinedDoctor(
   start: string[];
   kinds: CandidateKind[];
   hasGodot: boolean;
+  hasDotnet: boolean;
 }> {
   const combined = await detectCombined(path);
   const kinds = combined.web.candidates.map((candidate) => candidate.kind);
@@ -52,6 +60,11 @@ export async function runCombinedDoctor(
     chunks.push(formatTauriDoctorReport(tauri).trimEnd());
     ok = ok && tauri.ok;
   }
+  if (combined.dotnet.candidate !== null) {
+    const dotnet = await runDotnetDoctor(combined.root, dotnetEnv);
+    chunks.push(formatDotnetDoctorReport(dotnet).trimEnd());
+    ok = ok && dotnet.ok;
+  }
   const web = await runWebDoctor(combined.root, kinds, doctorEnv, { start });
   chunks.push(formatDoctorReport(web).trimEnd());
   ok = ok && web.ok;
@@ -62,5 +75,6 @@ export async function runCombinedDoctor(
     start,
     kinds,
     hasGodot: combined.godot.candidate !== null,
+    hasDotnet: combined.dotnet.candidate !== null,
   };
 }

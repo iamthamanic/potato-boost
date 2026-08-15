@@ -25,7 +25,8 @@ export async function detectGodot(
   const filesTouched: string[] = [];
   const evidence: GodotEvidence[] = [];
   const projectPath = `${root}/project.godot`;
-  if (await fs.exists(projectPath)) {
+  const hasProject = await fs.exists(projectPath);
+  if (hasProject) {
     filesTouched.push("project.godot");
     evidence.push({
       kind: "manifest",
@@ -48,7 +49,7 @@ export async function detectGodot(
         detail: "GDScript source",
       });
     }
-    if (name.endsWith(".csproj")) {
+    if (hasProject && name.endsWith(".csproj")) {
       filesTouched.push(name);
       evidence.push({
         kind: "marker",

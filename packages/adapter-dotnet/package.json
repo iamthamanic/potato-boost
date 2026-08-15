@@ -1,0 +1,23 @@
+{
+  "name": "@potato-boost/adapter-dotnet",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@potato-boost/adapter-sdk": "workspace:*",
+    "@potato-boost/collector-hub": "workspace:*",
+    "@potato-boost/scenario-engine": "workspace:*"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts"
+}

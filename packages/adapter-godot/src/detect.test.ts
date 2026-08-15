@@ -50,6 +50,15 @@ describe("detectGodot", () => {
     ]);
   });
 
+  it("does not treat a standalone .csproj as Godot", async () => {
+    const root = "/tmp/dotnet-only";
+    const result = await detectGodot(
+      memoryFs({ [`${root}/App.csproj`]: "<Project />" }),
+      root,
+    );
+    expect(result.candidate).toBeNull();
+  });
+
   it("returns null when no Godot markers exist", async () => {
     const root = "/tmp/empty";
     const result = await detectGodot(memoryFs({}), root);
