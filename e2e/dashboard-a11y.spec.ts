@@ -12,6 +12,12 @@ type Project = {
   root: string;
 };
 
+type ProjectRun = {
+  runId: string;
+  projectId: string;
+  status: string;
+};
+
 function dash(path: string): string {
   const url = new URL(path, DASH);
   url.searchParams.set("token", TOKEN);
@@ -78,6 +84,31 @@ async function ensureProject(page: Page): Promise<Project> {
     throw new Error("project registry did not return the root project");
   }
   return project;
+}
+
+async function startProjectRun(
+  page: Page,
+  projectId: string,
+  key: string,
+): Promise<string> {
+  const response = await page.request.post(
+    `${API}/api/v1/projects/${projectId}/runs`,
+    {
+      headers: { ...apiHeaders(), "idempotency-key": key },
+      data: { scenarioId: "quick-scan" },
+    },
+  );
+  expect(response.status()).toBe(202);
+  return ((await response.json()) as { runId: string }).runId;
+}
+
+async function projectRuns(page: Page, projectId: string): Promise<ProjectRun[]> {
+  const response = await page.request.get(
+    `${API}/api/v1/projects/${projectId}/runs`,
+    { headers: apiHeaders() },
+  );
+  expect(response.status()).toBe(200);
+  return ((await response.json()) as { runs: ProjectRun[] }).runs;
 }
 
 async function axeCriticalSerious(page: Page): Promise<void> {
@@ -151,7 +182,7 @@ test("projects hub and creation wizard establish project context", async ({
   ).toHaveLength(1);
 });
 
-test("project workflow routes keep one project navigation model", async ({
+test("project workflow scopes runs and compare to the active project", async ({
   page,
 }) => {
   const project = await ensureProject(page);
@@ -164,52 +195,65 @@ test("project workflow routes keep one project navigation model", async ({
   await expect(page.getByRole("link", { name: "Runs" })).toBeVisible();
   await axeCriticalSerious(page);
 
+  await page.goto(dash(`${base}/test-setup`));
+  await page.getByLabel("Mid-tier mobile").check();
+  await page.getByRole("button", { name: "Save changes" }).click();
+  await expect(page.getByText("Test setup saved.")).toBeVisible();
+
   await page.goto(dash(`${base}/runs`));
-  await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
-  await expect(page.getByText("Local performance budget")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Runs" })).toBeVisible();
+  await expect(page.getByText("Mid-tier mobile").first()).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Start Quick Scan" }),
+  ).toBeVisible();
+  await axeCriticalSerious(page);
+
+  const runId = await startProjectRun(
+    page,
+    project.id,
+    `e2e-project-${String(Date.now())}`,
+  );
+  expect((await projectRuns(page, project.id)).some((run) => run.runId === runId))
+    .toBe(true);
+
+  await page.goto(dash(`${base}/runs/${runId}/live`));
+  await expect(page.getByRole("heading", { name: "Live run" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Runs" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  const abort = page.getByRole("button", { name: "Abort run" });
+  await expect(abort).toBeEnabled();
+  await axeCriticalSerious(page);
+  await abort.click();
+  await expect(page.getByText("Status cancelled")).toBeVisible();
+
+  await page.goto(dash(`${base}/runs`));
+  await expect(page.getByText("cancelled").first()).toBeVisible();
+  await expect(page.getByText("No persisted result artifact")).toBeVisible();
   await axeCriticalSerious(page);
 
   await page.goto(dash(`${base}/compare`));
   await expect(
     page.getByRole("heading", { name: "Compare before and after" }),
   ).toBeVisible();
+  await expect(page.getByText("No comparable run pair yet")).toBeVisible();
+  await expect(page.getByRole("textbox", { name: /run/i })).toHaveCount(0);
+  await axeCriticalSerious(page);
+
+  await page.goto(dash(`${base}/runs/${GOLDEN}`));
+  await expect(page.getByText("Run unavailable in this project")).toBeVisible();
   await axeCriticalSerious(page);
 
   await page.goto(dash(`${base}/scenarios`));
   await expect(page.getByRole("heading", { name: "Scenarios" })).toBeVisible();
   await axeCriticalSerious(page);
+});
 
-  await page.goto(dash(`${base}/test-setup`));
-  await expect(page.getByRole("heading", { name: "Test Setup" })).toBeVisible();
-  await page.getByLabel("Mid-tier mobile").check();
-  await page.getByRole("button", { name: "Save changes" }).click();
-  await expect(page.getByText("Test setup saved.")).toBeVisible();
-  await axeCriticalSerious(page);
-
-  const created = await page.request.post(`${API}/api/v1/runs`, {
-    headers: {
-      ...apiHeaders(),
-      "idempotency-key": `e2e-a11y-${String(Date.now())}`,
-    },
-    data: {
-      targetId: "web-threejs",
-      scenarioId: "quick-scan",
-      profileId: "budget-local",
-    },
-  });
-  expect(created.status()).toBe(202);
-  const body = (await created.json()) as { runId: string };
-
-  await page.goto(dash(`${base}/runs/${body.runId}/live`));
-  await expect(page.getByRole("heading", { name: "Live run" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Runs" })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await expect(page.getByRole("button", { name: "Abort run" })).toBeEnabled();
-  await axeCriticalSerious(page);
-
-  await page.goto(dash(`${base}/runs/${GOLDEN}?tab=findings`));
+test("global artifact fixtures remain available outside project ownership", async ({
+  page,
+}) => {
+  await page.goto(dash(`/runs/${GOLDEN}?tab=findings`));
   await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
   await expect(
     page.getByRole("radio", { name: "finding:web.frame_time.p95" }),
@@ -217,9 +261,7 @@ test("project workflow routes keep one project navigation model", async ({
   await axeCriticalSerious(page);
 });
 
-test("keyboard path reaches project work and run controls", async ({
-  page,
-}) => {
+test("keyboard path reaches project run controls", async ({ page }) => {
   const project = await ensureProject(page);
   const base = `/projects/${project.id}`;
   await page.goto(dash(`${base}/runs`));
@@ -233,26 +275,19 @@ test("keyboard path reaches project work and run controls", async ({
     page.getByRole("button", { name: "Start Quick Scan" }),
   ).toBeVisible();
 
-  const created = await page.request.post(`${API}/api/v1/runs`, {
-    headers: {
-      ...apiHeaders(),
-      "idempotency-key": `e2e-abort-${String(Date.now())}`,
-    },
-    data: {
-      targetId: "web-threejs",
-      scenarioId: "quick-scan",
-      profileId: "budget-local",
-    },
-  });
-  const body = (await created.json()) as { runId: string };
-  await page.goto(dash(`${base}/runs/${body.runId}/live`));
+  const runId = await startProjectRun(
+    page,
+    project.id,
+    `e2e-abort-${String(Date.now())}`,
+  );
+  await page.goto(dash(`${base}/runs/${runId}/live`));
   const abort = page.getByRole("button", { name: "Abort run" });
   await expect(abort).toBeEnabled();
   await abort.focus();
   await page.keyboard.press("Enter");
   await expect(page.getByText("Status cancelled")).toBeVisible();
 
-  await page.goto(dash(`${base}/runs/${GOLDEN}?tab=findings`));
+  await page.goto(dash(`/runs/${GOLDEN}?tab=findings`));
   const finding = page.getByRole("radio", {
     name: "finding:web.frame_time.p95",
   });
@@ -267,22 +302,16 @@ test("mobile tablet and reduced motion keep project actions usable", async ({
   const base = `/projects/${project.id}`;
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto(dash("/projects"));
+  await page.goto(dash(`${base}/runs`));
   await expect(
-    page.getByRole("link", { name: "Create project" }),
+    page.getByRole("button", { name: "Start Quick Scan" }),
   ).toBeVisible();
-  await expect(page.locator("body")).not.toHaveJSProperty(
-    "scrollWidth",
-    Number.POSITIVE_INFINITY,
-  );
   await axeCriticalSerious(page);
 
   await page.setViewportSize({ width: 768, height: 1024 });
-  await page.goto(dash(`${base}/test-setup`));
-  await expect(
-    page.getByRole("button", { name: "Save changes" }),
-  ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Compare" })).toBeVisible();
+  await page.goto(dash(`${base}/compare`));
+  await expect(page.getByText("No comparable run pair yet")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Runs" })).toBeVisible();
   await axeCriticalSerious(page);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
