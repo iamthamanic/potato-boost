@@ -156,11 +156,7 @@ async function readRegistry(path: string): Promise<ProjectRecord[]> {
   try {
     raw = await readFile(path, "utf8");
   } catch (error) {
-    if (
-      error instanceof Error &&
-      "code" in error &&
-      error.code === "ENOENT"
-    ) {
+    if (error instanceof Error && "code" in error && error.code === "ENOENT") {
       return [];
     }
     throw error;
@@ -257,7 +253,8 @@ export async function createProjectRegistry(
         const updated: ProjectRecord = {
           ...current,
           ...input,
-          start: input.start === undefined ? [...current.start] : [...input.start],
+          start:
+            input.start === undefined ? [...current.start] : [...input.start],
           rulePackIds:
             input.rulePackIds === undefined
               ? [...current.rulePackIds]
