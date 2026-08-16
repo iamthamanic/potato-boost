@@ -154,7 +154,10 @@ async function canonicalDirectory(root: string): Promise<string> {
   }
 }
 
-function findProject(projects: readonly ProjectRecord[], id: string): ProjectRecord {
+function findProject(
+  projects: readonly ProjectRecord[],
+  id: string,
+): ProjectRecord {
   const project = projects.find((candidate) => candidate.id === id);
   if (project === undefined) {
     throw new ProjectRegistryError("NOT_FOUND", "project not found");
