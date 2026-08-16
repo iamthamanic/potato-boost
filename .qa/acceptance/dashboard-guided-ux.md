@@ -49,5 +49,12 @@ Make the local dashboard understandable as one guided workflow: configure the pr
 - `pnpm test:e2e` / focused dashboard a11y journey where environment permits
 - typed-strict: zero escape hatches in touched TypeScript files
 
+## Composition Gate
+SKIPPED for this slice. The dashboard remains a single-hop client of the existing loopback Local API; this change adds no queue, outbox, fan-out, asynchronous consumer, retry pipeline, or cross-service business-event composition. Proof: `.qa/runs/composition-gate-dashboard-guided-ux.md`.
+
 ## Implementation Notes
-_To be completed after implementation._
+- Primary navigation now exposes user destinations; setup doctor/live/detail remain contextual routes.
+- Overview and Quick Scan expose the next action and recommended measurement context without requiring CLI knowledge.
+- System Check and Run Tape preserve explicit status text; results and compare lead with user-facing measurements/context before technical identifiers.
+- Existing API contracts and `packages/**` remain unchanged; raw run IDs remain necessary compare inputs because the existing Local API has no run-list endpoint in this ticket's scope.
+- GitHub Actions `pnpm checks` and Playwright E2E are required green before merge.
