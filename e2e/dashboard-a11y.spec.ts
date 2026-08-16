@@ -98,7 +98,9 @@ test("projects hub and creation wizard establish project context", async ({
   let project = await projectByRoot(page, dashboardRoot);
 
   await page.goto(dash("/projects"));
-  await expect(page.getByRole("heading", { name: "Projects" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Projects", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Create project" }),
   ).toBeVisible();
