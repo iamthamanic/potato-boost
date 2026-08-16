@@ -1,0 +1,99 @@
+{
+  "id": "2026-08-16-project-shell-wizard",
+  "date": "2026-08-16",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Projektzentrale, Projektwechsel und Setup-Wizard",
+    "en": "Projects hub, project switching, and setup wizard"
+  },
+  "summary": {
+    "de": "Das Dashboard behandelt Projekte jetzt als oberste Navigationsebene. Nutzer starten in einer Projektzentrale, wechseln Projekte über die linke Leiste, legen neue Projekte in einem geführten Wizard an und können das projektspezifische Test Setup später bearbeiten.",
+    "en": "The dashboard now treats projects as the top-level navigation concept. Users start in a projects hub, switch projects from the left rail, create projects through a guided wizard, and can edit project-specific Test Setup later."
+  },
+  "plain_language": {
+    "de": "Statt zwischen globalen Setup-, Run- und Compare-Seiten zu springen, wählt der Nutzer zuerst sein Projekt und arbeitet danach immer in dessen Kontext.",
+    "en": "Instead of jumping among global setup, run, and compare pages, the user first selects a project and then stays inside that project's context."
+  },
+  "why_it_matters": {
+    "de": "Die Informationsarchitektur bildet jetzt das Multi-Project-Modell aus der Local API sichtbar ab und schafft die Grundlage für projektspezifische Run-Historie und Vergleiche.",
+    "en": "The information architecture now exposes the Local API's multi-project model and creates the foundation for project-scoped run history and comparisons."
+  },
+  "user_impact": {
+    "de": [
+      "Neue Projektzentrale unter /projects",
+      "Projektwechsel über eine persistente Projektleiste",
+      "Geführter Wizard: Project Setup → Rules → Target Profiles → Review",
+      "Test Setup kann nach der Projekterstellung erneut bearbeitet werden",
+      "Overview, Runs, Compare und Scenarios erscheinen als Navigation innerhalb des aktiven Projekts"
+    ],
+    "en": [
+      "New projects hub at /projects",
+      "Project switching through a persistent project rail",
+      "Guided wizard: Project Setup → Rules → Target Profiles → Review",
+      "Test Setup can be edited again after project creation",
+      "Overview, Runs, Compare, and Scenarios appear as navigation inside the active project"
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Neue verschachtelte Dashboard-Routen unter /projects/:projectId",
+      "React ProjectProvider hält nur vom Local API geladene Registry-Daten im Speicher",
+      "Playwright/Axe deckt Projektanlage, Projektkontext, Test Setup, Keyboard, Mobile/Tablet und Reduced Motion ab",
+      "Projektbezogene Run-Daten bleiben bewusst dem Folgeticket #93 vorbehalten"
+    ],
+    "en": [
+      "New nested dashboard routes under /projects/:projectId",
+      "React ProjectProvider keeps only Local API registry data in memory",
+      "Playwright/Axe covers project creation, project context, Test Setup, keyboard, mobile/tablet, and reduced motion",
+      "Project-scoped run data intentionally remains in follow-up issue #93"
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Keine Cloud-Infrastruktur oder neue Remote-Persistenz; das Dashboard nutzt weiterhin die lokale, token-geschützte Project Registry."
+    ],
+    "en": [
+      "No cloud infrastructure or new remote persistence; the dashboard continues to use the local token-protected project registry."
+    ]
+  },
+  "git": {
+    "base": "10c79f2820182fcf0b334adca07e5044d3f13e73",
+    "head": "feat/project-shell-wizard",
+    "branch": "feat/project-shell-wizard",
+    "pull_request": 95
+  },
+  "packages": ["dashboard"],
+  "affected_features": ["dashboard", "project-setup"],
+  "affected_components": [
+    "apps/dashboard/src/app.tsx",
+    "apps/dashboard/src/project-context.tsx",
+    "apps/dashboard/src/project-shell.tsx",
+    "apps/dashboard/src/projects-hub.tsx",
+    "apps/dashboard/src/project-wizard.tsx",
+    "apps/dashboard/src/test-setup.tsx",
+    "apps/dashboard/src/project-ux.css",
+    "e2e/dashboard-a11y.spec.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "label": "PR #95",
+      "url": "https://github.com/iamthamanic/potato-boost/pull/95"
+    },
+    {
+      "label": "Issue #92",
+      "url": "https://github.com/iamthamanic/potato-boost/issues/92"
+    }
+  ],
+  "screenshots": [
+    {
+      "status": "missing",
+      "note": "UI behavior is verified by Playwright/Axe CI; persistent review screenshots still need capture for Living Docs."
+    }
+  ],
+  "confidence": 0.93,
+  "review_status": "needs-review"
+}
