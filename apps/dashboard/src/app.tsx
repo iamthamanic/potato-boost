@@ -3,6 +3,7 @@
  */
 import { NavLink, Route, Routes } from "react-router-dom";
 import { Compare } from "./compare.js";
+import "./guided-ux.css";
 import { LiveRun } from "./live-run.js";
 import { NewRun } from "./new-run.js";
 import { ProjectHome } from "./project-home.js";
