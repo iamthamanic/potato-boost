@@ -41,9 +41,7 @@ export function LiveRun() {
     if (runId === undefined) {
       throw new ApiRequestError("Run id is missing.", 400);
     }
-    return readJson<RunSnapshot>(
-      await apiRequest(runPath(projectId, runId)),
-    );
+    return readJson<RunSnapshot>(await apiRequest(runPath(projectId, runId)));
   }, [projectId, runId]);
 
   useEffect(() => {
