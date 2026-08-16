@@ -212,12 +212,7 @@ export function registerProjectRoutes(
   });
 
   app.get("/api/v1/projects/:projectId", async (request, reply) => {
-    const project = readProject(
-      registry,
-      request.params,
-      reply,
-      sendEnvelope,
-    );
+    const project = readProject(registry, request.params, reply, sendEnvelope);
     if (project === undefined) {
       return reply;
     }
