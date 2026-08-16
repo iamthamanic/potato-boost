@@ -110,6 +110,7 @@ export function TestSetup() {
             <label htmlFor="setup-project-name">Project name</label>
             <input
               id="setup-project-name"
+              name="project-name"
               value={name}
               onChange={(event) => {
                 setName(event.target.value);
@@ -122,6 +123,7 @@ export function TestSetup() {
             <label htmlFor="setup-project-root">Project path</label>
             <input
               id="setup-project-root"
+              name="project-root"
               className="mono"
               value={root}
               onChange={(event) => {
@@ -140,6 +142,7 @@ export function TestSetup() {
             <label htmlFor="setup-project-adapter">Project type</label>
             <select
               id="setup-project-adapter"
+              name="project-adapter"
               value={adapterId}
               onChange={(event) => {
                 setAdapterId(event.target.value as AdapterId);
@@ -157,6 +160,7 @@ export function TestSetup() {
             <label htmlFor="setup-project-start">Start argv</label>
             <input
               id="setup-project-start"
+              name="project-start"
               className="mono"
               value={startText}
               onChange={(event) => {
@@ -183,6 +187,7 @@ export function TestSetup() {
               <label className="choice-card" key={rule.id}>
                 <input
                   type="checkbox"
+                  name="rule-pack"
                   checked={rulePackIds.includes(rule.id)}
                   onChange={() => toggleRule(rule.id)}
                 />
