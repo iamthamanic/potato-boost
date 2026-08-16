@@ -9,11 +9,19 @@ import {
   emptyBaselines,
 } from "@potato-boost/analysis";
 import { errorEnvelopeSchema } from "@potato-boost/schemas";
-import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
+import Fastify, {
+  type FastifyInstance,
+  type FastifyReply,
+  type FastifyRequest,
+} from "fastify";
 import { z } from "zod";
 import { GOLDEN_RUN_ID, goldenSamples, loadArtifactByRunId } from "./golden.js";
 import { registerProjectRoutes } from "./project-routes.js";
-import { createProjectRegistry } from "./projects.js";
+import {
+  createProjectRegistry,
+  ProjectRegistryError,
+  projectIdParamSchema,
+} from "./projects.js";
 import { registerSetupRoutes } from "./setup.js";
 
 const startRunBody = z.object({
@@ -23,10 +31,18 @@ const startRunBody = z.object({
   rulePackIds: z.array(z.string().min(1)).optional(),
 });
 
+const projectStartRunBody = z
+  .object({
+    scenarioId: z.string().min(1).default("quick-scan"),
+  })
+  .strict();
+
 const runIdParam = z
   .string()
   .min(1)
   .regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/);
+
+const projectRunParamSchema = projectIdParamSchema.extend({ id: runIdParam });
 
 export type LocalApi = {
   url: string;
@@ -45,9 +61,20 @@ export type StartLocalApiOptions = {
   runHoldMs?: number;
 };
 
-type RunRecord = {
+type RunStatus = "queued" | "running" | "completed" | "cancelled" | "failed";
+
+type RunInputs = {
+  targetId: string;
+  scenarioId: string;
+  profileId: string;
+  rulePackIds: string[];
+};
+
+type RunRecord = RunInputs & {
   runId: string;
-  status: "queued" | "running" | "completed" | "cancelled" | "failed";
+  projectId: string | undefined;
+  createdAt: string;
+  status: RunStatus;
   payloadHash: string;
   events: { id: number; data: string }[];
   done: boolean;
@@ -55,6 +82,11 @@ type RunRecord = {
   sse: import("node:http").ServerResponse[];
   holdTimer: ReturnType<typeof setTimeout> | undefined;
 };
+
+type StartRunResult =
+  | { kind: "ok"; run: RunRecord }
+  | { kind: "lost" }
+  | { kind: "mismatch" };
 
 function envelope(
   code: string,
@@ -78,6 +110,30 @@ function sendEnvelope(
   return reply.status(packed.status).send(packed.body);
 }
 
+function sendProjectRegistryError(
+  reply: FastifyReply,
+  error: unknown,
+): FastifyReply {
+  if (!(error instanceof ProjectRegistryError)) {
+    throw error;
+  }
+  if (error.code === "NOT_FOUND") {
+    return sendEnvelope(reply, "NOT_FOUND", "project not found", 404);
+  }
+  if (error.code === "INVALID_ROOT") {
+    return sendEnvelope(reply, "UNPROCESSABLE", error.message, 422);
+  }
+  if (error.code === "DUPLICATE_ROOT") {
+    return sendEnvelope(reply, "CONFLICT", error.message, 409);
+  }
+  return sendEnvelope(
+    reply,
+    "INTERNAL_ERROR",
+    "project registry is unavailable",
+    500,
+  );
+}
+
 function tokenOk(provided: string | undefined, expected: string): boolean {
   if (provided === undefined || provided.length !== expected.length) {
     return false;
@@ -92,6 +148,13 @@ function readToken(header: string | string[] | undefined): string | undefined {
   }
   const bearer = /^Bearer\s+(\S+)$/i.exec(raw);
   return bearer?.[1] ?? raw;
+}
+
+function readIdempotencyKey(
+  header: string | string[] | undefined,
+): string | undefined {
+  const key = Array.isArray(header) ? header[0] : header;
+  return key === undefined || key.length === 0 ? undefined : key;
 }
 
 function loopbackOrigin(origin: string): boolean {
@@ -146,7 +209,7 @@ function endSse(run: RunRecord): void {
 
 function finishRun(
   run: RunRecord,
-  status: RunRecord["status"],
+  status: RunStatus,
   baselineEligible: boolean,
 ): void {
   if (run.holdTimer !== undefined) {
@@ -157,6 +220,81 @@ function finishRun(
   run.baselineEligible = baselineEligible;
   run.done = true;
   endSse(run);
+}
+
+function snapshot(run: RunRecord): {
+  runId: string;
+  projectId: string | undefined;
+  status: RunStatus;
+  baselineEligible: boolean;
+} {
+  return {
+    runId: run.runId,
+    projectId: run.projectId,
+    status: run.status,
+    baselineEligible: run.baselineEligible,
+  };
+}
+
+function scopedRun(
+  runs: ReadonlyMap<string, RunRecord>,
+  projectId: string,
+  runId: string,
+): RunRecord | undefined {
+  const run = runs.get(runId);
+  return run?.projectId === projectId ? run : undefined;
+}
+
+function streamRunEvents(
+  run: RunRecord,
+  request: FastifyRequest,
+  reply: FastifyReply,
+  runHoldMs: number,
+): FastifyReply | void {
+  const lastHeader = request.headers["last-event-id"];
+  const lastRaw = Array.isArray(lastHeader) ? lastHeader[0] : lastHeader;
+  const lastId = lastRaw !== undefined ? Number(lastRaw) : 0;
+  if (run.done && lastId >= (run.events.at(-1)?.id ?? 0)) {
+    return sendEnvelope(reply, "GONE", "event stream completed", 410);
+  }
+  reply.hijack();
+  const sseHeaders: Record<string, string> = {
+    "content-type": "text/event-stream",
+    "cache-control": "no-cache",
+    connection: "keep-alive",
+  };
+  const origin = request.headers.origin;
+  if (typeof origin === "string" && loopbackOrigin(origin)) {
+    sseHeaders["access-control-allow-origin"] = origin;
+    sseHeaders.vary = "Origin";
+  }
+  reply.raw.writeHead(200, sseHeaders);
+  for (const event of run.events) {
+    if (event.id > lastId) {
+      reply.raw.write(`id: ${event.id}\ndata: ${event.data}\n\n`);
+    }
+  }
+  if (run.done) {
+    reply.raw.end();
+    return;
+  }
+  run.sse.push(reply.raw);
+  if (runHoldMs <= 0) {
+    pushEvent(run, { phase: "measure", detail: "stub" });
+    finishRun(run, "completed", true);
+    return;
+  }
+  if (run.holdTimer === undefined) {
+    run.holdTimer = setTimeout(() => {
+      if (run.done) {
+        return;
+      }
+      pushEvent(run, { phase: "measure", detail: "stub" });
+      pushEvent(run, { phase: "analyze", detail: "stub" });
+      pushEvent(run, { phase: "report", detail: "stub" });
+      finishRun(run, "completed", true);
+    }, runHoldMs);
+  }
 }
 
 async function portFree(port: number): Promise<boolean> {
@@ -189,6 +327,63 @@ export async function startLocalApi(
       ? {}
       : { path: options.projectRegistryPath },
   );
+
+  const startRun = (
+    key: string,
+    inputs: RunInputs,
+    projectId: string | undefined,
+  ): StartRunResult => {
+    const hash = payloadHash({ projectId: projectId ?? null, ...inputs });
+    const existingId = idempotency.get(key);
+    if (existingId !== undefined) {
+      const existing = runs.get(existingId);
+      if (existing === undefined) {
+        return { kind: "lost" };
+      }
+      return existing.payloadHash === hash
+        ? { kind: "ok", run: existing }
+        : { kind: "mismatch" };
+    }
+
+    const runId = `run-${randomBytes(8).toString("hex")}`;
+    const run: RunRecord = {
+      ...inputs,
+      runId,
+      projectId,
+      createdAt: new Date().toISOString(),
+      status: "running",
+      payloadHash: hash,
+      events: [
+        { id: 1, data: JSON.stringify({ phase: "setup", detail: "queued" }) },
+        { id: 2, data: JSON.stringify({ phase: "warmup", detail: "ready" }) },
+      ],
+      done: false,
+      baselineEligible: false,
+      sse: [],
+      holdTimer: undefined,
+    };
+    runs.set(runId, run);
+    idempotency.set(key, runId);
+    return { kind: "ok", run };
+  };
+
+  const sendStartResult = (
+    reply: FastifyReply,
+    result: StartRunResult,
+  ): FastifyReply => {
+    if (result.kind === "lost") {
+      return sendEnvelope(reply, "CONFLICT", "idempotency record lost", 409);
+    }
+    if (result.kind === "mismatch") {
+      return sendEnvelope(
+        reply,
+        "CONFLICT",
+        "idempotency key reused with a different payload",
+        409,
+      );
+    }
+    return reply.status(202).send({ runId: result.run.runId });
+  };
 
   const app: FastifyInstance = Fastify({
     logger: false,
@@ -257,10 +452,198 @@ export async function startLocalApi(
     sendEnvelope,
   );
 
+  app.post("/api/v1/projects/:projectId/runs", async (request, reply) => {
+    const params = projectIdParamSchema.safeParse(request.params);
+    if (!params.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid project id", 400);
+    }
+    const body = projectStartRunBody.safeParse(request.body);
+    if (!body.success) {
+      return sendEnvelope(reply, "UNPROCESSABLE", "invalid run request", 422);
+    }
+    const key = readIdempotencyKey(request.headers["idempotency-key"]);
+    if (key === undefined) {
+      return sendEnvelope(
+        reply,
+        "BAD_REQUEST",
+        "Idempotency-Key is required",
+        400,
+      );
+    }
+
+    let project;
+    try {
+      project = await projectRegistry.resolve(params.data.projectId);
+    } catch (error) {
+      return sendProjectRegistryError(reply, error);
+    }
+
+    return sendStartResult(
+      reply,
+      startRun(
+        key,
+        {
+          targetId: project.adapterId,
+          scenarioId: body.data.scenarioId,
+          profileId: project.targetProfileId,
+          rulePackIds: [...project.rulePackIds],
+        },
+        project.id,
+      ),
+    );
+  });
+
+  app.get("/api/v1/projects/:projectId/runs", async (request, reply) => {
+    const params = projectIdParamSchema.safeParse(request.params);
+    if (!params.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid project id", 400);
+    }
+    if (projectRegistry.get(params.data.projectId) === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "project not found", 404);
+    }
+
+    const owned = [...runs.values()]
+      .filter((run) => run.projectId === params.data.projectId)
+      .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+    const summaries = await Promise.all(
+      owned.map(async (run) => ({
+        runId: run.runId,
+        projectId: run.projectId,
+        status: run.status,
+        baselineEligible: run.baselineEligible,
+        createdAt: run.createdAt,
+        scenarioId: run.scenarioId,
+        scenarioLabel:
+          run.scenarioId === "quick-scan" ? "Quick Scan" : run.scenarioId,
+        targetId: run.targetId,
+        profileId: run.profileId,
+        rulePackIds: [...run.rulePackIds],
+        comparable: (await loadArtifactByRunId(run.runId)) !== undefined,
+      })),
+    );
+    return reply.status(200).send({ runs: summaries });
+  });
+
+  app.get("/api/v1/projects/:projectId/runs/:id", async (request, reply) => {
+    const parsed = projectRunParamSchema.safeParse(request.params);
+    if (!parsed.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid project or run id", 400);
+    }
+    if (projectRegistry.get(parsed.data.projectId) === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "project not found", 404);
+    }
+    const run = scopedRun(runs, parsed.data.projectId, parsed.data.id);
+    if (run === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "project run not found", 404);
+    }
+    return reply.status(200).send(snapshot(run));
+  });
+
+  app.post(
+    "/api/v1/projects/:projectId/runs/:id/abort",
+    async (request, reply) => {
+      const parsed = projectRunParamSchema.safeParse(request.params);
+      if (!parsed.success) {
+        return sendEnvelope(
+          reply,
+          "BAD_REQUEST",
+          "invalid project or run id",
+          400,
+        );
+      }
+      if (projectRegistry.get(parsed.data.projectId) === undefined) {
+        return sendEnvelope(reply, "NOT_FOUND", "project not found", 404);
+      }
+      const run = scopedRun(runs, parsed.data.projectId, parsed.data.id);
+      if (run === undefined) {
+        return sendEnvelope(reply, "NOT_FOUND", "project run not found", 404);
+      }
+      if (run.status === "cancelled") {
+        return reply.status(200).send(snapshot(run));
+      }
+      if (run.done) {
+        return sendEnvelope(reply, "CONFLICT", "run already finished", 409);
+      }
+      pushEvent(run, { phase: "cleanup", detail: "aborted" });
+      finishRun(run, "cancelled", false);
+      return reply.status(200).send(snapshot(run));
+    },
+  );
+
+  app.get(
+    "/api/v1/projects/:projectId/runs/:id/events",
+    async (request, reply) => {
+      const parsed = projectRunParamSchema.safeParse(request.params);
+      if (!parsed.success) {
+        return sendEnvelope(
+          reply,
+          "BAD_REQUEST",
+          "invalid project or run id",
+          400,
+        );
+      }
+      if (projectRegistry.get(parsed.data.projectId) === undefined) {
+        return sendEnvelope(reply, "NOT_FOUND", "project not found", 404);
+      }
+      const run = scopedRun(runs, parsed.data.projectId, parsed.data.id);
+      if (run === undefined) {
+        return sendEnvelope(reply, "NOT_FOUND", "project run not found", 404);
+      }
+      return streamRunEvents(run, request, reply, runHoldMs);
+    },
+  );
+
+  const compareBody = z.object({
+    baselineRunId: runIdParam,
+    candidateRunId: runIdParam,
+  });
+
+  app.post("/api/v1/projects/:projectId/compare", async (request, reply) => {
+    const params = projectIdParamSchema.safeParse(request.params);
+    if (!params.success) {
+      return sendEnvelope(reply, "BAD_REQUEST", "invalid project id", 400);
+    }
+    if (projectRegistry.get(params.data.projectId) === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "project not found", 404);
+    }
+    const parsed = compareBody.safeParse(request.body);
+    if (!parsed.success) {
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid compare request",
+        422,
+      );
+    }
+    const baselineRun = scopedRun(
+      runs,
+      params.data.projectId,
+      parsed.data.baselineRunId,
+    );
+    const candidateRun = scopedRun(
+      runs,
+      params.data.projectId,
+      parsed.data.candidateRunId,
+    );
+    if (baselineRun === undefined || candidateRun === undefined) {
+      return sendEnvelope(reply, "NOT_FOUND", "project run not found", 404);
+    }
+    const baseline = await loadArtifactByRunId(baselineRun.runId);
+    const candidate = await loadArtifactByRunId(candidateRun.runId);
+    if (baseline === undefined || candidate === undefined) {
+      return sendEnvelope(
+        reply,
+        "RUN_ARTIFACT_NOT_READY",
+        "run artifacts are not available for comparison",
+        409,
+      );
+    }
+    return reply.status(200).send(compareRuns(baseline, candidate));
+  });
+
   app.post("/api/v1/runs", async (request, reply) => {
-    const keyHeader = request.headers["idempotency-key"];
-    const key = Array.isArray(keyHeader) ? keyHeader[0] : keyHeader;
-    if (key === undefined || key.length === 0) {
+    const key = readIdempotencyKey(request.headers["idempotency-key"]);
+    if (key === undefined) {
       return sendEnvelope(
         reply,
         "BAD_REQUEST",
@@ -272,40 +655,19 @@ export async function startLocalApi(
     if (!parsed.success) {
       return sendEnvelope(reply, "UNPROCESSABLE", "invalid run request", 422);
     }
-    const hash = payloadHash(parsed.data);
-    const existingId = idempotency.get(key);
-    if (existingId !== undefined) {
-      const existing = runs.get(existingId);
-      if (existing === undefined) {
-        return sendEnvelope(reply, "CONFLICT", "idempotency record lost", 409);
-      }
-      if (existing.payloadHash !== hash) {
-        return sendEnvelope(
-          reply,
-          "CONFLICT",
-          "idempotency key reused with a different payload",
-          409,
-        );
-      }
-      return reply.status(202).send({ runId: existing.runId });
-    }
-    const runId = `run-${randomBytes(8).toString("hex")}`;
-    const events = [
-      { id: 1, data: JSON.stringify({ phase: "setup", detail: "queued" }) },
-      { id: 2, data: JSON.stringify({ phase: "warmup", detail: "ready" }) },
-    ];
-    runs.set(runId, {
-      runId,
-      status: "running",
-      payloadHash: hash,
-      events,
-      done: false,
-      baselineEligible: false,
-      sse: [],
-      holdTimer: undefined,
-    });
-    idempotency.set(key, runId);
-    return reply.status(202).send({ runId });
+    return sendStartResult(
+      reply,
+      startRun(
+        key,
+        {
+          targetId: parsed.data.targetId,
+          scenarioId: parsed.data.scenarioId,
+          profileId: parsed.data.profileId,
+          rulePackIds: [...(parsed.data.rulePackIds ?? [])],
+        },
+        undefined,
+      ),
+    );
   });
 
   app.get("/api/v1/runs/:id", async (request, reply) => {
@@ -325,11 +687,7 @@ export async function startLocalApi(
       }
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }
-    return reply.status(200).send({
-      runId: run.runId,
-      status: run.status,
-      baselineEligible: run.baselineEligible,
-    });
+    return reply.status(200).send(snapshot(run));
   });
 
   app.get("/api/v1/runs/:id/artifact", async (request, reply) => {
@@ -365,28 +723,16 @@ export async function startLocalApi(
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }
     if (run.status === "cancelled") {
-      return reply.status(200).send({
-        runId: run.runId,
-        status: run.status,
-        baselineEligible: false,
-      });
+      return reply.status(200).send(snapshot(run));
     }
     if (run.done) {
       return sendEnvelope(reply, "CONFLICT", "run already finished", 409);
     }
     pushEvent(run, { phase: "cleanup", detail: "aborted" });
     finishRun(run, "cancelled", false);
-    return reply.status(200).send({
-      runId: run.runId,
-      status: "cancelled",
-      baselineEligible: false,
-    });
+    return reply.status(200).send(snapshot(run));
   });
 
-  const compareBody = z.object({
-    baselineRunId: runIdParam,
-    candidateRunId: runIdParam,
-  });
   const baselineBody = z.object({
     runId: runIdParam,
     confirm: z.boolean(),
@@ -459,51 +805,7 @@ export async function startLocalApi(
     if (run === undefined) {
       return sendEnvelope(reply, "NOT_FOUND", "run not found", 404);
     }
-    const lastHeader = request.headers["last-event-id"];
-    const lastRaw = Array.isArray(lastHeader) ? lastHeader[0] : lastHeader;
-    const lastId = lastRaw !== undefined ? Number(lastRaw) : 0;
-    if (run.done && lastId >= (run.events.at(-1)?.id ?? 0)) {
-      return sendEnvelope(reply, "GONE", "event stream completed", 410);
-    }
-    reply.hijack();
-    const sseHeaders: Record<string, string> = {
-      "content-type": "text/event-stream",
-      "cache-control": "no-cache",
-      connection: "keep-alive",
-    };
-    const origin = request.headers.origin;
-    if (typeof origin === "string" && loopbackOrigin(origin)) {
-      sseHeaders["access-control-allow-origin"] = origin;
-      sseHeaders.vary = "Origin";
-    }
-    reply.raw.writeHead(200, sseHeaders);
-    for (const event of run.events) {
-      if (event.id > lastId) {
-        reply.raw.write(`id: ${event.id}\ndata: ${event.data}\n\n`);
-      }
-    }
-    if (run.done) {
-      reply.raw.end();
-      return;
-    }
-    run.sse.push(reply.raw);
-    if (runHoldMs <= 0) {
-      pushEvent(run, { phase: "measure", detail: "stub" });
-      finishRun(run, "completed", true);
-      return;
-    }
-    if (run.holdTimer === undefined) {
-      run.holdTimer = setTimeout(() => {
-        if (run.done) {
-          return;
-        }
-        pushEvent(run, { phase: "measure", detail: "stub" });
-        pushEvent(run, { phase: "analyze", detail: "stub" });
-        pushEvent(run, { phase: "report", detail: "stub" });
-        finishRun(run, "completed", true);
-      }, runHoldMs);
-    }
-    return;
+    return streamRunEvents(run, request, reply, runHoldMs);
   });
 
   await app.listen({ host: "127.0.0.1", port });
