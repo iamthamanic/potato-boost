@@ -19,6 +19,7 @@ import { GOLDEN_RUN_ID, goldenSamples, loadArtifactByRunId } from "./golden.js";
 import { registerProjectRoutes } from "./project-routes.js";
 import {
   createProjectRegistry,
+  type ProjectRecord,
   ProjectRegistryError,
   projectIdParamSchema,
 } from "./projects.js";
@@ -250,7 +251,7 @@ function streamRunEvents(
   request: FastifyRequest,
   reply: FastifyReply,
   runHoldMs: number,
-): FastifyReply | void {
+): FastifyReply | undefined {
   const lastHeader = request.headers["last-event-id"];
   const lastRaw = Array.isArray(lastHeader) ? lastHeader[0] : lastHeader;
   const lastId = lastRaw !== undefined ? Number(lastRaw) : 0;
@@ -276,13 +277,13 @@ function streamRunEvents(
   }
   if (run.done) {
     reply.raw.end();
-    return;
+    return undefined;
   }
   run.sse.push(reply.raw);
   if (runHoldMs <= 0) {
     pushEvent(run, { phase: "measure", detail: "stub" });
     finishRun(run, "completed", true);
-    return;
+    return undefined;
   }
   if (run.holdTimer === undefined) {
     run.holdTimer = setTimeout(() => {
@@ -295,6 +296,7 @@ function streamRunEvents(
       finishRun(run, "completed", true);
     }, runHoldMs);
   }
+  return undefined;
 }
 
 async function portFree(port: number): Promise<boolean> {
@@ -471,7 +473,7 @@ export async function startLocalApi(
       );
     }
 
-    let project;
+    let project: ProjectRecord;
     try {
       project = await projectRegistry.resolve(params.data.projectId);
     } catch (error) {
