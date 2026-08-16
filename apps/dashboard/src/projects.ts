@@ -41,7 +41,8 @@ export const ADAPTER_OPTIONS: readonly {
   {
     id: "unknown",
     label: "Auto / generic",
-    detail: "Use when you want to configure the project before choosing an adapter.",
+    detail:
+      "Use when you want to configure the project before choosing an adapter.",
   },
   { id: "vite", label: "Vite", detail: "Vite-powered web application." },
   { id: "react", label: "React", detail: "React web application." },
@@ -128,7 +129,10 @@ export function projectIdFromPathname(pathname: string): string | undefined {
   }
 }
 
-export function projectSetupError(name: string, root: string): string | undefined {
+export function projectSetupError(
+  name: string,
+  root: string,
+): string | undefined {
   if (name.trim().length === 0) {
     return "Enter a project name.";
   }
