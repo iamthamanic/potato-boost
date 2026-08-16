@@ -177,7 +177,10 @@ describe("local project registry", () => {
     );
     expect(confirm.status).toBe(200);
     expect(((await confirm.json()) as { wrote: boolean }).wrote).toBe(true);
-    const config = await readFile(join(projectRoot, "potato.config.yaml"), "utf8");
+    const config = await readFile(
+      join(projectRoot, "potato.config.yaml"),
+      "utf8",
+    );
     expect(config).toMatch(/adapterId: "vite"/);
     expect(await readdir(startupRoot)).toEqual([]);
 
