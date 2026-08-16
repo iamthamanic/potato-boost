@@ -35,7 +35,9 @@ export function ProjectRail() {
       </div>
 
       <Link
-        className={location.pathname === "/projects" ? "rail-all is-active" : "rail-all"}
+        className={
+          location.pathname === "/projects" ? "rail-all is-active" : "rail-all"
+        }
         to="/projects"
         aria-current={location.pathname === "/projects" ? "page" : undefined}
       >
@@ -64,7 +66,9 @@ export function ProjectRail() {
             return (
               <li key={project.id}>
                 <Link
-                  className={active ? "project-switch is-active" : "project-switch"}
+                  className={
+                    active ? "project-switch is-active" : "project-switch"
+                  }
                   to={projectOverviewPath(project.id)}
                   aria-current={active ? "true" : undefined}
                 >
