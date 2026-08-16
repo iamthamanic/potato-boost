@@ -46,7 +46,9 @@ export function NewRun() {
   };
 
   const setupPath =
-    projectId === undefined ? "/projects" : projectPath(projectId, "test-setup");
+    projectId === undefined
+      ? "/projects"
+      : projectPath(projectId, "test-setup");
 
   return (
     <section className="narrow-page">
