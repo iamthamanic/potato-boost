@@ -45,31 +45,58 @@ export function NewRun() {
         <div>
           <p className="eyebrow">Recommended run</p>
           <h2>Quick Scan</h2>
-          <p className="muted">A short local measurement designed to produce the first actionable finding without configuration work.</p>
+          <p className="muted">
+            A short local measurement designed to produce the first actionable
+            finding without configuration work.
+          </p>
         </div>
       </header>
 
       <div className="panel run-setup-card">
         <dl className="setup-summary">
-          <div><dt>Scenario</dt><dd>Quick Scan</dd></div>
-          <div><dt>Target</dt><dd>This machine · Web / Three.js</dd></div>
-          <div><dt>Profile</dt><dd>Local performance budget</dd></div>
-          <div><dt>Rules</dt><dd>Bundled web performance rules</dd></div>
+          <div>
+            <dt>Scenario</dt>
+            <dd>Quick Scan</dd>
+          </div>
+          <div>
+            <dt>Target</dt>
+            <dd>This machine · Web / Three.js</dd>
+          </div>
+          <div>
+            <dt>Profile</dt>
+            <dd>Local performance budget</dd>
+          </div>
+          <div>
+            <dt>Rules</dt>
+            <dd>Bundled web performance rules</dd>
+          </div>
         </dl>
 
         <details className="technical-details">
           <summary>Advanced run details</summary>
           <dl className="technical-list">
-            <div><dt>Scenario ID</dt><dd className="mono">{QUICK_SCAN.scenarioId}</dd></div>
-            <div><dt>Target ID</dt><dd className="mono">{QUICK_SCAN.targetId}</dd></div>
-            <div><dt>Profile ID</dt><dd className="mono">{QUICK_SCAN.profileId}</dd></div>
+            <div>
+              <dt>Scenario ID</dt>
+              <dd className="mono">{QUICK_SCAN.scenarioId}</dd>
+            </div>
+            <div>
+              <dt>Target ID</dt>
+              <dd className="mono">{QUICK_SCAN.targetId}</dd>
+            </div>
+            <div>
+              <dt>Profile ID</dt>
+              <dd className="mono">{QUICK_SCAN.profileId}</dd>
+            </div>
           </dl>
         </details>
 
         <div className="next-action">
           <div>
             <strong>Ready to measure</strong>
-            <p className="muted">The live view will show prepare, warm-up, measurement, analysis, and report phases.</p>
+            <p className="muted">
+              The live view will show prepare, warm-up, measurement, analysis,
+              and report phases.
+            </p>
           </div>
           <button type="button" onClick={() => void start()} disabled={busy}>
             {busy ? "Starting scan…" : "Start Quick Scan"}
@@ -78,9 +105,14 @@ export function NewRun() {
 
         {error !== undefined ? (
           <div className="callout" role="alert">
-            <p className="status"><span aria-hidden="true">!</span><span>Scan did not start</span></p>
+            <p className="status">
+              <span aria-hidden="true">!</span>
+              <span>Scan did not start</span>
+            </p>
             <p>{error}</p>
-            <Link className="text-link" to="/setup/doctor">Open system check</Link>
+            <Link className="text-link" to="/setup/doctor">
+              Open system check
+            </Link>
           </div>
         ) : null}
       </div>
