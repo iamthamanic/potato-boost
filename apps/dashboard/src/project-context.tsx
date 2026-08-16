@@ -8,13 +8,13 @@ import {
   useState,
 } from "react";
 import {
-  createProject as createProjectRequest,
   type CreateProjectInput,
+  createProject as createProjectRequest,
   loadProjects,
-  projectApiError,
   type ProjectRecord,
-  updateProject as updateProjectRequest,
+  projectApiError,
   type UpdateProjectInput,
+  updateProject as updateProjectRequest,
 } from "./projects.js";
 
 type ProjectContextValue = {
@@ -29,12 +29,13 @@ type ProjectContextValue = {
   ) => Promise<ProjectRecord>;
 };
 
-const ProjectContext = createContext<ProjectContextValue | undefined>(undefined);
+const ProjectContext = createContext<ProjectContextValue | undefined>(
+  undefined,
+);
 
 export function ProjectProvider(props: { children: ReactNode }) {
-  const [status, setStatus] = useState<ProjectContextValue["status"]>(
-    "loading",
-  );
+  const [status, setStatus] =
+    useState<ProjectContextValue["status"]>("loading");
   const [projects, setProjects] = useState<ProjectRecord[]>([]);
   const [error, setError] = useState<string | undefined>(undefined);
 
@@ -96,7 +97,9 @@ export function ProjectProvider(props: { children: ReactNode }) {
   );
 
   return (
-    <ProjectContext.Provider value={value}>{props.children}</ProjectContext.Provider>
+    <ProjectContext.Provider value={value}>
+      {props.children}
+    </ProjectContext.Provider>
   );
 }
 
