@@ -1,6 +1,8 @@
 import {
   mkdir,
   mkdtemp,
+  readdir,
+  readFile,
   realpath,
   rename,
   writeFile,
@@ -101,7 +103,7 @@ describe("local project registry", () => {
     expect(body.projects[0]?.targetProfileId).toBe("low-end-mobile");
   });
 
-  it("uses only the registered project root for scoped detection", async () => {
+  it("uses only the registered project root for scoped setup", async () => {
     const temp = await mkdtemp(join(tmpdir(), "potato-project-root-"));
     const startupRoot = join(temp, "startup");
     const projectRoot = join(temp, "selected");
@@ -119,6 +121,14 @@ describe("local project registry", () => {
     api = await startLocalApi({
       projectRoot: startupRoot,
       projectRegistryPath: join(temp, "projects.json"),
+      doctorEnv: {
+        nodePath: "/usr/bin/node",
+        nodeVersion: "v24.0.0",
+        wantedNodeRange: ">=24",
+        locateBrowser: async () => null,
+        isPortInUse: async () => false,
+        appPort: 5199,
+      },
     });
     const created = await createProject(api, projectRoot, "Selected app");
     const project = (await created.json()) as Project;
@@ -131,6 +141,57 @@ describe("local project registry", () => {
     const body = (await detected.json()) as { root: string };
     expect(body.root).toBe(await realpath(projectRoot));
     expect(body.root).not.toBe(await realpath(startupRoot));
+
+    const before = await readdir(projectRoot);
+    const preview = await fetch(
+      `${api.url}/api/v1/projects/${project.id}/config/preview`,
+      {
+        method: "POST",
+        headers: headers(api),
+        body: JSON.stringify({ adapterId: "vite", start: ["npx", "vite"] }),
+      },
+    );
+    expect(preview.status).toBe(200);
+    expect(((await preview.json()) as { wrote: boolean }).wrote).toBe(false);
+    expect(await readdir(projectRoot)).toEqual(before);
+
+    const cancel = await fetch(
+      `${api.url}/api/v1/projects/${project.id}/config/cancel`,
+      {
+        method: "POST",
+        headers: headers(api),
+        body: "{}",
+      },
+    );
+    expect(cancel.status).toBe(200);
+    expect(((await cancel.json()) as { wrote: boolean }).wrote).toBe(false);
+    expect(await readdir(projectRoot)).toEqual(before);
+
+    const confirm = await fetch(
+      `${api.url}/api/v1/projects/${project.id}/config/confirm`,
+      {
+        method: "POST",
+        headers: headers(api),
+        body: JSON.stringify({ adapterId: "vite", start: ["npx", "vite"] }),
+      },
+    );
+    expect(confirm.status).toBe(200);
+    expect(((await confirm.json()) as { wrote: boolean }).wrote).toBe(true);
+    const config = await readFile(join(projectRoot, "potato.config.yaml"), "utf8");
+    expect(config).toMatch(/adapterId: "vite"/);
+    expect(await readdir(startupRoot)).toEqual([]);
+
+    const doctor = await fetch(
+      `${api.url}/api/v1/projects/${project.id}/doctor`,
+      {
+        method: "POST",
+        headers: headers(api),
+        body: JSON.stringify({ adapterId: "vite", start: ["npx", "vite"] }),
+      },
+    );
+    expect(doctor.status).toBe(200);
+    const report = (await doctor.json()) as { root: string };
+    expect(report.root).toBe(await realpath(projectRoot));
 
     const unknown = await fetch(
       `${api.url}/api/v1/projects/not-a-project/detect`,
