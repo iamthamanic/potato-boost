@@ -41,12 +41,24 @@ Out: project-scoped run storage/listing/compare selection (#93), collector/analy
 
 ## Acceptance
 
-- [ ] `/projects` is the dashboard entry point with project cards/list, empty state, and one clear Create project action; sidebar shows Projects plus all registered projects with active state.
-- [ ] Project creation uses a keyboard-accessible multi-step wizard in this order: Project Setup → Rules → Target Profiles → Review, then creates exactly one project through #91 APIs.
-- [ ] An existing project exposes a Test Setup screen where Project Setup, Rules, and Target Profiles can be edited and saved after creation.
-- [ ] Desktop/tablet/mobile and reduced-motion states pass the existing accessibility/E2E quality floor; no duplicate primary navigation concepts are shown in sidebar and top nav.
-- [ ] Touched files: zero type escape hatches (typed-strict / Boy Scout).
+- [x] `/projects` is the dashboard entry point with project cards/list, empty state, and one clear Create project action; sidebar shows Projects plus all registered projects with active state.
+- [x] Project creation uses a keyboard-accessible multi-step wizard in this order: Project Setup → Rules → Target Profiles → Review, then creates exactly one project through #91 APIs.
+- [x] An existing project exposes a Test Setup screen where Project Setup, Rules, and Target Profiles can be edited and saved after creation.
+- [x] Desktop/tablet/mobile and reduced-motion states pass the existing accessibility/E2E quality floor; no duplicate primary navigation concepts are shown in sidebar and top nav.
+- [x] Touched files: zero type escape hatches (typed-strict / Boy Scout).
 
 ## Implementation Notes
 
-Pending implementation and verification.
+- `/projects` is the dashboard entry. The left rail owns project selection; Overview, Runs, Compare, and Scenarios live in the active-project context bar, while Test Setup is a secondary project action.
+- The creation wizard holds draft form state locally and performs the first registry mutation only from Review → Create project. A pending-submit ref prevents double clicks; duplicate-root validation remains authoritative in the Local API.
+- Test Setup loads the selected registry record and PATCHes that exact project. Project paths remain server-validated/canonicalized; the dashboard stores no authoritative registry in browser persistence.
+- Legacy top-level workflow routes redirect to `/projects`, so users are not presented with two competing navigation models.
+- #93 remains the explicit boundary for project-scoped run persistence/listing and human Before/After compare choices.
+- Runtime verification on `74e1e803c9882ac9e2218c7ca5a6738d23878058`: GitHub Actions run `31941713043` passed `pnpm checks` and Playwright/Axe E2E, including project creation, active navigation, Test Setup editing, keyboard, mobile 390px, tablet 768px, and reduced-motion coverage.
+- Web-interface review was reconciled with `docs/UI_STYLEGUIDE.md`; project form controls have associated labels/names and existing focus/reduced-motion conventions are preserved.
+
+## Composition Gate
+
+VERDICT: CLEAR
+
+The create/edit event was reconstructed through dashboard state → authenticated Local API → canonical project registry → provider refresh → route/rail identity. Multiple-project, invalid-root, duplicate-submit/retry, and unknown-project simulations preserve project identity without silent fallback. See `.qa/runs/composition-gate-project-shell-wizard.md`.
