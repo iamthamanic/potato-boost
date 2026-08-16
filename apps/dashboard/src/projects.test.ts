@@ -22,13 +22,17 @@ describe("project dashboard helpers", () => {
       "project alpha",
     );
     expect(projectIdFromPathname("/projects/new")).toBeUndefined();
-    expect(projectIdFromPathname("/projects/%E0%A4%A/overview")).toBeUndefined();
+    expect(
+      projectIdFromPathname("/projects/%E0%A4%A/overview"),
+    ).toBeUndefined();
   });
 
   it("validates required setup fields without claiming filesystem authority", () => {
     expect(projectSetupError("", "/tmp/app")).toBe("Enter a project name.");
     expect(projectSetupError("App", "")).toBe("Enter the local project path.");
-    expect(projectSetupError("App", "/missing/is-still-api-validated")).toBeUndefined();
+    expect(
+      projectSetupError("App", "/missing/is-still-api-validated"),
+    ).toBeUndefined();
   });
 
   it("turns local api statuses into actionable project messages", () => {
