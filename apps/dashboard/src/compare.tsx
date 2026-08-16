@@ -285,9 +285,7 @@ export function Compare() {
     candidateId !== undefined &&
     baselineId !== candidateId;
   const canConfirm =
-    canCompare &&
-    result !== undefined &&
-    result.comparability === "comparable";
+    canCompare && result !== undefined && result.comparability === "comparable";
 
   return (
     <section className="workspace-page">
