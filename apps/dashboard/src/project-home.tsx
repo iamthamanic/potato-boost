@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { projectPath } from "./projects.js";
 import { getApiBase, getRunToken } from "./session.js";
 
 type HomeState =
@@ -8,6 +9,7 @@ type HomeState =
   | { kind: "error"; message: string };
 
 export function ProjectHome() {
+  const { projectId } = useParams();
   const [state, setState] = useState<HomeState>({
     kind: "loading",
     operation: "Checking local API",
@@ -43,6 +45,11 @@ export function ProjectHome() {
     void load();
   }, [load]);
 
+  const runsPath =
+    projectId === undefined ? "/projects" : projectPath(projectId, "runs");
+  const setupPath =
+    projectId === undefined ? "/projects" : projectPath(projectId, "test-setup");
+
   return (
     <section className="workspace-page">
       <header className="page-header">
@@ -54,7 +61,7 @@ export function ProjectHome() {
             code, then verify with the same setup.
           </p>
         </div>
-        <Link className="button-link primary-action" to="/runs/new">
+        <Link className="button-link primary-action" to={runsPath}>
           Run scan
         </Link>
       </header>
@@ -95,11 +102,11 @@ export function ProjectHome() {
               exact setup before starting.
             </p>
             <div className="actions">
-              <Link className="button-link" to="/runs/new">
+              <Link className="button-link" to={runsPath}>
                 Review and start scan
               </Link>
-              <Link className="text-link" to="/setup/detect">
-                Review project setup
+              <Link className="text-link" to={setupPath}>
+                Review Test Setup
               </Link>
             </div>
           </article>
