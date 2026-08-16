@@ -139,7 +139,7 @@ function registryError(
   );
 }
 
-function resolveProject(
+function readProject(
   registry: ProjectRegistry,
   params: unknown,
   reply: FastifyReply,
@@ -156,6 +156,25 @@ function resolveProject(
     return undefined;
   }
   return project;
+}
+
+async function resolveProject(
+  registry: ProjectRegistry,
+  params: unknown,
+  reply: FastifyReply,
+  sendEnvelope: EnvelopeFn,
+): Promise<ProjectRecord | undefined> {
+  const parsed = projectIdParamSchema.safeParse(params);
+  if (!parsed.success) {
+    sendEnvelope(reply, "BAD_REQUEST", "invalid project id", 400);
+    return undefined;
+  }
+  try {
+    return await registry.resolve(parsed.data.projectId);
+  } catch (error) {
+    registryError(error, reply, sendEnvelope);
+    return undefined;
+  }
 }
 
 export function registerProjectRoutes(
@@ -193,7 +212,7 @@ export function registerProjectRoutes(
   });
 
   app.get("/api/v1/projects/:projectId", async (request, reply) => {
-    const project = resolveProject(
+    const project = readProject(
       registry,
       request.params,
       reply,
@@ -247,7 +266,7 @@ export function registerProjectRoutes(
   }
 
   app.get("/api/v1/projects/:projectId/detect", async (request, reply) => {
-    const project = resolveProject(
+    const project = await resolveProject(
       registry,
       request.params,
       reply,
@@ -298,7 +317,7 @@ export function registerProjectRoutes(
   app.post(
     "/api/v1/projects/:projectId/config/preview",
     async (request, reply) => {
-      const project = resolveProject(
+      const project = await resolveProject(
         registry,
         request.params,
         reply,
@@ -331,7 +350,7 @@ export function registerProjectRoutes(
   app.post(
     "/api/v1/projects/:projectId/config/cancel",
     async (request, reply) => {
-      const project = resolveProject(
+      const project = await resolveProject(
         registry,
         request.params,
         reply,
@@ -347,7 +366,7 @@ export function registerProjectRoutes(
   app.post(
     "/api/v1/projects/:projectId/config/confirm",
     async (request, reply) => {
-      const project = resolveProject(
+      const project = await resolveProject(
         registry,
         request.params,
         reply,
@@ -382,7 +401,7 @@ export function registerProjectRoutes(
   );
 
   app.post("/api/v1/projects/:projectId/doctor", async (request, reply) => {
-    const project = resolveProject(
+    const project = await resolveProject(
       registry,
       request.params,
       reply,
