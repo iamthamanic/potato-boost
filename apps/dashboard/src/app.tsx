@@ -7,6 +7,7 @@ import "./guided-ux.css";
 import { LiveRun } from "./live-run.js";
 import { NewRun } from "./new-run.js";
 import { ProjectHome } from "./project-home.js";
+import "./result-ux.css";
 import { RunDetail } from "./run-detail.js";
 import { Screen } from "./screen.js";
 import { SetupDetect } from "./setup-detect.js";
