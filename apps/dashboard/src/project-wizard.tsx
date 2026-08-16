@@ -146,6 +146,7 @@ export function ProjectWizard() {
               <label htmlFor="project-name">Project name</label>
               <input
                 id="project-name"
+                name="project-name"
                 value={name}
                 onChange={(event) => {
                   setName(event.target.value);
@@ -159,6 +160,7 @@ export function ProjectWizard() {
               <label htmlFor="project-root">Project path</label>
               <input
                 id="project-root"
+                name="project-root"
                 className="mono"
                 value={root}
                 onChange={(event) => {
@@ -178,6 +180,7 @@ export function ProjectWizard() {
               <label htmlFor="project-adapter">Project type</label>
               <select
                 id="project-adapter"
+                name="project-adapter"
                 value={adapterId}
                 onChange={(event) => {
                   setAdapterId(event.target.value as AdapterId);
@@ -200,6 +203,7 @@ export function ProjectWizard() {
               <label htmlFor="project-start">Start argv</label>
               <input
                 id="project-start"
+                name="project-start"
                 className="mono"
                 value={startText}
                 onChange={(event) => {
@@ -229,6 +233,7 @@ export function ProjectWizard() {
                 <label className="choice-card" key={rule.id}>
                   <input
                     type="checkbox"
+                    name="rule-pack"
                     checked={rulePackIds.includes(rule.id)}
                     onChange={() => toggleRule(rule.id)}
                   />
