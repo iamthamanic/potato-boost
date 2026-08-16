@@ -121,11 +121,17 @@ input:focus-visible {
 
 .shell {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 240px minmax(0, 1fr);
   min-height: 100vh;
 }
 
 .nav {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
   border-right: 1px solid var(--color-line);
   padding: var(--space-4);
   background: var(--color-panel);
@@ -415,15 +421,6 @@ main h2 {
 }
 
 @media (max-width: 767px) {
-  .shell {
-    grid-template-columns: 1fr;
-  }
-
-  .nav {
-    border-right: 0;
-    border-bottom: 1px solid var(--color-line);
-  }
-
   .timeline-layout {
     grid-template-columns: 1fr;
   }
@@ -434,6 +431,20 @@ main h2 {
 
   .timeline-table {
     display: table;
+  }
+}
+
+@media (max-width: 389px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .nav {
+    position: static;
+    min-height: 0;
+    max-height: none;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-line);
   }
 }
 

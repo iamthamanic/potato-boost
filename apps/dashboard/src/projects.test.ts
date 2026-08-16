@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ApiRequestError } from "./api.js";
 import {
+  nameFromProjectRoot,
   projectApiError,
   projectIdFromPathname,
   projectOverviewPath,
@@ -27,6 +28,14 @@ describe("project dashboard helpers", () => {
     ).toBeUndefined();
   });
 
+  it("derives an editable project name from the folder path", () => {
+    expect(nameFromProjectRoot("/Users/me/dev/arena-game")).toBe("arena-game");
+    expect(nameFromProjectRoot("/Users/me/dev/arena-game/")).toBe("arena-game");
+    expect(nameFromProjectRoot("C:\\Users\\me\\arena-game")).toBe("arena-game");
+    expect(nameFromProjectRoot("/")).toBe("");
+    expect(nameFromProjectRoot("")).toBe("");
+  });
+
   it("validates required setup fields without claiming filesystem authority", () => {
     expect(projectSetupError("", "/tmp/app")).toBe("Enter a project name.");
     expect(projectSetupError("App", "")).toBe("Enter the local project path.");
@@ -44,6 +53,9 @@ describe("project dashboard helpers", () => {
     );
     expect(projectApiError(new ApiRequestError("gone", 404))).toMatch(
       /no longer exists/i,
+    );
+    expect(projectApiError(new ApiRequestError("no picker", 501))).toMatch(
+      /enter the path manually/i,
     );
   });
 

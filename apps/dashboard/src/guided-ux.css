@@ -51,6 +51,28 @@
   padding-top: var(--space-5);
 }
 
+.nav-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-fg);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.nav-icon-link:hover {
+  color: var(--color-accent);
+}
+
+.nav-icon-link svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.nav-icon-link[aria-current="page"] {
+  color: var(--color-accent);
+}
+
 .button-link {
   display: inline-flex;
   align-items: center;
@@ -66,6 +88,39 @@
 }
 .button-link:hover {
   border-color: var(--color-accent);
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: var(--color-panel);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+
+.icon-button:hover {
+  border-color: var(--color-accent);
+}
+
+.icon-button svg {
+  display: block;
+}
+
+.icon-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon-label svg {
+  display: block;
+  flex: 0 0 auto;
 }
 .primary-action {
   border-color: var(--color-accent);
@@ -274,7 +329,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .button-link {
+  .button-link,
+  .icon-button {
     transition: none;
   }
 }

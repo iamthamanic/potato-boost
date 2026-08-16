@@ -14,6 +14,7 @@ import {
 import { RunOverview } from "./run-overview.js";
 import { RunTimeline } from "./run-timeline.js";
 import { parseSamples, type SampleView } from "./timeline.js";
+import { UiIcon } from "./ui-icon.js";
 
 type TabId = "overview" | "timeline" | "findings" | "raw";
 
@@ -133,8 +134,9 @@ export function RunDetail() {
             </p>
           ) : null}
         </div>
-        <Link className="button-link primary-action" to="/runs/new">
+        <Link className="button-link primary-action icon-label" to="/runs/new">
           Run same scan again
+          <UiIcon name="forward" />
         </Link>
       </header>
       <div

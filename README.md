@@ -34,7 +34,7 @@ pnpm build
 node packages/cli --help
 ```
 
-`pnpm --filter dashboard dev` serves the shell at [http://127.0.0.1:5173](http://127.0.0.1:5173). Pass `?token=` and `?api=` on the query string; the run token stays in memory (not localStorage). The local API binds loopback only.
+`pnpm dev` (or `npm run dev`) starts the Local API and the Vite dashboard together. Open [http://127.0.0.1:5173](http://127.0.0.1:5173) — the dev server hands the loopback API URL and run token to the page in memory (not localStorage). `pnpm dev:ui` starts only Vite; then pass `?token=` and `?api=` yourself. The local API binds loopback only.
 
 `potato compare --baseline a.json --candidate b.json` hard-compares two artifacts (exit 4 if non-comparable, exit 1 only on a compatible regression). `potato compare --set-baseline a.json --confirm` writes `.potato/baselines.json`; without `--confirm` it writes nothing.
 

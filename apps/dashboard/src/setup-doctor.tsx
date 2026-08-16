@@ -4,6 +4,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiRequestError, apiRequest, readJson } from "./api.js";
+import { UiIcon } from "./ui-icon.js";
 
 type DoctorCheck = {
   id: string;
@@ -119,8 +120,12 @@ export function SetupDoctor() {
                 Check again
               </button>
               {page.report.ok ? (
-                <Link className="button-link primary-action" to="/runs/new">
+                <Link
+                  className="button-link primary-action icon-label"
+                  to="/runs/new"
+                >
                   Continue to Quick Scan
+                  <UiIcon name="forward" />
                 </Link>
               ) : (
                 <span className="muted">

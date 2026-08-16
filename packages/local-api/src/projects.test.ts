@@ -242,6 +242,90 @@ describe("local project registry", () => {
     ).toBe(422);
   });
 
+  it("inspects an unregistered root for name, adapter, and start argv", async () => {
+    const temp = await mkdtemp(join(tmpdir(), "potato-project-inspect-"));
+    const root = join(temp, "arena-game");
+    await mkdir(root);
+    await writeFile(
+      join(root, "package.json"),
+      JSON.stringify({
+        scripts: { dev: "vite --host 127.0.0.1" },
+        dependencies: { react: "19.0.0" },
+      }),
+      "utf8",
+    );
+    api = await startLocalApi({
+      projectRegistryPath: join(temp, "projects.json"),
+    });
+
+    const inspected = await fetch(`${api.url}/api/v1/projects/inspect`, {
+      method: "POST",
+      headers: headers(api),
+      body: JSON.stringify({ root }),
+    });
+    expect(inspected.status).toBe(200);
+    expect(await inspected.json()).toEqual({
+      root: await realpath(root),
+      name: "arena-game",
+      adapterId: "react",
+      start: ["vite", "--host", "127.0.0.1"],
+    });
+
+    const missing = await fetch(`${api.url}/api/v1/projects/inspect`, {
+      method: "POST",
+      headers: headers(api),
+      body: JSON.stringify({ root: join(temp, "missing") }),
+    });
+    expect(missing.status).toBe(422);
+  });
+
+  it("returns a native folder pick without treating cancel as an error", async () => {
+    const temp = await mkdtemp(join(tmpdir(), "potato-project-browse-"));
+    const picked = join(temp, "selected");
+    await mkdir(picked);
+    api = await startLocalApi({
+      projectRegistryPath: join(temp, "projects.json"),
+      chooseDirectory: async () => ({ status: "picked", path: picked }),
+    });
+
+    const selected = await fetch(`${api.url}/api/v1/projects/browse`, {
+      method: "POST",
+      headers: headers(api),
+      body: "{}",
+    });
+    expect(selected.status).toBe(200);
+    expect(await selected.json()).toEqual({ path: picked, cancelled: false });
+
+    await api.close();
+    api = await startLocalApi({
+      projectRegistryPath: join(temp, "projects.json"),
+      chooseDirectory: async () => ({ status: "cancelled" }),
+    });
+    const cancelled = await fetch(`${api.url}/api/v1/projects/browse`, {
+      method: "POST",
+      headers: headers(api),
+      body: "{}",
+    });
+    expect(cancelled.status).toBe(200);
+    expect(await cancelled.json()).toEqual({ cancelled: true });
+
+    await api.close();
+    api = await startLocalApi({
+      projectRegistryPath: join(temp, "projects.json"),
+      chooseDirectory: async () => ({
+        status: "unavailable",
+        message:
+          "Install zenity or kdialog, or enter the project path manually.",
+      }),
+    });
+    const missing = await fetch(`${api.url}/api/v1/projects/browse`, {
+      method: "POST",
+      headers: headers(api),
+      body: "{}",
+    });
+    expect(missing.status).toBe(501);
+  });
+
   it("fails closed when the persisted registry is corrupt", async () => {
     const temp = await mkdtemp(join(tmpdir(), "potato-project-corrupt-"));
     const registryPath = join(temp, "projects.json");

@@ -11,6 +11,7 @@ import {
 import { errorEnvelopeSchema } from "@potato-boost/schemas";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { z } from "zod";
+import type { ChooseDirectory } from "./folder-picker.js";
 import { GOLDEN_RUN_ID, goldenSamples, loadArtifactByRunId } from "./golden.js";
 import { registerProjectRoutes } from "./project-routes.js";
 import { createProjectRegistry } from "./projects.js";
@@ -43,6 +44,7 @@ export type StartLocalApiOptions = {
   projectRegistryPath?: string;
   doctorEnv?: DoctorEnv;
   runHoldMs?: number;
+  chooseDirectory?: ChooseDirectory;
 };
 
 type RunRecord = {
@@ -253,7 +255,14 @@ export async function startLocalApi(
   registerProjectRoutes(
     app,
     projectRegistry,
-    options.doctorEnv === undefined ? {} : { doctorEnv: options.doctorEnv },
+    {
+      ...(options.doctorEnv === undefined
+        ? {}
+        : { doctorEnv: options.doctorEnv }),
+      ...(options.chooseDirectory === undefined
+        ? {}
+        : { chooseDirectory: options.chooseDirectory }),
+    },
     sendEnvelope,
   );
 

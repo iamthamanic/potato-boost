@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterEach, describe, expect, it } from "vitest";
 import {
+  applySessionFromDevPayload,
   captureSessionFromSearch,
   getApiBase,
   getRunToken,
@@ -18,6 +19,31 @@ describe("dashboard session token", () => {
     captureSessionFromSearch("?token=run-token-example&api=http://127.0.0.1:9");
     expect(getRunToken()).toBe("run-token-example");
     expect(getApiBase()).toBe("http://127.0.0.1:9");
+  });
+
+  it("accepts a loopback dev session and rejects anything else", () => {
+    expect(
+      applySessionFromDevPayload({
+        token: "dev-token",
+        api: "http://127.0.0.1:8788",
+      }),
+    ).toBe(true);
+    expect(getRunToken()).toBe("dev-token");
+    expect(getApiBase()).toBe("http://127.0.0.1:8788");
+    expect(
+      applySessionFromDevPayload({
+        token: "other",
+        api: "http://127.0.0.1:9",
+      }),
+    ).toBe(false);
+    resetSessionForTests();
+    expect(
+      applySessionFromDevPayload({
+        token: "dev-token",
+        api: "https://example.test",
+      }),
+    ).toBe(false);
+    expect(getRunToken()).toBeUndefined();
   });
 
   it("does not write token keys to web storage APIs in source", async () => {

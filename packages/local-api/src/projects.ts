@@ -8,7 +8,7 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, join } from "node:path";
+import { basename, dirname, join } from "node:path";
 import { z } from "zod";
 
 const adapterIdSchema = z.enum([
@@ -130,6 +130,15 @@ function cloneProject(project: ProjectRecord): ProjectRecord {
     start: [...project.start],
     rulePackIds: [...project.rulePackIds],
   };
+}
+
+export function nameFromProjectRoot(root: string): string {
+  const base = basename(root);
+  return base.length === 0 || base === "." || base === "/" ? "" : base;
+}
+
+export async function resolveProjectRoot(root: string): Promise<string> {
+  return canonicalDirectory(root);
 }
 
 async function canonicalDirectory(root: string): Promise<string> {

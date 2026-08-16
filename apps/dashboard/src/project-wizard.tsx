@@ -1,10 +1,14 @@
-import { useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { parseArgv } from "./detect.js";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { formatArgv, parseArgv } from "./detect.js";
+import { IconButton } from "./icon-button.js";
 import { useProjects } from "./project-context.js";
+import { ProjectPathField } from "./project-path-field.js";
 import {
   ADAPTER_OPTIONS,
   type AdapterId,
+  inspectProjectRoot,
+  nameFromProjectRoot,
   projectApiError,
   projectOverviewPath,
   projectSetupError,
@@ -13,8 +17,9 @@ import {
   TARGET_PROFILES,
   targetProfileLabel,
 } from "./projects.js";
+import { UiIcon } from "./ui-icon.js";
 
-const STEPS = ["Project Setup", "Rules", "Target Profiles", "Review"] as const;
+const STEPS = ["Setup", "Rules", "Profiles", "Review"] as const;
 
 type StepIndex = 0 | 1 | 2 | 3;
 
@@ -30,7 +35,11 @@ export function ProjectWizard() {
   const [targetProfileId, setTargetProfileId] = useState("local-machine");
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
+  const [detecting, setDetecting] = useState(false);
   const creating = useRef(false);
+  const lastDerivedName = useRef("");
+  const adapterLocked = useRef(false);
+  const startLocked = useRef(false);
 
   const validateCurrent = (): string | undefined => {
     if (step === 0) {
@@ -63,6 +72,60 @@ export function ProjectWizard() {
       setStep((step - 1) as StepIndex);
     }
   };
+
+  useEffect(() => {
+    const path = root.trim();
+    const derived = nameFromProjectRoot(path);
+    setName((current) => {
+      if (current.trim() === "" || current === lastDerivedName.current) {
+        lastDerivedName.current = derived;
+        return derived;
+      }
+      return current;
+    });
+    if (path.length === 0) {
+      setDetecting(false);
+      return undefined;
+    }
+    const generation = { cancelled: false };
+    const timer = window.setTimeout(() => {
+      setDetecting(true);
+      void inspectProjectRoot(path)
+        .then((preview) => {
+          if (generation.cancelled) {
+            return;
+          }
+          setRoot((current) =>
+            current.trim() === path ? preview.root : current,
+          );
+          setName((current) => {
+            if (current.trim() === "" || current === lastDerivedName.current) {
+              lastDerivedName.current = preview.name;
+              return preview.name;
+            }
+            return current;
+          });
+          if (!adapterLocked.current) {
+            setAdapterId(preview.adapterId);
+          }
+          if (!startLocked.current) {
+            setStartText(formatArgv(preview.start));
+          }
+        })
+        .catch(() => {
+          // Incomplete or unknown paths stay editable; Continue still validates.
+        })
+        .finally(() => {
+          if (!generation.cancelled) {
+            setDetecting(false);
+          }
+        });
+    }, 350);
+    return () => {
+      generation.cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [root]);
 
   const toggleRule = (ruleId: string): void => {
     setRulePackIds((current) =>
@@ -106,16 +169,9 @@ export function ProjectWizard() {
     <section className="narrow-page wizard-page">
       <header className="page-header">
         <div>
-          <p className="eyebrow">New local workspace</p>
           <h2>Create project</h2>
-          <p className="muted">
-            Configure the measurement context once. You can change every test
-            setup choice later.
-          </p>
         </div>
-        <Link className="button-link" to="/projects">
-          Cancel
-        </Link>
+        <IconButton label="Cancel" icon="close" to="/projects" />
       </header>
 
       <ol className="wizard-steps" aria-label="Project creation progress">
@@ -125,6 +181,7 @@ export function ProjectWizard() {
             className={
               index === step ? "is-current" : index < step ? "is-done" : ""
             }
+            aria-label={label}
             aria-current={index === step ? "step" : undefined}
           >
             <span className="wizard-step-number" aria-hidden="true">
@@ -138,85 +195,85 @@ export function ProjectWizard() {
       <div className="panel wizard-panel">
         {step === 0 ? (
           <fieldset className="wizard-fieldset">
-            <legend>Project Setup</legend>
-            <p className="muted">
-              Tell Potato Boost which local workspace this project represents.
-            </p>
-            <div className="field">
-              <label htmlFor="project-name">Project name</label>
-              <input
-                id="project-name"
-                name="project-name"
-                value={name}
-                onChange={(event) => {
-                  setName(event.target.value);
-                  setMessage(undefined);
-                }}
-                placeholder="My Three.js Game"
-                autoComplete="off"
-              />
-            </div>
-            <div className="field">
-              <label htmlFor="project-root">Project path</label>
-              <input
-                id="project-root"
-                name="project-root"
-                className="mono"
-                value={root}
-                onChange={(event) => {
-                  setRoot(event.target.value);
-                  setMessage(undefined);
-                }}
-                placeholder="/Users/me/dev/my-project"
-                autoComplete="off"
-                spellCheck={false}
-              />
-              <p className="muted">
-                The Local API validates and canonicalizes this directory when
-                you create the project.
-              </p>
-            </div>
-            <div className="field">
-              <label htmlFor="project-adapter">Project type</label>
-              <select
-                id="project-adapter"
-                name="project-adapter"
-                value={adapterId}
-                onChange={(event) => {
-                  setAdapterId(event.target.value as AdapterId);
-                }}
-              >
-                {ADAPTER_OPTIONS.map((option) => (
-                  <option key={option.id} value={option.id}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              <p className="muted">
-                {
-                  ADAPTER_OPTIONS.find((option) => option.id === adapterId)
-                    ?.detail
-                }
-              </p>
-            </div>
-            <div className="field">
-              <label htmlFor="project-start">Start argv</label>
-              <input
-                id="project-start"
-                name="project-start"
-                className="mono"
-                value={startText}
-                onChange={(event) => {
-                  setStartText(event.target.value);
-                }}
-                placeholder="pnpm dev"
-                autoComplete="off"
-                spellCheck={false}
-              />
-              <p className="muted">
-                Stored as argv, not a shell command. Preview:{" "}
-                <code>{JSON.stringify(parseArgv(startText))}</code>
-              </p>
+            <legend className="visually-hidden">Project Setup</legend>
+            <div className="wizard-fields">
+              <div className="field field-wide">
+                <label htmlFor="project-root">Project path</label>
+                <ProjectPathField
+                  id="project-root"
+                  value={root}
+                  onChange={(value) => {
+                    setRoot(value);
+                    setMessage(undefined);
+                  }}
+                  onError={setMessage}
+                  disabled={busy}
+                  placeholder="/Users/me/dev/my-project"
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="project-name">Project name</label>
+                <input
+                  id="project-name"
+                  name="project-name"
+                  value={name}
+                  onChange={(event) => {
+                    setName(event.target.value);
+                    setMessage(undefined);
+                  }}
+                  placeholder="Filled from the folder name"
+                  autoComplete="off"
+                />
+                <p className="muted">
+                  Filled from the folder. You can rename it.
+                </p>
+              </div>
+              <div className="field">
+                <label htmlFor="project-adapter">Project type</label>
+                <select
+                  id="project-adapter"
+                  name="project-adapter"
+                  value={adapterId}
+                  onChange={(event) => {
+                    adapterLocked.current = true;
+                    setAdapterId(event.target.value as AdapterId);
+                  }}
+                >
+                  {ADAPTER_OPTIONS.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <p className="muted">
+                  {
+                    ADAPTER_OPTIONS.find((option) => option.id === adapterId)
+                      ?.detail
+                  }
+                </p>
+              </div>
+              <div className="field field-wide">
+                <label htmlFor="project-start">Start argv</label>
+                <input
+                  id="project-start"
+                  name="project-start"
+                  className="mono"
+                  value={startText}
+                  onChange={(event) => {
+                    startLocked.current = true;
+                    setStartText(event.target.value);
+                  }}
+                  placeholder="Detected from the project"
+                  autoComplete="off"
+                  spellCheck={false}
+                />
+                <p className="muted">
+                  {detecting
+                    ? "Reading start command from the project…"
+                    : "Filled from potato.config or package.json scripts."}{" "}
+                  <code>{JSON.stringify(parseArgv(startText))}</code>
+                </p>
+              </div>
             </div>
           </fieldset>
         ) : null}
@@ -279,11 +336,9 @@ export function ProjectWizard() {
 
         {step === 3 ? (
           <div className="wizard-review">
-            <p className="eyebrow">Review</p>
             <h3>Ready to create this project</h3>
             <p className="muted">
-              No project has been written yet. Create project will save this
-              setup to the local registry once.
+              Nothing is written yet. Create project saves this setup once.
             </p>
             <dl className="review-list">
               <div>
@@ -326,25 +381,33 @@ export function ProjectWizard() {
         ) : null}
 
         <div className="wizard-actions">
-          <button type="button" onClick={back} disabled={step === 0 || busy}>
+          <button
+            className="icon-label"
+            type="button"
+            onClick={back}
+            disabled={step === 0 || busy}
+          >
+            <UiIcon name="back" />
             Back
           </button>
           {step < 3 ? (
             <button
-              className="wizard-primary"
+              className="wizard-primary icon-label"
               type="button"
               onClick={next}
               disabled={busy}
             >
               Continue
+              <UiIcon name="forward" />
             </button>
           ) : (
             <button
-              className="wizard-primary"
+              className="wizard-primary icon-label"
               type="button"
               onClick={() => void submit()}
               disabled={busy}
             >
+              <UiIcon name="plus" />
               {busy ? "Creating project…" : "Create project"}
             </button>
           )}

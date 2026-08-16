@@ -129,6 +129,19 @@ export function projectIdFromPathname(pathname: string): string | undefined {
   }
 }
 
+export function nameFromProjectRoot(root: string): string {
+  const trimmed = root.trim().replace(/[\\/]+$/, "");
+  if (trimmed.length === 0) {
+    return "";
+  }
+  const parts = trimmed.split(/[\\/]/);
+  const last = parts[parts.length - 1];
+  if (last === undefined || last.length === 0 || /^[A-Za-z]:$/.test(last)) {
+    return "";
+  }
+  return last;
+}
+
 export function projectSetupError(
   name: string,
   root: string,
@@ -153,12 +166,52 @@ export function projectApiError(error: unknown): string {
     if (error.status === 404) {
       return "This project no longer exists in the local registry.";
     }
+    if (error.status === 501) {
+      return "Folder picker is not available. Enter the path manually.";
+    }
     if (error.status === 401 || error.status === 403) {
       return "The local dashboard session is no longer authorized. Restart Potato Boost and try again.";
     }
     return error.message;
   }
   return "The Local API is unreachable. Start Potato Boost and try again.";
+}
+
+export type BrowseProjectRootResult = { path: string } | { cancelled: true };
+
+export type InspectedProjectRoot = {
+  root: string;
+  name: string;
+  adapterId: AdapterId;
+  start: string[];
+};
+
+export async function inspectProjectRoot(
+  root: string,
+): Promise<InspectedProjectRoot> {
+  return readJson<InspectedProjectRoot>(
+    await apiRequest("/api/v1/projects/inspect", {
+      method: "POST",
+      body: JSON.stringify({ root }),
+    }),
+  );
+}
+
+export async function browseProjectRoot(): Promise<BrowseProjectRootResult> {
+  const body = await readJson<{ path?: string; cancelled?: boolean }>(
+    await apiRequest("/api/v1/projects/browse", {
+      method: "POST",
+      body: "{}",
+    }),
+  );
+  if (
+    body.cancelled === true ||
+    body.path === undefined ||
+    body.path.length === 0
+  ) {
+    return { cancelled: true };
+  }
+  return { path: body.path };
 }
 
 export async function loadProjects(): Promise<ProjectRecord[]> {

@@ -28,6 +28,7 @@ import {
   createNodeConfigFs,
   createNodeDiscoveryFs,
   detectProject,
+  parsePotatoConfigYaml,
   resolveRunStart,
   startArgv,
   webDetectors,
@@ -35,11 +36,22 @@ import {
 import type { FastifyInstance, FastifyReply } from "fastify";
 import { z } from "zod";
 import {
+  type ChooseDirectory,
+  chooseDirectoryNative,
+} from "./folder-picker.js";
+import {
+  inspectProjectBodySchema,
+  pickDetectedAdapter,
+  startFromPackageScripts,
+} from "./project-inspect.js";
+import {
   createProjectBodySchema,
+  nameFromProjectRoot,
   type ProjectRecord,
   type ProjectRegistry,
   ProjectRegistryError,
   projectIdParamSchema,
+  resolveProjectRoot,
   updateProjectBodySchema,
 } from "./projects.js";
 
@@ -77,6 +89,7 @@ type EnvelopeFn = (
 
 export type ProjectRouteOptions = {
   doctorEnv?: DoctorEnv;
+  chooseDirectory?: ChooseDirectory;
 };
 
 function webKindsFromAdapter(
@@ -191,6 +204,68 @@ export function registerProjectRoutes(
 
   app.get("/api/v1/projects", async (_request, reply) => {
     return reply.status(200).send({ projects: registry.list() });
+  });
+
+  app.post("/api/v1/projects/inspect", async (request, reply) => {
+    const parsed = inspectProjectBodySchema.safeParse(request.body);
+    if (!parsed.success) {
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid project inspect request",
+        422,
+      );
+    }
+    try {
+      const root = await resolveProjectRoot(parsed.data.root);
+      const detection = await detectedCandidates(root);
+      const adapterId = pickDetectedAdapter(detection.candidates);
+      const configPath = join(root, "potato.config.yaml");
+      const packagePath = join(root, "package.json");
+      let start: string[] = [];
+      try {
+        if (await configFs.exists(configPath)) {
+          const config = parsePotatoConfigYaml(
+            await configFs.readFile(configPath),
+          );
+          if (config.commands.startSource === "override") {
+            start = [...config.commands.start];
+          }
+        }
+      } catch {
+        start = [];
+      }
+      if (start.length === 0 && (await configFs.exists(packagePath))) {
+        start = startFromPackageScripts(await configFs.readFile(packagePath));
+      }
+      if (start.length === 0) {
+        start = inferredStartFor(adapterId);
+      }
+      return reply.status(200).send({
+        root,
+        name: nameFromProjectRoot(root),
+        adapterId,
+        start,
+      });
+    } catch (error) {
+      return registryError(error, reply, sendEnvelope);
+    }
+  });
+
+  app.post("/api/v1/projects/browse", async (_request, reply) => {
+    const choose = options.chooseDirectory ?? chooseDirectoryNative;
+    try {
+      const result = await choose();
+      if (result.status === "picked") {
+        return reply.status(200).send({ path: result.path, cancelled: false });
+      }
+      if (result.status === "cancelled") {
+        return reply.status(200).send({ cancelled: true });
+      }
+      return sendEnvelope(reply, "NOT_IMPLEMENTED", result.message, 501);
+    } catch {
+      return sendEnvelope(reply, "INTERNAL", "The folder picker failed.", 500);
+    }
   });
 
   app.post("/api/v1/projects", async (request, reply) => {

@@ -13,7 +13,8 @@
     "potato": "./packages/cli/dist/bin.js"
   },
   "scripts": {
-    "dev": "pnpm --filter dashboard dev",
+    "dev": "node scripts/dev.mjs",
+    "dev:ui": "pnpm --filter dashboard dev",
     "build": "tsc -b",
     "lint": "biome check .",
     "typecheck": "tsc -b --pretty false",

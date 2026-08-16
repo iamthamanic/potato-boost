@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { formatArgv, parseArgv } from "./detect.js";
 import { useProjects } from "./project-context.js";
+import { ProjectPathField } from "./project-path-field.js";
 import {
   ADAPTER_OPTIONS,
   type AdapterId,
@@ -10,6 +11,7 @@ import {
   RULE_PACKS,
   TARGET_PROFILES,
 } from "./projects.js";
+import { UiIcon } from "./ui-icon.js";
 
 export function TestSetup() {
   const { projectId } = useParams();
@@ -121,21 +123,23 @@ export function TestSetup() {
           </div>
           <div className="field">
             <label htmlFor="setup-project-root">Project path</label>
-            <input
+            <ProjectPathField
               id="setup-project-root"
-              name="project-root"
-              className="mono"
               value={root}
-              onChange={(event) => {
-                setRoot(event.target.value);
+              onChange={(value) => {
+                setRoot(value);
                 setMessage(undefined);
               }}
-              autoComplete="off"
-              spellCheck={false}
+              onError={(message) => {
+                setMessageKind("error");
+                setMessage(message);
+              }}
+              disabled={busy}
             />
             <p className="muted">
-              If the project moved, update the path here. The Local API
-              validates the new directory before saving it.
+              Browse opens a native folder dialog. If the project moved, update
+              the path here. The Local API validates the new directory before
+              saving it.
             </p>
           </div>
           <div className="field">
@@ -238,11 +242,12 @@ export function TestSetup() {
           </p>
         </div>
         <button
-          className="wizard-primary"
+          className="wizard-primary icon-label"
           type="button"
           onClick={() => void save()}
           disabled={busy}
         >
+          <UiIcon name="check" />
           {busy ? "Saving…" : "Save changes"}
         </button>
       </div>

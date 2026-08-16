@@ -6,6 +6,7 @@ import {
   rulePackLabel,
   targetProfileLabel,
 } from "./projects.js";
+import { UiIcon } from "./ui-icon.js";
 
 export function ProjectsHub() {
   const { status, projects, error, reload } = useProjects();
@@ -21,7 +22,11 @@ export function ProjectsHub() {
             workspace.
           </p>
         </div>
-        <Link className="button-link primary-action" to="/projects/new">
+        <Link
+          className="button-link primary-action icon-label"
+          to="/projects/new"
+        >
+          <UiIcon name="plus" />
           Create project
         </Link>
       </header>
@@ -52,7 +57,11 @@ export function ProjectsHub() {
             Register a local project once. Potato Boost will keep its test setup
             available for future scans.
           </p>
-          <Link className="button-link primary-action" to="/projects/new">
+          <Link
+            className="button-link primary-action icon-label"
+            to="/projects/new"
+          >
+            <UiIcon name="plus" />
             Create your first project
           </Link>
         </div>
@@ -89,10 +98,11 @@ export function ProjectsHub() {
               </dl>
               <div className="project-card-actions">
                 <Link
-                  className="button-link primary-action"
+                  className="button-link primary-action icon-label"
                   to={projectOverviewPath(project.id)}
                 >
                   Open project
+                  <UiIcon name="forward" />
                 </Link>
               </div>
             </article>

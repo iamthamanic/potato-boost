@@ -55,6 +55,8 @@ Document project primitives (not every third-party widget). Planned from PRD:
 | FindingRow | `apps/dashboard/src/run-detail.tsx` | severity, confidence; semantic table |
 | FindingDetail | `apps/dashboard/src/finding-detail.tsx` | six PRD §10 blocks; ruleId + confidence |
 | EvidencePanel | `apps/dashboard/src/evidence-panel.tsx` | raw / derived / source; heading structure |
+| UiIcon | `apps/dashboard/src/ui-icon.tsx` | Shared stroke SVG set (`close`, `settings`, `back`, `forward`, `plus`, `check`) |
+| IconButton | `apps/dashboard/src/icon-button.tsx` | Close/dismiss in page headers; never a labeled Cancel there |
 | EvidencePanel | planned | raw / derived / source; heading structure |
 | CompareTable | planned | improved / regressed / neutral / incomparable |
 
@@ -98,6 +100,10 @@ Document project primitives (not every third-party widget). Planned from PRD:
 **Do**
 
 - Reuse tokens and planned primitives
+- Page dismiss/close is always `IconButton` (`close`) with an accessible name — never a text Cancel in a page header
+- Rail and utility nav items always use `UiIcon` plus visible text (e.g. Settings) — never a text-only footer link
+- Labeled flow actions (Back, Continue, Create, Save, Open) always use `UiIcon` plus visible text: Back/Create/Save icon-start, Continue/Open icon-end
+- Keep labeled Cancel only when it sits next to Confirm/Preview as a form action
 - Show run quality, budgets, regressions, findings, and test context on the home view
 - Keep Finding Detail as six blocks: observed, budget/baseline, when in scenario, supporting signals, plausible change class, how to verify
 

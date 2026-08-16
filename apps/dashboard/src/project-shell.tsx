@@ -12,6 +12,7 @@ import {
   projectOverviewPath,
   projectPath,
 } from "./projects.js";
+import { UiIcon } from "./ui-icon.js";
 
 export function ProjectRail() {
   const location = useLocation();
@@ -22,9 +23,8 @@ export function ProjectRail() {
     <nav className="nav project-rail" aria-label="Projects">
       <div className="nav-brand">
         <Link className="brand-link" to="/projects">
-          Potato Boost
+          <img src="/potato-boost-logo.png" alt="Potato Boost" />
         </Link>
-        <p className="nav-project">Local performance workbench</p>
       </div>
 
       <div className="rail-heading">
@@ -33,16 +33,6 @@ export function ProjectRail() {
           + Create
         </Link>
       </div>
-
-      <Link
-        className={
-          location.pathname === "/projects" ? "rail-all is-active" : "rail-all"
-        }
-        to="/projects"
-        aria-current={location.pathname === "/projects" ? "page" : undefined}
-      >
-        All projects
-      </Link>
 
       {status === "loading" ? (
         <p className="rail-status muted" role="status">
@@ -87,7 +77,10 @@ export function ProjectRail() {
       ) : null}
 
       <div className="nav-bottom">
-        <NavLink to="/settings">Settings</NavLink>
+        <NavLink className="nav-icon-link" to="/settings">
+          <UiIcon name="settings" />
+          Settings
+        </NavLink>
       </div>
     </nav>
   );
@@ -130,7 +123,11 @@ export function ProjectShell() {
             It may have been removed or the URL may be outdated. Choose a local
             project to continue.
           </p>
-          <Link className="button-link primary-action" to="/projects">
+          <Link
+            className="button-link primary-action icon-label"
+            to="/projects"
+          >
+            <UiIcon name="back" />
             Back to projects
           </Link>
         </div>

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { projectPath } from "./projects.js";
 import { getApiBase, getRunToken } from "./session.js";
+import { UiIcon } from "./ui-icon.js";
 
 type HomeState =
   | { kind: "loading"; operation: string }
@@ -63,8 +64,9 @@ export function ProjectHome() {
             code, then verify with the same setup.
           </p>
         </div>
-        <Link className="button-link primary-action" to={runsPath}>
+        <Link className="button-link primary-action icon-label" to={runsPath}>
           Run scan
+          <UiIcon name="forward" />
         </Link>
       </header>
 
@@ -104,8 +106,9 @@ export function ProjectHome() {
               exact setup before starting.
             </p>
             <div className="actions">
-              <Link className="button-link" to={runsPath}>
+              <Link className="button-link icon-label" to={runsPath}>
                 Review and start scan
+                <UiIcon name="forward" />
               </Link>
               <Link className="text-link" to={setupPath}>
                 Review Test Setup
