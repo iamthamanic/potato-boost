@@ -1,12 +1,12 @@
-/**
- * Compare — before/after verification with hard comparability rules.
- */
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { ApiRequestError, apiRequest, readJson } from "./api.js";
-
-export const GOLDEN_RUN_ID = "01J9GOLDENV100000000000000";
-export const COMPARE_CANDIDATE_ID = "01J9COMPARECAND000000000000";
-export const COMPARE_DEBUG_ID = "01J9COMPAREDBG000000000000";
+import {
+  loadProjectRuns,
+  type ProjectRunSummary,
+  runSummaryLabel,
+} from "./project-runs.js";
+import { projectPath } from "./projects.js";
 
 export type CompareRow = {
   name: string;
@@ -27,6 +27,11 @@ export type CompareView = {
   reasons: { code: string; detail: string }[];
   metrics: CompareRow[];
 };
+
+type RunsState =
+  | { kind: "loading" }
+  | { kind: "ready"; runs: ProjectRunSummary[] }
+  | { kind: "error"; message: string };
 
 export function parseCompareView(raw: unknown): CompareView | undefined {
   if (typeof raw !== "object" || raw === null) return undefined;
@@ -156,25 +161,69 @@ export function CompareTable(props: { result: CompareView }) {
 }
 
 export function Compare() {
-  const [baselineId, setBaselineId] = useState(GOLDEN_RUN_ID);
-  const [candidateId, setCandidateId] = useState(COMPARE_CANDIDATE_ID);
+  const { projectId } = useParams();
+  const [runsState, setRunsState] = useState<RunsState>({ kind: "loading" });
+  const [baselineId, setBaselineId] = useState<string | undefined>(undefined);
+  const [candidateId, setCandidateId] = useState<string | undefined>(undefined);
   const [result, setResult] = useState<CompareView | undefined>(undefined);
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
 
+  const load = useCallback(async (): Promise<void> => {
+    if (projectId === undefined) {
+      setRunsState({
+        kind: "error",
+        message: "Choose a project before comparing runs.",
+      });
+      return;
+    }
+    setRunsState({ kind: "loading" });
+    try {
+      const runs = await loadProjectRuns(projectId);
+      const comparable = runs.filter((run) => run.comparable);
+      setRunsState({ kind: "ready", runs });
+      setCandidateId(comparable[0]?.runId);
+      setBaselineId(comparable[1]?.runId);
+      setResult(undefined);
+      setMessage(undefined);
+    } catch (caught) {
+      setRunsState({
+        kind: "error",
+        message:
+          caught instanceof ApiRequestError
+            ? caught.message
+            : "Local API is unreachable. Start Potato Boost and retry.",
+      });
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    void load();
+  }, [load]);
+
   const runCompare = async (): Promise<void> => {
+    if (
+      projectId === undefined ||
+      baselineId === undefined ||
+      candidateId === undefined
+    ) {
+      return;
+    }
     setBusy(true);
     setMessage(undefined);
     try {
       const parsed = parseCompareView(
         await readJson<unknown>(
-          await apiRequest("/api/v1/compare", {
-            method: "POST",
-            body: JSON.stringify({
-              baselineRunId: baselineId,
-              candidateRunId: candidateId,
-            }),
-          }),
+          await apiRequest(
+            `/api/v1/projects/${encodeURIComponent(projectId)}/compare`,
+            {
+              method: "POST",
+              body: JSON.stringify({
+                baselineRunId: baselineId,
+                candidateRunId: candidateId,
+              }),
+            },
+          ),
         ),
       );
       if (parsed === undefined) {
@@ -187,8 +236,10 @@ export function Compare() {
       setResult(undefined);
       setMessage(
         caught instanceof ApiRequestError
-          ? caught.message
-          : "Local API is unreachable. Start the loopback server, then retry.",
+          ? caught.status === 409
+            ? "These run records do not have persisted measurement artifacts yet."
+            : caught.message
+          : "Local API is unreachable. Start Potato Boost and retry.",
       );
     } finally {
       setBusy(false);
@@ -196,6 +247,9 @@ export function Compare() {
   };
 
   const confirmBaseline = async (): Promise<void> => {
+    if (candidateId === undefined) {
+      return;
+    }
     setBusy(true);
     setMessage(undefined);
     try {
@@ -221,10 +275,17 @@ export function Compare() {
     }
   };
 
+  const comparableRuns =
+    runsState.kind === "ready"
+      ? runsState.runs.filter((run) => run.comparable)
+      : [];
+  const canCompare =
+    comparableRuns.length >= 2 &&
+    baselineId !== undefined &&
+    candidateId !== undefined &&
+    baselineId !== candidateId;
   const canConfirm =
-    result !== undefined &&
-    result.comparability === "comparable" &&
-    candidateId !== baselineId;
+    canCompare && result !== undefined && result.comparability === "comparable";
 
   return (
     <section className="workspace-page">
@@ -233,75 +294,137 @@ export function Compare() {
           <p className="eyebrow">Verify a change</p>
           <h2>Compare before and after</h2>
           <p className="muted">
-            Potato Boost only compares runs when scenario, target, runtime,
-            hardware class, and build mode are compatible.
+            Choose two compatible measurement artifacts from this project. Runs
+            from other projects never appear here.
           </p>
         </div>
       </header>
-      <div className="panel compare-panel">
-        <div className="compare-pickers">
-          <label className="field">
-            <strong>Before run</strong>
-            <span className="muted">Your baseline or earlier measurement</span>
-            <input
-              className="mono"
-              value={baselineId}
-              onChange={(event) => setBaselineId(event.target.value)}
-              spellCheck={false}
-              autoComplete="off"
-              name="baseline-run"
-            />
-          </label>
-          <label className="field">
-            <strong>After run</strong>
-            <span className="muted">
-              The measurement after your code change
-            </span>
-            <input
-              className="mono"
-              value={candidateId}
-              onChange={(event) => setCandidateId(event.target.value)}
-              spellCheck={false}
-              autoComplete="off"
-              name="candidate-run"
-            />
-          </label>
+
+      {runsState.kind === "loading" ? (
+        <div className="panel" aria-busy="true">
+          <p className="status">Loading project runs…</p>
         </div>
-        <div className="actions">
-          <button
-            type="button"
-            onClick={() => void runCompare()}
-            disabled={busy}
-          >
-            Compare runs
-          </button>
-          <button
-            type="button"
-            onClick={() => void confirmBaseline()}
-            disabled={busy || !canConfirm}
-          >
-            Set after run as baseline
+      ) : null}
+
+      {runsState.kind === "error" ? (
+        <div className="panel callout" role="alert">
+          <p>{runsState.message}</p>
+          <button type="button" onClick={() => void load()}>
+            Retry
           </button>
         </div>
-        {!canConfirm ? (
-          <p className="muted">
-            A new baseline can only be set after a compatible completed run is
-            compared.
+      ) : null}
+
+      {runsState.kind === "ready" && comparableRuns.length < 2 ? (
+        <div className="panel compare-empty">
+          <p className="status">
+            <span aria-hidden="true">○</span>
+            <strong>No comparable run pair yet</strong>
           </p>
-        ) : null}
-        <details className="technical-details">
-          <summary>Technical test helpers</summary>
-          <button
-            type="button"
-            onClick={() => setCandidateId(COMPARE_DEBUG_ID)}
-            disabled={busy}
-          >
-            Use debug candidate
-          </button>
-        </details>
-        {message !== undefined ? <p role="status">{message}</p> : null}
-        {result !== undefined ? <CompareTable result={result} /> : null}
-      </div>
+          <p>
+            This project has {runsState.runs.length}{" "}
+            {runsState.runs.length === 1 ? "run record" : "run records"}, but
+            fewer than two have persisted measurement artifacts available for a
+            deterministic comparison.
+          </p>
+          <p className="muted">
+            Potato Boost does not turn lifecycle-only run records into fake
+            performance evidence. Artifact-backed runs will appear here
+            automatically when they are available.
+          </p>
+          <div className="actions">
+            {projectId !== undefined ? (
+              <Link
+                className="button-link primary-action"
+                to={projectPath(projectId, "runs")}
+              >
+                Open Runs
+              </Link>
+            ) : null}
+            {projectId !== undefined ? (
+              <Link
+                className="button-link"
+                to={projectPath(projectId, "test-setup")}
+              >
+                Review Test Setup
+              </Link>
+            ) : null}
+          </div>
+        </div>
+      ) : null}
+
+      {runsState.kind === "ready" && comparableRuns.length >= 2 ? (
+        <div className="panel compare-panel">
+          <div className="compare-pickers">
+            <label className="field">
+              <strong>Before run</strong>
+              <span className="muted">Earlier project measurement</span>
+              <select
+                name="baseline-run"
+                value={baselineId}
+                onChange={(event) => setBaselineId(event.target.value)}
+              >
+                {comparableRuns.map((run) => (
+                  <option key={run.runId} value={run.runId}>
+                    {runSummaryLabel(run)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="field">
+              <strong>After run</strong>
+              <span className="muted">Measurement after your code change</span>
+              <select
+                name="candidate-run"
+                value={candidateId}
+                onChange={(event) => setCandidateId(event.target.value)}
+              >
+                {comparableRuns.map((run) => (
+                  <option key={run.runId} value={run.runId}>
+                    {runSummaryLabel(run)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="actions">
+            <button
+              type="button"
+              onClick={() => void runCompare()}
+              disabled={busy || !canCompare}
+            >
+              Compare runs
+            </button>
+            <button
+              type="button"
+              onClick={() => void confirmBaseline()}
+              disabled={busy || !canConfirm}
+            >
+              Set after run as baseline
+            </button>
+          </div>
+          {!canCompare ? (
+            <p className="muted">
+              Choose two different project runs before comparing.
+            </p>
+          ) : null}
+          <details className="technical-details">
+            <summary>Technical run IDs</summary>
+            <dl className="technical-list">
+              <div>
+                <dt>Before</dt>
+                <dd className="mono">{baselineId}</dd>
+              </div>
+              <div>
+                <dt>After</dt>
+                <dd className="mono">{candidateId}</dd>
+              </div>
+            </dl>
+          </details>
+          {message !== undefined ? <p role="status">{message}</p> : null}
+          {result !== undefined ? <CompareTable result={result} /> : null}
+        </div>
+      ) : null}
     </section>
   );
 }
