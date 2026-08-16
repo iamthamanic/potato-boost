@@ -28,6 +28,7 @@ const projectIdSchema = z
   .regex(/^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/);
 
 const nameSchema = z.string().trim().min(1).max(120);
+const rootSchema = z.string().trim().min(1).max(4096);
 const argvSchema = z.array(z.string().min(1).max(512)).max(32);
 const rulePackIdsSchema = z.array(z.string().min(1).max(120)).max(32);
 const targetProfileIdSchema = z.string().min(1).max(120);
@@ -35,7 +36,7 @@ const targetProfileIdSchema = z.string().min(1).max(120);
 export const createProjectBodySchema = z
   .object({
     name: nameSchema,
-    root: z.string().trim().min(1).max(4096),
+    root: rootSchema,
     adapterId: adapterIdSchema.default("unknown"),
     start: argvSchema.default([]),
     rulePackIds: rulePackIdsSchema.default(["web-performance"]),
@@ -46,6 +47,7 @@ export const createProjectBodySchema = z
 export const updateProjectBodySchema = z
   .object({
     name: nameSchema.optional(),
+    root: rootSchema.optional(),
     adapterId: adapterIdSchema.optional(),
     start: argvSchema.optional(),
     rulePackIds: rulePackIdsSchema.optional(),
@@ -73,7 +75,7 @@ export type ProjectRecord = {
 const projectRecordSchema: z.ZodType<ProjectRecord> = z.object({
   id: projectIdSchema,
   name: nameSchema,
-  root: z.string().min(1),
+  root: rootSchema,
   adapterId: adapterIdSchema,
   start: argvSchema,
   rulePackIds: rulePackIdsSchema,
@@ -109,6 +111,7 @@ export class ProjectRegistryError extends Error {
 export type ProjectRegistry = {
   list: () => ProjectRecord[];
   get: (id: string) => ProjectRecord | undefined;
+  resolve: (id: string) => Promise<ProjectRecord>;
   create: (input: CreateProjectInput) => Promise<ProjectRecord>;
   update: (id: string, input: UpdateProjectInput) => Promise<ProjectRecord>;
 };
@@ -149,6 +152,14 @@ async function canonicalDirectory(root: string): Promise<string> {
       "project root must be an existing directory",
     );
   }
+}
+
+function findProject(projects: readonly ProjectRecord[], id: string): ProjectRecord {
+  const project = projects.find((candidate) => candidate.id === id);
+  if (project === undefined) {
+    throw new ProjectRegistryError("NOT_FOUND", "project not found");
+  }
+  return project;
 }
 
 async function readRegistry(path: string): Promise<ProjectRecord[]> {
@@ -214,6 +225,17 @@ export async function createProjectRegistry(
       const project = projects.find((candidate) => candidate.id === id);
       return project === undefined ? undefined : cloneProject(project);
     },
+    resolve: async (id) => {
+      const project = findProject(projects, id);
+      const canonicalRoot = await canonicalDirectory(project.root);
+      if (canonicalRoot !== project.root) {
+        throw new ProjectRegistryError(
+          "INVALID_ROOT",
+          "project root no longer resolves to its registered location",
+        );
+      }
+      return cloneProject(project);
+    },
     create: (input) =>
       enqueue(async () => {
         const canonicalRoot = await canonicalDirectory(input.root);
@@ -242,25 +264,37 @@ export async function createProjectRegistry(
       }),
     update: (id, input) =>
       enqueue(async () => {
-        const index = projects.findIndex((project) => project.id === id);
-        if (index < 0) {
-          throw new ProjectRegistryError("NOT_FOUND", "project not found");
-        }
-        const current = projects[index];
-        if (current === undefined) {
-          throw new ProjectRegistryError("NOT_FOUND", "project not found");
+        const current = findProject(projects, id);
+        const canonicalRoot =
+          input.root === undefined
+            ? current.root
+            : await canonicalDirectory(input.root);
+        if (
+          canonicalRoot !== current.root &&
+          projects.some(
+            (project) => project.id !== id && project.root === canonicalRoot,
+          )
+        ) {
+          throw new ProjectRegistryError(
+            "DUPLICATE_ROOT",
+            "a project for this root already exists",
+          );
         }
         const updated: ProjectRecord = {
           ...current,
-          ...input,
+          name: input.name ?? current.name,
+          root: canonicalRoot,
+          adapterId: input.adapterId ?? current.adapterId,
           start:
             input.start === undefined ? [...current.start] : [...input.start],
           rulePackIds:
             input.rulePackIds === undefined
               ? [...current.rulePackIds]
               : [...input.rulePackIds],
+          targetProfileId: input.targetProfileId ?? current.targetProfileId,
           updatedAt: new Date().toISOString(),
         };
+        const index = projects.findIndex((project) => project.id === id);
         const next = [...projects];
         next[index] = updated;
         await writeRegistry(path, next);
