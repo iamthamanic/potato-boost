@@ -108,6 +108,7 @@ See [AGENTS.md](AGENTS.md).
 
 ## Recent changes
 
+- **2026-08-16** — Dashboard brand: flat Potato Boost wordmark in Create-button teal (`#5eead4`).
 - **2026-08-15** — .NET adapter spike: `.csproj` / `.sln` evidence; missing SDK blocks with exit 3; counters snapshot or unsupported (`issue/47-dotnet-adapter-spike`).
 - **2026-08-15** — Tauri detect spike: `src-tauri/tauri.conf.*` evidence; frontend vs native labels; native collector unsupported (`issue/46-tauri-adapter-spike`).
 - **2026-08-15** — Godot addon confirm: `potato init --godot` previews `addons/potato_boost`; writes only with `--confirm` (`issue/44-godot-addon-confirm`).
