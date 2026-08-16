@@ -132,8 +132,8 @@ export function TestSetup() {
               spellCheck={false}
             />
             <p className="muted">
-              If the project moved, update the path here. The Local API validates
-              the new directory before saving it.
+              If the project moved, update the path here. The Local API
+              validates the new directory before saving it.
             </p>
           </div>
           <div className="field">
@@ -167,7 +167,8 @@ export function TestSetup() {
               spellCheck={false}
             />
             <p className="muted">
-              Stored as argv: <code>{JSON.stringify(parseArgv(startText))}</code>
+              Stored as argv:{" "}
+              <code>{JSON.stringify(parseArgv(startText))}</code>
             </p>
           </div>
         </fieldset>
