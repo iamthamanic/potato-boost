@@ -9,6 +9,7 @@ import { NewRun } from "./new-run.js";
 import { ProjectProvider } from "./project-context.js";
 import { ProjectHome } from "./project-home.js";
 import { ProjectRail, ProjectShell } from "./project-shell.js";
+import { ProjectRunDetail } from "./project-run-detail.js";
 import "./project-ux.css";
 import { ProjectWizard } from "./project-wizard.js";
 import { ProjectsHub } from "./projects-hub.js";
@@ -35,7 +36,7 @@ export function App() {
               <Route path="overview" element={<ProjectHome />} />
               <Route path="runs" element={<NewRun />} />
               <Route path="runs/:id/live" element={<LiveRun />} />
-              <Route path="runs/:id" element={<RunDetail />} />
+              <Route path="runs/:id" element={<ProjectRunDetail />} />
               <Route path="compare" element={<Compare />} />
               <Route
                 path="scenarios"
