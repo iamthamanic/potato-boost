@@ -20,7 +20,8 @@ describe("live run phases", () => {
       }),
     );
     expect(html).toMatch(/warmup/);
-    expect(html).toMatch(/Operation: ready/);
+    expect(html).toMatch(/Current operation/);
+    expect(html).toMatch(/<strong>ready<\/strong>/);
     expect(html).not.toMatch(/spinner-only/);
   });
 });
