@@ -1,0 +1,84 @@
+{
+  "id": "2026-08-16-multi-project-foundation",
+  "date": "2026-08-16",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Lokale Multi-Project-Grundlage",
+    "en": "Local multi-project foundation"
+  },
+  "summary": {
+    "de": "Die Local API kann mehrere lokale Projekte als versionierte Registry verwalten. Jedes Projekt besitzt einen stabilen Schlüssel, einen kanonischen Projektpfad sowie projektspezifische Setup-, Rule-Pack- und Target-Profile-Einstellungen.",
+    "en": "The Local API can manage multiple local projects in a versioned registry. Each project has a stable key, a canonical project path, and project-specific setup, rule-pack, and target-profile settings."
+  },
+  "plain_language": {
+    "de": "Potato Boost kann Projekte jetzt explizit unterscheiden, statt alle Setup-Aktionen implizit auf einen beim Start festgelegten Ordner zu beziehen.",
+    "en": "Potato Boost can now distinguish projects explicitly instead of implicitly applying all setup actions to one folder fixed at startup."
+  },
+  "why_it_matters": {
+    "de": "Diese Trennung ist die technische Voraussetzung für eine Projektübersicht, einen Projektwechsel in der Sidebar und projektspezifische Workspaces.",
+    "en": "This separation is the technical prerequisite for a projects hub, sidebar project switching, and project-specific workspaces."
+  },
+  "user_impact": {
+    "de": [
+      "Mehrere lokale Projekte können dauerhaft registriert werden",
+      "Projektname, Pfad, Rule Packs und Target Profile können später geändert werden",
+      "Setup-Checks und Konfigurationsaktionen verwenden explizit das ausgewählte Projekt"
+    ],
+    "en": [
+      "Multiple local projects can be registered persistently",
+      "Project name, path, rule packs, and target profile can be changed later",
+      "Setup checks and configuration actions explicitly use the selected project"
+    ]
+  },
+  "developer_impact": {
+    "de": [
+      "Neue ProjectRegistry in @potato-boost/local-api",
+      "Neue projektbezogene CRUD-, Detect-, Doctor- und Config-Endpunkte",
+      "Legacy-Single-Root-Routen bleiben in diesem Schritt kompatibel"
+    ],
+    "en": [
+      "New ProjectRegistry in @potato-boost/local-api",
+      "New project-scoped CRUD, detect, doctor, and config endpoints",
+      "Legacy single-root routes remain compatible in this slice"
+    ]
+  },
+  "operational_impact": {
+    "de": [
+      "Projektmetadaten werden lokal in einer versionierten JSON-Datei gespeichert; Writes erfolgen atomar und die Datei wird mit restriktiven Rechten angelegt."
+    ],
+    "en": [
+      "Project metadata is stored locally in a versioned JSON file; writes are atomic and the file is created with restrictive permissions."
+    ]
+  },
+  "git": {
+    "base": "96a747154c06397e73593033ea4d3a6809a184fb",
+    "head": "feat/multi-project-foundation",
+    "branch": "feat/multi-project-foundation",
+    "pull_request": 94
+  },
+  "packages": ["local-api"],
+  "affected_features": ["dashboard", "project-setup"],
+  "affected_components": [
+    "packages/local-api/src/projects.ts",
+    "packages/local-api/src/project-routes.ts",
+    "packages/local-api/src/server.ts",
+    "packages/local-api/src/projects.test.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": true,
+  "evidence": [
+    {
+      "label": "PR #94",
+      "url": "https://github.com/iamthamanic/potato-boost/pull/94"
+    },
+    {
+      "label": "Issue #91",
+      "url": "https://github.com/iamthamanic/potato-boost/issues/91"
+    }
+  ],
+  "screenshots": [],
+  "confidence": 0.93,
+  "review_status": "needs-review"
+}

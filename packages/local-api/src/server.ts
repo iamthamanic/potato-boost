@@ -12,6 +12,8 @@ import { errorEnvelopeSchema } from "@potato-boost/schemas";
 import Fastify, { type FastifyInstance, type FastifyReply } from "fastify";
 import { z } from "zod";
 import { GOLDEN_RUN_ID, goldenSamples, loadArtifactByRunId } from "./golden.js";
+import { registerProjectRoutes } from "./project-routes.js";
+import { createProjectRegistry } from "./projects.js";
 import { registerSetupRoutes } from "./setup.js";
 
 const startRunBody = z.object({
@@ -38,6 +40,7 @@ export type StartLocalApiOptions = {
   preferredPort?: number;
   token?: string;
   projectRoot?: string;
+  projectRegistryPath?: string;
   doctorEnv?: DoctorEnv;
   runHoldMs?: number;
 };
@@ -181,6 +184,11 @@ export async function startLocalApi(
   let boundPort = 0;
   const runHoldMs = options.runHoldMs ?? 0;
   let baselines: BaselinesFile = emptyBaselines();
+  const projectRegistry = await createProjectRegistry(
+    options.projectRegistryPath === undefined
+      ? {}
+      : { path: options.projectRegistryPath },
+  );
 
   const app: FastifyInstance = Fastify({
     logger: false,
@@ -205,7 +213,10 @@ export async function startLocalApi(
     }
     if (request.method === "OPTIONS") {
       if (typeof origin === "string" && loopbackOrigin(origin)) {
-        reply.header("access-control-allow-methods", "GET, POST, OPTIONS");
+        reply.header(
+          "access-control-allow-methods",
+          "GET, POST, PATCH, OPTIONS",
+        );
         reply.header(
           "access-control-allow-headers",
           "authorization, content-type, idempotency-key, last-event-id",
@@ -236,6 +247,13 @@ export async function startLocalApi(
         ? {}
         : { doctorEnv: options.doctorEnv }),
     },
+    sendEnvelope,
+  );
+
+  registerProjectRoutes(
+    app,
+    projectRegistry,
+    options.doctorEnv === undefined ? {} : { doctorEnv: options.doctorEnv },
     sendEnvelope,
   );
 
