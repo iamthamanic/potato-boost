@@ -1,31 +1,44 @@
 /**
- * Dashboard shell — skip link, primary nav, and PRD routes.
- * Location: apps/dashboard/src/app.tsx
+ * Dashboard shell — user destinations in navigation, run states in context.
  */
 import { NavLink, Route, Routes } from "react-router-dom";
 import { Compare } from "./compare.js";
+import "./guided-ux.css";
 import { LiveRun } from "./live-run.js";
 import { NewRun } from "./new-run.js";
 import { ProjectHome } from "./project-home.js";
-import { GOLDEN_RUN_ID } from "./run-artifact.js";
+import "./result-ux.css";
 import { RunDetail } from "./run-detail.js";
 import { Screen } from "./screen.js";
 import { SetupDetect } from "./setup-detect.js";
 import { SetupDoctor } from "./setup-doctor.js";
 
-const NAV = [
-  { to: "/setup/detect", label: "Setup detect" },
-  { to: "/setup/doctor", label: "Setup doctor" },
-  { to: "/project", label: "Project" },
-  { to: "/scenarios", label: "Scenarios" },
-  { to: "/profiles", label: "Profiles" },
-  { to: "/runs/new", label: "New run" },
-  { to: "/runs/demo/live", label: "Live run" },
-  { to: `/runs/${GOLDEN_RUN_ID}`, label: "Run detail" },
+const PRIMARY_NAV = [
+  { to: "/project", label: "Overview" },
+  { to: "/runs/new", label: "Runs" },
   { to: "/compare", label: "Compare" },
-  { to: "/rules", label: "Rules" },
-  { to: "/settings", label: "Settings" },
+  { to: "/scenarios", label: "Scenarios" },
 ] as const;
+
+const SETUP_NAV = [
+  { to: "/profiles", label: "Target profiles" },
+  { to: "/rules", label: "Rules" },
+  { to: "/setup/detect", label: "Project setup" },
+] as const;
+
+function NavItems(props: { items: readonly { to: string; label: string }[] }) {
+  return (
+    <ul>
+      {props.items.map((item) => (
+        <li key={item.to}>
+          <NavLink to={item.to} end={item.to === "/project"}>
+            {item.label}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function App() {
   return (
@@ -34,16 +47,16 @@ export function App() {
         Skip to main content
       </a>
       <nav className="nav" aria-label="Primary">
-        <h1>Potato Boost</h1>
-        <ul>
-          {NAV.map((item) => (
-            <li key={item.to}>
-              <NavLink to={item.to} end={item.to === "/project"}>
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+        <div className="nav-brand">
+          <h1>Potato Boost</h1>
+          <p className="nav-project">Local performance workbench</p>
+        </div>
+        <NavItems items={PRIMARY_NAV} />
+        <p className="nav-label">Test setup</p>
+        <NavItems items={SETUP_NAV} />
+        <div className="nav-bottom">
+          <NavLink to="/settings">Settings</NavLink>
+        </div>
       </nav>
       <main id="main" tabIndex={-1}>
         <Routes>
@@ -56,7 +69,7 @@ export function App() {
             element={
               <Screen
                 title="Scenarios"
-                empty="No validated scenario yet. Record or import a scenario before a representative run."
+                empty="No representative scenario yet. Quick Scan works without one; add a scenario when you need repeatable interaction."
               />
             }
           />
@@ -64,8 +77,8 @@ export function App() {
             path="/profiles"
             element={
               <Screen
-                title="Profiles"
-                empty="No target profile selected. Pick a profile to see budgets."
+                title="Target profiles"
+                empty="The recommended local target is used for Quick Scan. Add profiles when you need device-specific budgets."
               />
             }
           />
@@ -78,7 +91,7 @@ export function App() {
             element={
               <Screen
                 title="Rules"
-                empty="No rule pack loaded. Bundled packs appear here after a run."
+                empty="Bundled performance rules are applied automatically. Rule details appear here after a run."
               />
             }
           />
@@ -87,7 +100,7 @@ export function App() {
             element={
               <Screen
                 title="Settings"
-                empty="Local paths and retention are unchanged. Offline mode is the default."
+                empty="Potato Boost stays local and offline by default. Project paths and retention settings will live here."
               />
             }
           />

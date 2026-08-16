@@ -38,7 +38,8 @@ test("core routes have no critical or serious Axe violations", async ({
   await axeCriticalSerious(page);
 
   await page.goto(dash("/runs/new"));
-  await expect(page.getByRole("heading", { name: "New run" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
+  await expect(page.getByText("Local performance budget")).toBeVisible();
   await axeCriticalSerious(page);
 
   const created = await page.request.post(`${API}/api/v1/runs`, {
@@ -60,10 +61,11 @@ test("core routes have no critical or serious Axe violations", async ({
   await page.goto(dash(`/runs/${body.runId}/live`));
   await expect(page.getByRole("heading", { name: "Live run" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Abort run" })).toBeEnabled();
+  await expect(page.getByText("Current operation")).toBeVisible();
   await axeCriticalSerious(page);
 
   await page.goto(dash(`/runs/${GOLDEN}?tab=findings`));
-  await expect(page.getByRole("heading", { name: "Run detail" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
   await expect(
     page.getByRole("radio", { name: "finding:web.frame_time.p95" }),
   ).toBeVisible();
@@ -74,7 +76,7 @@ test("keyboard path: skip link, start, abort, finding", async ({ page }) => {
   await page.goto(dash("/setup/detect"));
   await expect(page.getByRole("button", { name: "Confirm" })).toBeVisible();
   await page.goto(dash("/runs/new"));
-  await expect(page.getByRole("heading", { name: "New run" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Skip to main content" }),

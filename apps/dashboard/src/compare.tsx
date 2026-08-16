@@ -1,6 +1,5 @@
 /**
- * Compare — hard compare when locks match; baseline only after Confirm.
- * Route: /compare. Location: apps/dashboard/src/compare.tsx
+ * Compare — before/after verification with hard comparability rules.
  */
 import { useState } from "react";
 import { ApiRequestError, apiRequest, readJson } from "./api.js";
@@ -30,22 +29,17 @@ export type CompareView = {
 };
 
 export function parseCompareView(raw: unknown): CompareView | undefined {
-  if (typeof raw !== "object" || raw === null) {
-    return undefined;
-  }
+  if (typeof raw !== "object" || raw === null) return undefined;
   const record = raw as Record<string, unknown>;
   if (
     typeof record.comparability !== "string" ||
     typeof record.overall !== "string"
-  ) {
+  )
     return undefined;
-  }
   const metrics: CompareRow[] = [];
   if (Array.isArray(record.metrics)) {
     for (const item of record.metrics) {
-      if (typeof item !== "object" || item === null) {
-        continue;
-      }
+      if (typeof item !== "object" || item === null) continue;
       const row = item as Record<string, unknown>;
       if (
         typeof row.name !== "string" ||
@@ -57,9 +51,8 @@ export function parseCompareView(raw: unknown): CompareView | undefined {
         typeof row.noiseBudgetPct !== "number" ||
         typeof row.withinNoiseBudget !== "boolean" ||
         typeof row.verdict !== "string"
-      ) {
+      )
         continue;
-      }
       metrics.push({
         name: row.name,
         unit: row.unit,
@@ -76,13 +69,10 @@ export function parseCompareView(raw: unknown): CompareView | undefined {
   const reasons: { code: string; detail: string }[] = [];
   if (Array.isArray(record.reasons)) {
     for (const item of record.reasons) {
-      if (typeof item !== "object" || item === null) {
-        continue;
-      }
+      if (typeof item !== "object" || item === null) continue;
       const row = item as Record<string, unknown>;
-      if (typeof row.code === "string" && typeof row.detail === "string") {
+      if (typeof row.code === "string" && typeof row.detail === "string")
         reasons.push({ code: row.code, detail: row.detail });
-      }
     }
   }
   return {
@@ -95,55 +85,72 @@ export function parseCompareView(raw: unknown): CompareView | undefined {
 }
 
 export function CompareTable(props: { result: CompareView }) {
+  const comparable = props.result.comparability === "comparable";
   return (
-    <div>
-      <p className="status">
-        <span aria-hidden="true">
-          {props.result.comparability === "comparable" ? "●" : "!"}
-        </span>
-        <span>
-          {props.result.comparability} — {props.result.overall}
-        </span>
-      </p>
-      {props.result.gitDirtyVisible ? (
-        <p className="muted">Git dirty is visible on a fingerprint.</p>
-      ) : null}
-      {props.result.comparability === "non-comparable" ? (
-        <p>Hard compare is blocked. This is not a budget fail.</p>
-      ) : null}
-      <table className="checks">
-        <caption className="muted">
-          Absolute values, delta, and noise budget
-        </caption>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Baseline</th>
-            <th>Candidate</th>
-            <th>Delta</th>
-            <th>Noise</th>
-            <th>Verdict</th>
-          </tr>
-        </thead>
-        <tbody>
-          {props.result.metrics.map((row) => (
-            <tr key={row.name}>
-              <td className="mono">{row.name}</td>
-              <td>
-                {row.baseline} {row.unit}
-              </td>
-              <td>
-                {row.candidate} {row.unit}
-              </td>
-              <td>
-                {row.delta} ({row.deltaPct.toFixed(1)}%)
-              </td>
-              <td>{row.noiseBudgetPct}%</td>
-              <td>{row.verdict}</td>
-            </tr>
+    <div className="compare-result">
+      <div className="result-summary">
+        <p className="status">
+          <span aria-hidden="true">{comparable ? "●" : "!"}</span>
+          <strong>
+            {comparable
+              ? "Runs are comparable"
+              : "Runs cannot be compared reliably"}
+          </strong>
+        </p>
+        <p>{props.result.overall}</p>
+        {!comparable ? (
+          <p className="muted">
+            This is a compatibility result, not a performance failure.
+          </p>
+        ) : null}
+      </div>
+      {props.result.reasons.length > 0 ? (
+        <ul className="reason-list">
+          {props.result.reasons.map((reason) => (
+            <li key={`${reason.code}:${reason.detail}`}>{reason.detail}</li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      ) : null}
+      <div className="table-scroll">
+        <table className="checks">
+          <caption className="muted">
+            Before/after measurements include the configured noise budget.
+          </caption>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Before</th>
+              <th>After</th>
+              <th>Change</th>
+              <th>Noise</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {props.result.metrics.map((row) => (
+              <tr key={row.name}>
+                <td className="mono">{row.name}</td>
+                <td>
+                  {row.baseline} {row.unit}
+                </td>
+                <td>
+                  {row.candidate} {row.unit}
+                </td>
+                <td>
+                  {row.delta} ({row.deltaPct.toFixed(1)}%)
+                </td>
+                <td>{row.noiseBudgetPct}%</td>
+                <td>{row.verdict}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {props.result.gitDirtyVisible ? (
+        <p className="muted">
+          The run fingerprint records that the working tree was dirty.
+        </p>
+      ) : null}
     </div>
   );
 }
@@ -200,7 +207,7 @@ export function Compare() {
       );
       setMessage(
         saved.wrote
-          ? `Baseline set to ${candidateId}. Previous id stays in history.`
+          ? "The after run is now the baseline. The previous baseline remains in history."
           : "No files written.",
       );
     } catch (caught) {
@@ -220,71 +227,79 @@ export function Compare() {
     candidateId !== baselineId;
 
   return (
-    <section>
-      <h2>Compare</h2>
-      <div className="panel">
-        <p>
-          Hard compare needs matching scenario, profile, adapter major, runtime,
-          hardware class, and build mode.
-        </p>
-        <label className="field">
-          Baseline
-          <input
-            className="mono"
-            value={baselineId}
-            onChange={(event) => {
-              setBaselineId(event.target.value);
-            }}
-            spellCheck={false}
-            autoComplete="off"
-            name="baseline-run"
-          />
-        </label>
-        <label className="field">
-          Candidate
-          <input
-            className="mono"
-            value={candidateId}
-            onChange={(event) => {
-              setCandidateId(event.target.value);
-            }}
-            spellCheck={false}
-            autoComplete="off"
-            name="candidate-run"
-          />
-        </label>
+    <section className="workspace-page">
+      <header className="page-header">
+        <div>
+          <p className="eyebrow">Verify a change</p>
+          <h2>Compare before and after</h2>
+          <p className="muted">
+            Potato Boost only compares runs when scenario, target, runtime,
+            hardware class, and build mode are compatible.
+          </p>
+        </div>
+      </header>
+      <div className="panel compare-panel">
+        <div className="compare-pickers">
+          <label className="field">
+            <strong>Before run</strong>
+            <span className="muted">Your baseline or earlier measurement</span>
+            <input
+              className="mono"
+              value={baselineId}
+              onChange={(event) => setBaselineId(event.target.value)}
+              spellCheck={false}
+              autoComplete="off"
+              name="baseline-run"
+            />
+          </label>
+          <label className="field">
+            <strong>After run</strong>
+            <span className="muted">
+              The measurement after your code change
+            </span>
+            <input
+              className="mono"
+              value={candidateId}
+              onChange={(event) => setCandidateId(event.target.value)}
+              spellCheck={false}
+              autoComplete="off"
+              name="candidate-run"
+            />
+          </label>
+        </div>
         <div className="actions">
           <button
             type="button"
             onClick={() => void runCompare()}
             disabled={busy}
           >
-            Compare
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setCandidateId(COMPARE_DEBUG_ID);
-            }}
-            disabled={busy}
-          >
-            Use debug candidate
+            Compare runs
           </button>
           <button
             type="button"
             onClick={() => void confirmBaseline()}
             disabled={busy || !canConfirm}
           >
-            Confirm baseline
+            Set after run as baseline
           </button>
         </div>
-        {canConfirm ? null : (
+        {!canConfirm ? (
           <p className="muted">
-            Confirm baseline stays disabled until a comparable completed
-            candidate is compared.
+            A new baseline can only be set after a compatible completed run is
+            compared.
           </p>
-        )}
-        {message !== undefined ? <p>{message}</p> : null}
+        ) : null}
+        <details className="technical-details">
+          <summary>Technical test helpers</summary>
+          <button
+            type="button"
+            onClick={() => setCandidateId(COMPARE_DEBUG_ID)}
+            disabled={busy}
+          >
+            Use debug candidate
+          </button>
+        </details>
+        {message !== undefined ? <p role="status">{message}</p> : null}
         {result !== undefined ? <CompareTable result={result} /> : null}
       </div>
     </section>

@@ -1,0 +1,87 @@
+{
+  "id": "2026-08-16-dashboard-guided-ux",
+  "date": "2026-08-16",
+  "type": "feature",
+  "status": "recorded",
+  "title": {
+    "de": "Geführter Dashboard-Workflow von Setup bis Verify",
+    "en": "Guided dashboard workflow from setup to verify"
+  },
+  "summary": {
+    "de": "Das Dashboard folgt jetzt der Nutzerreise Overview → Quick Scan → Findings → Verify. Technische IDs und Debug-Details sind nachrangig, Run Tape und System Check machen den Messablauf verständlich.",
+    "en": "The dashboard now follows the user journey Overview → Quick Scan → Findings → Verify. Technical IDs and debug details are secondary, while Run Tape and System Check make the measurement flow understandable."
+  },
+  "plain_language": {
+    "de": "Nutzer sehen zuerst, was sie als Nächstes tun sollen und was eine Messung bedeutet, statt interne Routen und IDs verstehen zu müssen.",
+    "en": "Users first see what to do next and what a measurement means instead of having to understand internal routes and IDs."
+  },
+  "why_it_matters": {
+    "de": "Potato Boost soll reproduzierbare Performance-Findings liefern, ohne dass Nutzer zuerst das interne Datenmodell lernen müssen.",
+    "en": "Potato Boost should produce reproducible performance findings without making users learn the internal data model first."
+  },
+  "user_impact": {
+    "de": [
+      "Navigation nach Nutzerzielen statt Implementierungszuständen",
+      "Quick Scan zeigt empfohlenen Kontext vor dem Start",
+      "System Check führt direkt zum Scan",
+      "Run Tape zeigt benannte Messphasen",
+      "Run Result und Compare priorisieren verständliche Messkontexte vor IDs"
+    ],
+    "en": [
+      "Navigation follows user destinations instead of implementation states",
+      "Quick Scan shows recommended context before start",
+      "System Check leads directly to the scan",
+      "Run Tape shows named measurement phases",
+      "Run Result and Compare prioritize understandable measurement context before IDs"
+    ]
+  },
+  "developer_impact": {
+    "de": ["Keine Local-API- oder Schemaänderung", "Neue responsive Dashboard-Styles und aktualisierte Playwright/Axe-Reise"],
+    "en": ["No Local API or schema change", "New responsive dashboard styles and updated Playwright/Axe journey"]
+  },
+  "operational_impact": {
+    "de": ["Keine neue Infrastruktur oder Persistenz; bestehende loopback-only Sicherheitsgrenzen bleiben unverändert."],
+    "en": ["No new infrastructure or persistence; existing loopback-only security boundaries remain unchanged."]
+  },
+  "git": {
+    "base": "3f5c43b2d8f247ab306554fe8bd170d8399cea38",
+    "head": "feat/dashboard-guided-ux",
+    "branch": "feat/dashboard-guided-ux",
+    "pull_request": 90
+  },
+  "packages": ["dashboard"],
+  "affected_features": ["dashboard"],
+  "affected_components": [
+    "apps/dashboard/src/app.tsx",
+    "apps/dashboard/src/project-home.tsx",
+    "apps/dashboard/src/new-run.tsx",
+    "apps/dashboard/src/setup-doctor.tsx",
+    "apps/dashboard/src/run-phase-stepper.tsx",
+    "apps/dashboard/src/run-detail.tsx",
+    "apps/dashboard/src/compare.tsx",
+    "apps/dashboard/src/guided-ux.css",
+    "apps/dashboard/src/result-ux.css",
+    "e2e/dashboard-a11y.spec.ts"
+  ],
+  "breaking_changes": [],
+  "migration_required": false,
+  "security_relevant": false,
+  "evidence": [
+    {
+      "label": "PR #90",
+      "url": "https://github.com/iamthamanic/potato-boost/pull/90"
+    },
+    {
+      "label": "Issue #89",
+      "url": "https://github.com/iamthamanic/potato-boost/issues/89"
+    }
+  ],
+  "screenshots": [
+    {
+      "status": "missing",
+      "note": "UI change verified by Playwright/Axe CI; persistent review screenshots still need capture."
+    }
+  ],
+  "confidence": 0.9,
+  "review_status": "needs-review"
+}

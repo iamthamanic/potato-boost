@@ -39,7 +39,7 @@ describe("compare view", () => {
     expect(html).not.toMatch(/Performance Score/);
   });
 
-  it("says non-comparable is not a budget fail", () => {
+  it("says non-comparable is not a performance failure", () => {
     const parsed = parseCompareView({
       comparability: "non-comparable",
       overall: "non-comparable",
@@ -66,7 +66,7 @@ describe("compare view", () => {
     const html = renderToStaticMarkup(
       createElement(CompareTable, { result: parsed }),
     );
-    expect(html).toMatch(/not a budget fail/);
+    expect(html).toMatch(/not a performance failure/);
     expect(html).toMatch(/incomparable/);
   });
 });

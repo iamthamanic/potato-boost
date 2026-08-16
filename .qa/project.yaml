@@ -67,16 +67,13 @@ viewports:
     width: 1280
     height: 720
 
-# Planned dashboard routes from docs/PRD.md §10 — screens do not exist yet
+# Dashboard destinations — live/detail routes are contextual run states, not permanent navigation.
 navigation:
-  - Setup detect
-  - Setup doctor
-  - Project
-  - Scenarios
-  - Profiles
-  - New run
-  - Live run
-  - Run detail
+  - Overview
+  - Runs
   - Compare
+  - Scenarios
+  - Target profiles
   - Rules
+  - Project setup
   - Settings
