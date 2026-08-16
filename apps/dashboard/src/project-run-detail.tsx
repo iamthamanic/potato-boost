@@ -21,7 +21,9 @@ export function ProjectRunDetail() {
     }
     setState({ kind: "loading" });
     try {
-      await readJson<unknown>(await apiRequest(projectRunPath(projectId, runId)));
+      await readJson<unknown>(
+        await apiRequest(projectRunPath(projectId, runId)),
+      );
       setState({ kind: "ready" });
     } catch (caught) {
       setState({
