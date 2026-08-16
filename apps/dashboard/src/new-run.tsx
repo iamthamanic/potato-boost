@@ -255,7 +255,9 @@ export function NewRun() {
                       </Link>
                     ) : null}
                     {!run.comparable && run.status !== "running" ? (
-                      <span className="muted">No persisted result artifact</span>
+                      <span className="muted">
+                        No persisted result artifact
+                      </span>
                     ) : null}
                     <details className="technical-details inline-details">
                       <summary>Run ID</summary>
