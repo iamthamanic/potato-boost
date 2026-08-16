@@ -43,7 +43,9 @@ function NavItems(props: { items: readonly { to: string; label: string }[] }) {
 export function App() {
   return (
     <div className="shell">
-      <a className="skip-link" href="#main">Skip to main content</a>
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
       <nav className="nav" aria-label="Primary">
         <div className="nav-brand">
           <h1>Potato Boost</h1>
@@ -62,14 +64,46 @@ export function App() {
           <Route path="/project" element={<ProjectHome />} />
           <Route path="/setup/detect" element={<SetupDetect />} />
           <Route path="/setup/doctor" element={<SetupDoctor />} />
-          <Route path="/scenarios" element={<Screen title="Scenarios" empty="No representative scenario yet. Quick Scan works without one; add a scenario when you need repeatable interaction." />} />
-          <Route path="/profiles" element={<Screen title="Target profiles" empty="The recommended local target is used for Quick Scan. Add profiles when you need device-specific budgets." />} />
+          <Route
+            path="/scenarios"
+            element={
+              <Screen
+                title="Scenarios"
+                empty="No representative scenario yet. Quick Scan works without one; add a scenario when you need repeatable interaction."
+              />
+            }
+          />
+          <Route
+            path="/profiles"
+            element={
+              <Screen
+                title="Target profiles"
+                empty="The recommended local target is used for Quick Scan. Add profiles when you need device-specific budgets."
+              />
+            }
+          />
           <Route path="/runs/new" element={<NewRun />} />
           <Route path="/runs/:id/live" element={<LiveRun />} />
           <Route path="/runs/:id" element={<RunDetail />} />
           <Route path="/compare" element={<Compare />} />
-          <Route path="/rules" element={<Screen title="Rules" empty="Bundled performance rules are applied automatically. Rule details appear here after a run." />} />
-          <Route path="/settings" element={<Screen title="Settings" empty="Potato Boost stays local and offline by default. Project paths and retention settings will live here." />} />
+          <Route
+            path="/rules"
+            element={
+              <Screen
+                title="Rules"
+                empty="Bundled performance rules are applied automatically. Rule details appear here after a run."
+              />
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <Screen
+                title="Settings"
+                empty="Potato Boost stays local and offline by default. Project paths and retention settings will live here."
+              />
+            }
+          />
         </Routes>
       </main>
     </div>
