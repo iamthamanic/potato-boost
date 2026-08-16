@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, realpath, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, realpath, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -97,7 +97,10 @@ describe("local project registry", () => {
     await mkdir(projectRoot);
     await writeFile(
       join(projectRoot, "package.json"),
-      JSON.stringify({ scripts: { dev: "vite" }, devDependencies: { vite: "latest" } }),
+      JSON.stringify({
+        scripts: { dev: "vite" },
+        devDependencies: { vite: "latest" },
+      }),
       "utf8",
     );
 
@@ -144,8 +147,8 @@ describe("local project registry", () => {
     const registryPath = join(temp, "projects.json");
     await writeFile(registryPath, "{ definitely-not-json", "utf8");
 
-    await expect(startLocalApi({ projectRegistryPath: registryPath })).rejects.toThrow(
-      /registry is invalid/i,
-    );
+    await expect(
+      startLocalApi({ projectRegistryPath: registryPath }),
+    ).rejects.toThrow(/registry is invalid/i);
   });
 });
