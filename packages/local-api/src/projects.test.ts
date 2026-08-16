@@ -1,4 +1,10 @@
-import { mkdir, mkdtemp, realpath, writeFile } from "node:fs/promises";
+import {
+  mkdir,
+  mkdtemp,
+  realpath,
+  rename,
+  writeFile,
+} from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
@@ -52,8 +58,10 @@ describe("local project registry", () => {
   it("persists projects and their settings across api restarts", async () => {
     const temp = await mkdtemp(join(tmpdir(), "potato-projects-"));
     const root = join(temp, "app");
+    const updatedRoot = join(temp, "app-renamed");
     const registryPath = join(temp, "state", "projects.json");
     await mkdir(root);
+    await mkdir(updatedRoot);
 
     api = await startLocalApi({ projectRegistryPath: registryPath });
     const created = await createProject(api, root);
@@ -67,11 +75,14 @@ describe("local project registry", () => {
       method: "PATCH",
       headers: headers(api),
       body: JSON.stringify({
+        root: updatedRoot,
         rulePackIds: ["web-performance", "javascript-performance"],
         targetProfileId: "low-end-mobile",
       }),
     });
     expect(patched.status).toBe(200);
+    const updated = (await patched.json()) as Project;
+    expect(updated.root).toBe(await realpath(updatedRoot));
 
     await api.close();
     api = await startLocalApi({ projectRegistryPath: registryPath });
@@ -82,6 +93,7 @@ describe("local project registry", () => {
     const body = (await listed.json()) as { projects: Project[] };
     expect(body.projects).toHaveLength(1);
     expect(body.projects[0]?.id).toBe(project.id);
+    expect(body.projects[0]?.root).toBe(await realpath(updatedRoot));
     expect(body.projects[0]?.rulePackIds).toEqual([
       "web-performance",
       "javascript-performance",
@@ -125,6 +137,30 @@ describe("local project registry", () => {
       { headers: headers(api) },
     );
     expect(unknown.status).toBe(404);
+  });
+
+  it("fails closed when a registered project root moves", async () => {
+    const temp = await mkdtemp(join(tmpdir(), "potato-project-moved-"));
+    const projectRoot = join(temp, "selected");
+    const movedRoot = join(temp, "moved");
+    await mkdir(projectRoot);
+    api = await startLocalApi({
+      projectRegistryPath: join(temp, "projects.json"),
+    });
+    const created = await createProject(api, projectRoot, "Selected app");
+    const project = (await created.json()) as Project;
+    await rename(projectRoot, movedRoot);
+
+    const detected = await fetch(
+      `${api.url}/api/v1/projects/${project.id}/detect`,
+      { headers: headers(api) },
+    );
+    expect(detected.status).toBe(422);
+
+    const readable = await fetch(`${api.url}/api/v1/projects/${project.id}`, {
+      headers: headers(api),
+    });
+    expect(readable.status).toBe(200);
   });
 
   it("rejects duplicate and invalid project roots", async () => {
