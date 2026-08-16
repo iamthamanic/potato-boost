@@ -1,16 +1,17 @@
 /**
- * Live run — SSE/poll phases and abort. Route: /runs/:id/live
- * Location: apps/dashboard/src/live-run.tsx
+ * Live run — SSE phases and abort for global or project-scoped runs.
  */
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ApiRequestError, apiRequest, readJson } from "./api.js";
+import { projectRunPath } from "./project-runs.js";
 import { RunPhaseStepper } from "./run-phase-stepper.js";
 import { type PhaseEvent, parseSseChunk } from "./run-phases.js";
 import { getApiBase, getRunToken } from "./session.js";
 
 type RunSnapshot = {
   runId: string;
+  projectId?: string;
   status: string;
   baselineEligible: boolean;
 };
@@ -20,9 +21,16 @@ type PageState =
   | { kind: "error"; message: string }
   | { kind: "ready"; run: RunSnapshot; events: PhaseEvent[] };
 
+function runPath(projectId: string | undefined, runId: string): string {
+  return projectId === undefined
+    ? `/api/v1/runs/${encodeURIComponent(runId)}`
+    : projectRunPath(projectId, runId);
+}
+
 export function LiveRun() {
   const params = useParams();
   const runId = params.id;
+  const projectId = params.projectId;
   const [page, setPage] = useState<PageState>({
     kind: "loading",
     operation: "Opening live run",
@@ -33,8 +41,10 @@ export function LiveRun() {
     if (runId === undefined) {
       throw new ApiRequestError("Run id is missing.", 400);
     }
-    return readJson<RunSnapshot>(await apiRequest(`/api/v1/runs/${runId}`));
-  }, [runId]);
+    return readJson<RunSnapshot>(
+      await apiRequest(runPath(projectId, runId)),
+    );
+  }, [projectId, runId]);
 
   useEffect(() => {
     if (runId === undefined) {
@@ -51,6 +61,7 @@ export function LiveRun() {
         const run = await loadSnapshot();
         setPage({ kind: "ready", run, events: collected });
         await streamEvents(
+          projectId,
           runId,
           lastId,
           controller.signal,
@@ -74,7 +85,9 @@ export function LiveRun() {
           kind: "error",
           message:
             error instanceof ApiRequestError
-              ? error.message
+              ? error.status === 404 && projectId !== undefined
+                ? "This run does not belong to the active project, or it no longer exists."
+                : error.message
               : "Local API is unreachable. Start the loopback server, then retry.",
         });
       }
@@ -83,7 +96,7 @@ export function LiveRun() {
     return () => {
       controller.abort();
     };
-  }, [loadSnapshot, runId]);
+  }, [loadSnapshot, projectId, runId]);
 
   const abort = async (): Promise<void> => {
     if (runId === undefined) {
@@ -92,7 +105,9 @@ export function LiveRun() {
     setBusy(true);
     try {
       const run = await readJson<RunSnapshot>(
-        await apiRequest(`/api/v1/runs/${runId}/abort`, { method: "POST" }),
+        await apiRequest(`${runPath(projectId, runId)}/abort`, {
+          method: "POST",
+        }),
       );
       setPage((current) =>
         current.kind === "ready"
@@ -178,6 +193,7 @@ export function LiveRun() {
 }
 
 async function streamEvents(
+  projectId: string | undefined,
   runId: string,
   lastEventId: number,
   signal: AbortSignal,
@@ -191,10 +207,13 @@ async function streamEvents(
   if (lastEventId > 0) {
     headers.set("last-event-id", String(lastEventId));
   }
-  const response = await fetch(`${getApiBase()}/api/v1/runs/${runId}/events`, {
-    headers,
-    signal,
-  });
+  const response = await fetch(
+    `${getApiBase()}${runPath(projectId, runId)}/events`,
+    {
+      headers,
+      signal,
+    },
+  );
   if (response.status === 410) {
     return;
   }
