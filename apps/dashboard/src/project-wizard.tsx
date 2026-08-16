@@ -26,9 +26,7 @@ export function ProjectWizard() {
   const [root, setRoot] = useState("");
   const [adapterId, setAdapterId] = useState<AdapterId>("unknown");
   const [startText, setStartText] = useState("");
-  const [rulePackIds, setRulePackIds] = useState<string[]>([
-    "web-performance",
-  ]);
+  const [rulePackIds, setRulePackIds] = useState<string[]>(["web-performance"]);
   const [targetProfileId, setTargetProfileId] = useState("local-machine");
   const [message, setMessage] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
@@ -124,7 +122,9 @@ export function ProjectWizard() {
         {STEPS.map((label, index) => (
           <li
             key={label}
-            className={index === step ? "is-current" : index < step ? "is-done" : ""}
+            className={
+              index === step ? "is-current" : index < step ? "is-done" : ""
+            }
             aria-current={index === step ? "step" : undefined}
           >
             <span className="wizard-step-number" aria-hidden="true">
@@ -190,7 +190,10 @@ export function ProjectWizard() {
                 ))}
               </select>
               <p className="muted">
-                {ADAPTER_OPTIONS.find((option) => option.id === adapterId)?.detail}
+                {
+                  ADAPTER_OPTIONS.find((option) => option.id === adapterId)
+                    ?.detail
+                }
               </p>
             </div>
             <div className="field">
@@ -288,7 +291,12 @@ export function ProjectWizard() {
               </div>
               <div>
                 <dt>Project type</dt>
-                <dd>{ADAPTER_OPTIONS.find((option) => option.id === adapterId)?.label}</dd>
+                <dd>
+                  {
+                    ADAPTER_OPTIONS.find((option) => option.id === adapterId)
+                      ?.label
+                  }
+                </dd>
               </div>
               <div>
                 <dt>Start argv</dt>
