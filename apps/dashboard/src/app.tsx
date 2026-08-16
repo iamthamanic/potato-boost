@@ -15,6 +15,7 @@ import { ProjectWizard } from "./project-wizard.js";
 import { ProjectsHub } from "./projects-hub.js";
 import "./result-ux.css";
 import { RunDetail } from "./run-detail.js";
+import "./run-workspace.css";
 import { Screen } from "./screen.js";
 import { TestSetup } from "./test-setup.js";
 
