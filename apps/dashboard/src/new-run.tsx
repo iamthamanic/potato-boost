@@ -2,8 +2,9 @@
  * New run — review the recommended Quick Scan before starting it.
  */
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ApiRequestError, apiRequest, readJson } from "./api.js";
+import { projectPath } from "./projects.js";
 
 const QUICK_SCAN = {
   targetId: "web-threejs",
@@ -13,6 +14,7 @@ const QUICK_SCAN = {
 
 export function NewRun() {
   const navigate = useNavigate();
+  const { projectId } = useParams();
   const [error, setError] = useState<string | undefined>(undefined);
   const [busy, setBusy] = useState(false);
 
@@ -27,7 +29,11 @@ export function NewRun() {
           body: JSON.stringify(QUICK_SCAN),
         }),
       );
-      navigate(`/runs/${created.runId}/live`);
+      navigate(
+        projectId === undefined
+          ? `/runs/${created.runId}/live`
+          : `${projectPath(projectId, "runs")}/${encodeURIComponent(created.runId)}/live`,
+      );
     } catch (caught) {
       setError(
         caught instanceof ApiRequestError
@@ -38,6 +44,9 @@ export function NewRun() {
       setBusy(false);
     }
   };
+
+  const setupPath =
+    projectId === undefined ? "/projects" : projectPath(projectId, "test-setup");
 
   return (
     <section className="narrow-page">
@@ -110,8 +119,8 @@ export function NewRun() {
               <span>Scan did not start</span>
             </p>
             <p>{error}</p>
-            <Link className="text-link" to="/setup/doctor">
-              Open system check
+            <Link className="text-link" to={setupPath}>
+              Open Test Setup
             </Link>
           </div>
         ) : null}
