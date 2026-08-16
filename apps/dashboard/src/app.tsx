@@ -49,14 +49,38 @@ export function App() {
               <Route path="test-setup" element={<TestSetup />} />
             </Route>
 
-            <Route path="/project" element={<Navigate to="/projects" replace />} />
-            <Route path="/runs/new" element={<Navigate to="/projects" replace />} />
-            <Route path="/compare" element={<Navigate to="/projects" replace />} />
-            <Route path="/scenarios" element={<Navigate to="/projects" replace />} />
-            <Route path="/profiles" element={<Navigate to="/projects" replace />} />
-            <Route path="/rules" element={<Navigate to="/projects" replace />} />
-            <Route path="/setup/detect" element={<Navigate to="/projects" replace />} />
-            <Route path="/setup/doctor" element={<Navigate to="/projects" replace />} />
+            <Route
+              path="/project"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/runs/new"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/compare"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/scenarios"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/profiles"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/rules"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/setup/detect"
+              element={<Navigate to="/projects" replace />}
+            />
+            <Route
+              path="/setup/doctor"
+              element={<Navigate to="/projects" replace />}
+            />
 
             <Route path="/runs/:id/live" element={<LiveRun />} />
             <Route path="/runs/:id" element={<RunDetail />} />
