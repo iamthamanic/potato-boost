@@ -97,14 +97,20 @@ function webKindsFromAdapter(
 }
 
 function inferredStartFor(kind: string): string[] {
-  if (
-    kind === "vite" ||
-    kind === "web" ||
-    kind === "react" ||
-    kind === "threejs" ||
-    kind === "unknown"
-  ) {
-    return startArgv([kind]);
+  if (kind === "vite") {
+    return startArgv(["vite"]);
+  }
+  if (kind === "web") {
+    return startArgv(["web"]);
+  }
+  if (kind === "react") {
+    return startArgv(["react"]);
+  }
+  if (kind === "threejs") {
+    return startArgv(["threejs"]);
+  }
+  if (kind === "unknown") {
+    return startArgv(["unknown"]);
   }
   return [];
 }
@@ -125,7 +131,12 @@ function registryError(
       return sendEnvelope(reply, "NOT_FOUND", error.message, 404);
     }
   }
-  return sendEnvelope(reply, "INTERNAL", "project registry operation failed", 500);
+  return sendEnvelope(
+    reply,
+    "INTERNAL",
+    "project registry operation failed",
+    500,
+  );
 }
 
 function resolveProject(
@@ -166,7 +177,12 @@ export function registerProjectRoutes(
   app.post("/api/v1/projects", async (request, reply) => {
     const parsed = createProjectBodySchema.safeParse(request.body);
     if (!parsed.success) {
-      return sendEnvelope(reply, "UNPROCESSABLE", "invalid project request", 422);
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid project request",
+        422,
+      );
     }
     try {
       const project = await registry.create(parsed.data);
@@ -177,7 +193,12 @@ export function registerProjectRoutes(
   });
 
   app.get("/api/v1/projects/:projectId", async (request, reply) => {
-    const project = resolveProject(registry, request.params, reply, sendEnvelope);
+    const project = resolveProject(
+      registry,
+      request.params,
+      reply,
+      sendEnvelope,
+    );
     if (project === undefined) {
       return reply;
     }
@@ -191,7 +212,12 @@ export function registerProjectRoutes(
       return sendEnvelope(reply, "BAD_REQUEST", "invalid project id", 400);
     }
     if (!body.success) {
-      return sendEnvelope(reply, "UNPROCESSABLE", "invalid project update", 422);
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid project update",
+        422,
+      );
     }
     try {
       const project = await registry.update(params.data.projectId, body.data);
@@ -221,7 +247,12 @@ export function registerProjectRoutes(
   }
 
   app.get("/api/v1/projects/:projectId/detect", async (request, reply) => {
-    const project = resolveProject(registry, request.params, reply, sendEnvelope);
+    const project = resolveProject(
+      registry,
+      request.params,
+      reply,
+      sendEnvelope,
+    );
     if (project === undefined) {
       return reply;
     }
@@ -267,13 +298,23 @@ export function registerProjectRoutes(
   app.post(
     "/api/v1/projects/:projectId/config/preview",
     async (request, reply) => {
-      const project = resolveProject(registry, request.params, reply, sendEnvelope);
+      const project = resolveProject(
+        registry,
+        request.params,
+        reply,
+        sendEnvelope,
+      );
       if (project === undefined) {
         return reply;
       }
       const parsed = configBody.safeParse(request.body);
       if (!parsed.success) {
-        return sendEnvelope(reply, "UNPROCESSABLE", "invalid config request", 422);
+        return sendEnvelope(
+          reply,
+          "UNPROCESSABLE",
+          "invalid config request",
+          422,
+        );
       }
       const preview = await makePreview(project, parsed.data);
       await applyInit(configFs, preview, false);
@@ -290,7 +331,12 @@ export function registerProjectRoutes(
   app.post(
     "/api/v1/projects/:projectId/config/cancel",
     async (request, reply) => {
-      const project = resolveProject(registry, request.params, reply, sendEnvelope);
+      const project = resolveProject(
+        registry,
+        request.params,
+        reply,
+        sendEnvelope,
+      );
       if (project === undefined) {
         return reply;
       }
@@ -301,13 +347,23 @@ export function registerProjectRoutes(
   app.post(
     "/api/v1/projects/:projectId/config/confirm",
     async (request, reply) => {
-      const project = resolveProject(registry, request.params, reply, sendEnvelope);
+      const project = resolveProject(
+        registry,
+        request.params,
+        reply,
+        sendEnvelope,
+      );
       if (project === undefined) {
         return reply;
       }
       const parsed = configBody.safeParse(request.body);
       if (!parsed.success) {
-        return sendEnvelope(reply, "UNPROCESSABLE", "invalid config request", 422);
+        return sendEnvelope(
+          reply,
+          "UNPROCESSABLE",
+          "invalid config request",
+          422,
+        );
       }
       const preview = await makePreview(project, parsed.data);
       const result = await applyInit(configFs, preview, true);
@@ -326,7 +382,12 @@ export function registerProjectRoutes(
   );
 
   app.post("/api/v1/projects/:projectId/doctor", async (request, reply) => {
-    const project = resolveProject(registry, request.params, reply, sendEnvelope);
+    const project = resolveProject(
+      registry,
+      request.params,
+      reply,
+      sendEnvelope,
+    );
     if (project === undefined) {
       return reply;
     }
@@ -334,7 +395,12 @@ export function registerProjectRoutes(
       request.body === null || request.body === undefined ? {} : request.body,
     );
     if (!parsed.success) {
-      return sendEnvelope(reply, "UNPROCESSABLE", "invalid doctor request", 422);
+      return sendEnvelope(
+        reply,
+        "UNPROCESSABLE",
+        "invalid doctor request",
+        422,
+      );
     }
     const detection = await detectedCandidates(project.root);
     const selectedAdapter =
@@ -349,12 +415,9 @@ export function registerProjectRoutes(
       (project.start.length > 0
         ? project.start
         : await resolveRunStart(configFs, detection.result.root, kinds));
-    const report = await runWebDoctor(
-      detection.result.root,
-      kinds,
-      doctorEnv,
-      { start },
-    );
+    const report = await runWebDoctor(detection.result.root, kinds, doctorEnv, {
+      start,
+    });
     const extra: Array<{
       id: string;
       status: string;
@@ -374,14 +437,20 @@ export function registerProjectRoutes(
       detection.tauri.candidate !== null || selectedAdapter === "tauri";
     if (includeTauri) {
       const hasFrontend = kinds.some((kind) => kind !== "unknown");
-      const tauriReport = await runTauriDoctor(detection.result.root, hasFrontend);
+      const tauriReport = await runTauriDoctor(
+        detection.result.root,
+        hasFrontend,
+      );
       extra.push(...tauriReport.checks);
       ok = ok && tauriReport.ok;
     }
     const includeDotnet =
       detection.dotnet.candidate !== null || selectedAdapter === "dotnet";
     if (includeDotnet) {
-      const dotnetReport = await runDotnetDoctor(detection.result.root, dotnetEnv);
+      const dotnetReport = await runDotnetDoctor(
+        detection.result.root,
+        dotnetEnv,
+      );
       extra.push(...dotnetReport.checks);
       ok = ok && dotnetReport.ok;
     }
