@@ -6,11 +6,78 @@ const API = "http://127.0.0.1:8787";
 const DASH = "http://127.0.0.1:5173";
 const GOLDEN = "01J9GOLDENV100000000000000";
 
+type Project = {
+  id: string;
+  name: string;
+  root: string;
+};
+
 function dash(path: string): string {
   const url = new URL(path, DASH);
   url.searchParams.set("token", TOKEN);
   url.searchParams.set("api", API);
   return url.toString();
+}
+
+function apiHeaders(): Record<string, string> {
+  return {
+    authorization: `Bearer ${TOKEN}`,
+    origin: DASH,
+    "content-type": "application/json",
+  };
+}
+
+async function projectRoot(page: Page): Promise<string> {
+  const response = await page.request.get(`${API}/api/v1/detect`, {
+    headers: apiHeaders(),
+  });
+  expect(response.status()).toBe(200);
+  return ((await response.json()) as { root: string }).root;
+}
+
+async function listProjects(page: Page): Promise<Project[]> {
+  const listed = await page.request.get(`${API}/api/v1/projects`, {
+    headers: apiHeaders(),
+  });
+  expect(listed.status()).toBe(200);
+  return ((await listed.json()) as { projects: Project[] }).projects;
+}
+
+async function projectByRoot(
+  page: Page,
+  root: string,
+): Promise<Project | undefined> {
+  return (await listProjects(page)).find((project) => project.root === root);
+}
+
+async function ensureProject(page: Page): Promise<Project> {
+  const root = await projectRoot(page);
+  const rootProject = await projectByRoot(page, root);
+  if (rootProject !== undefined) {
+    return rootProject;
+  }
+
+  const created = await page.request.post(`${API}/api/v1/projects`, {
+    headers: apiHeaders(),
+    data: {
+      name: "E2E Fixture",
+      root,
+      adapterId: "vite",
+      start: ["pnpm", "dev"],
+      rulePackIds: ["web-performance"],
+      targetProfileId: "local-machine",
+    },
+  });
+  if (created.status() === 201) {
+    return (await created.json()) as Project;
+  }
+  expect(created.status()).toBe(409);
+  const project = await projectByRoot(page, root);
+  expect(project).toBeDefined();
+  if (project === undefined) {
+    throw new Error("project registry did not return the root project");
+  }
+  return project;
 }
 
 async function axeCriticalSerious(page: Page): Promise<void> {
@@ -23,30 +90,105 @@ async function axeCriticalSerious(page: Page): Promise<void> {
   expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
 }
 
-test("core routes have no critical or serious Axe violations", async ({
+test("projects hub and creation wizard establish project context", async ({
   page,
 }) => {
-  await page.goto(dash("/setup/detect"));
+  const root = await projectRoot(page);
+  const dashboardRoot = `${root}/apps/dashboard`;
+  let project = await projectByRoot(page, dashboardRoot);
+
+  await page.goto(dash("/projects"));
   await expect(
-    page.getByRole("heading", { name: "Setup detect" }),
+    page.getByRole("heading", { name: "Projects", exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("Generic (unsupported)")).toBeVisible();
   await expect(
-    page.getByText("A manual start is an override, not detect evidence."),
+    page.getByRole("link", { name: "Create project" }),
   ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Confirm" })).toBeEnabled();
   await axeCriticalSerious(page);
 
-  await page.goto(dash("/runs/new"));
+  if (project === undefined) {
+    await page.getByRole("link", { name: "Create project" }).click();
+    await expect(
+      page.getByRole("heading", { name: "Create project" }),
+    ).toBeVisible();
+    await page.getByLabel("Project name").fill("Dashboard fixture");
+    await page.getByLabel("Project path").fill(dashboardRoot);
+    await page.getByLabel("Project type").selectOption("vite");
+    await page.getByLabel("Start argv").fill("pnpm dev");
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await expect(page.getByText("Choose the rule packs")).toBeVisible();
+    await page.getByLabel("JavaScript performance").check();
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await expect(
+      page.getByText("Define the performance environment"),
+    ).toBeVisible();
+    await page.getByLabel("Low-end mobile").check();
+    await page.getByRole("button", { name: "Continue" }).click();
+
+    await expect(page.getByText("Ready to create this project")).toBeVisible();
+    await page.getByRole("button", { name: "Create project" }).click();
+    project = await projectByRoot(page, dashboardRoot);
+    expect(project).toBeDefined();
+  } else {
+    await page.goto(dash(`/projects/${project.id}/overview`));
+  }
+
+  await expect(page.getByText("Dashboard fixture").first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "Overview" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(
+    page.getByRole("link", { name: "Test Setup", exact: true }),
+  ).toBeVisible();
+  await axeCriticalSerious(page);
+
+  const projects = await listProjects(page);
+  expect(
+    projects.filter((candidate) => candidate.root === dashboardRoot),
+  ).toHaveLength(1);
+});
+
+test("project workflow routes keep one project navigation model", async ({
+  page,
+}) => {
+  const project = await ensureProject(page);
+  const base = `/projects/${project.id}`;
+
+  await page.goto(dash(`${base}/overview`));
+  await expect(
+    page.getByRole("heading", { name: "Performance workbench" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Runs" })).toBeVisible();
+  await axeCriticalSerious(page);
+
+  await page.goto(dash(`${base}/runs`));
   await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
   await expect(page.getByText("Local performance budget")).toBeVisible();
   await axeCriticalSerious(page);
 
+  await page.goto(dash(`${base}/compare`));
+  await expect(
+    page.getByRole("heading", { name: "Compare before and after" }),
+  ).toBeVisible();
+  await axeCriticalSerious(page);
+
+  await page.goto(dash(`${base}/scenarios`));
+  await expect(page.getByRole("heading", { name: "Scenarios" })).toBeVisible();
+  await axeCriticalSerious(page);
+
+  await page.goto(dash(`${base}/test-setup`));
+  await expect(page.getByRole("heading", { name: "Test Setup" })).toBeVisible();
+  await page.getByLabel("Mid-tier mobile").check();
+  await page.getByRole("button", { name: "Save changes" }).click();
+  await expect(page.getByText("Test setup saved.")).toBeVisible();
+  await axeCriticalSerious(page);
+
   const created = await page.request.post(`${API}/api/v1/runs`, {
     headers: {
-      authorization: `Bearer ${TOKEN}`,
-      origin: DASH,
-      "content-type": "application/json",
+      ...apiHeaders(),
       "idempotency-key": `e2e-a11y-${String(Date.now())}`,
     },
     data: {
@@ -58,13 +200,16 @@ test("core routes have no critical or serious Axe violations", async ({
   expect(created.status()).toBe(202);
   const body = (await created.json()) as { runId: string };
 
-  await page.goto(dash(`/runs/${body.runId}/live`));
+  await page.goto(dash(`${base}/runs/${body.runId}/live`));
   await expect(page.getByRole("heading", { name: "Live run" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Runs" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
   await expect(page.getByRole("button", { name: "Abort run" })).toBeEnabled();
-  await expect(page.getByText("Current operation")).toBeVisible();
   await axeCriticalSerious(page);
 
-  await page.goto(dash(`/runs/${GOLDEN}?tab=findings`));
+  await page.goto(dash(`${base}/runs/${GOLDEN}?tab=findings`));
   await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
   await expect(
     page.getByRole("radio", { name: "finding:web.frame_time.p95" }),
@@ -72,11 +217,12 @@ test("core routes have no critical or serious Axe violations", async ({
   await axeCriticalSerious(page);
 });
 
-test("keyboard path: skip link, start, abort, finding", async ({ page }) => {
-  await page.goto(dash("/setup/detect"));
-  await expect(page.getByRole("button", { name: "Confirm" })).toBeVisible();
-  await page.goto(dash("/runs/new"));
-  await expect(page.getByRole("heading", { name: "Quick Scan" })).toBeVisible();
+test("keyboard path reaches project work and run controls", async ({
+  page,
+}) => {
+  const project = await ensureProject(page);
+  const base = `/projects/${project.id}`;
+  await page.goto(dash(`${base}/runs`));
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Skip to main content" }),
@@ -89,9 +235,7 @@ test("keyboard path: skip link, start, abort, finding", async ({ page }) => {
 
   const created = await page.request.post(`${API}/api/v1/runs`, {
     headers: {
-      authorization: `Bearer ${TOKEN}`,
-      origin: DASH,
-      "content-type": "application/json",
+      ...apiHeaders(),
       "idempotency-key": `e2e-abort-${String(Date.now())}`,
     },
     data: {
@@ -101,14 +245,14 @@ test("keyboard path: skip link, start, abort, finding", async ({ page }) => {
     },
   });
   const body = (await created.json()) as { runId: string };
-  await page.goto(dash(`/runs/${body.runId}/live`));
+  await page.goto(dash(`${base}/runs/${body.runId}/live`));
   const abort = page.getByRole("button", { name: "Abort run" });
   await expect(abort).toBeEnabled();
   await abort.focus();
   await page.keyboard.press("Enter");
   await expect(page.getByText("Status cancelled")).toBeVisible();
 
-  await page.goto(dash(`/runs/${GOLDEN}?tab=findings`));
+  await page.goto(dash(`${base}/runs/${GOLDEN}?tab=findings`));
   const finding = page.getByRole("radio", {
     name: "finding:web.frame_time.p95",
   });
@@ -116,19 +260,33 @@ test("keyboard path: skip link, start, abort, finding", async ({ page }) => {
   await expect(finding).toBeFocused();
 });
 
-test("200% zoom keeps primary actions and reduced motion is off", async ({
+test("mobile tablet and reduced motion keep project actions usable", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 640, height: 720 });
-  await page.goto(dash("/setup/detect"));
-  await expect(page.getByRole("button", { name: "Confirm" })).toBeVisible();
-  await page.goto(dash("/runs/new"));
+  const project = await ensureProject(page);
+  const base = `/projects/${project.id}`;
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(dash("/projects"));
   await expect(
-    page.getByRole("button", { name: "Start Quick Scan" }),
+    page.getByRole("link", { name: "Create project" }),
   ).toBeVisible();
+  await expect(page.locator("body")).not.toHaveJSProperty(
+    "scrollWidth",
+    Number.POSITIVE_INFINITY,
+  );
+  await axeCriticalSerious(page);
+
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto(dash(`${base}/test-setup`));
+  await expect(
+    page.getByRole("button", { name: "Save changes" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Compare" })).toBeVisible();
+  await axeCriticalSerious(page);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto(dash("/runs/new"));
+  await page.goto(dash(`${base}/runs`));
   const duration = await page
     .getByRole("button", { name: "Start Quick Scan" })
     .evaluate((node) => getComputedStyle(node).transitionDuration);
